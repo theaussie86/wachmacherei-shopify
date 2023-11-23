@@ -10,6 +10,10 @@ module.exports = {
         sans: ['IBMPlexSans', ...defaultTheme.fontFamily.sans],
         gin: ['Gin']
       },
+      colors: {
+        primary: '#0d181c',
+        secondary: '#e8b428'
+      },
       keyframes: {
         fadeIn: {
           from: { opacity: 0 },
