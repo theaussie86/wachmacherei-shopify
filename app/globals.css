@@ -2,16 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+@font-face {
+  font-family: Gin;
+  src: url('/fonts/Gin/Gin-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
 }
 
-@supports (font: -apple-system-body) and (-webkit-appearance: none) {
-  img[loading='lazy'] {
-    clip-path: inset(0.6px);
-  }
+@font-face {
+  font-family: IBMPlexSans;
+  src: url('/fonts/IBMPlexSans/IBMPlexSans-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: IBMPlexSans;
+  src: url('/fonts/IBMPlexSans/IBMPlexSans-Italic.ttf');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: IBMPlexSans;
+  src: url('/fonts/IBMPlexSans/IBMPlexSans-Light.ttf');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: IBMPlexSans;
+  src: url('/fonts/IBMPlexSans/IBMPlexSans-LightItalic.ttf');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: IBMPlexSans;
+  src: url('/fonts/IBMPlexSans/IBMPlexSans-Medium.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: IBMPlexSans;
+  src: url('/fonts/IBMPlexSans/IBMPlexSans-MediumItalic.ttf');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: IBMPlexSans;
+  src: url('/fonts/IBMPlexSans/IBMPlexSans-SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: IBMPlexSans;
+  src: url('/fonts/IBMPlexSans/IBMPlexSans-SemiBoldItalic.ttf');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: IBMPlexSans;
+  src: url('/fonts/IBMPlexSans/IBMPlexSans-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: IBMPlexSans;
+  src: url('/fonts/IBMPlexSans/IBMPlexSans-BoldItalic.ttf');
+  font-weight: 700;
+  font-style: italic;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-gin;
 }
 
 a,
