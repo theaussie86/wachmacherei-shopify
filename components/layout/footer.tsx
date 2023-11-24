@@ -1,67 +1,92 @@
-import Link from 'next/link';
-
-import FooterMenu from 'components/layout/footer-menu';
-import LogoSquare from 'components/logo-square';
+import { DevicePhoneMobileIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
+import FacebookIcon from 'components/icons/facebook';
+import InstagramIcon from 'components/icons/instagram';
 import { getMenu } from 'lib/shopify';
+import Image from 'next/image';
 import { Suspense } from 'react';
+import ottobeurenWhite from '../images/Ottobeuren_white.png';
+import FooterMenu from './footer-menu';
 
 const { COMPANY_NAME, SITE_NAME } = process.env;
 
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
-  const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : '');
+  const copyrightDate = 2022 + (currentYear > 2022 ? `-${currentYear}` : '');
   const skeleton = 'w-full h-6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700';
   const menu = await getMenu('next-js-frontend-footer-menu');
   const copyrightName = COMPANY_NAME || SITE_NAME || '';
 
   return (
-    <footer className="text-sm text-neutral-500 dark:text-neutral-400">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 border-t border-neutral-200 px-6 py-12 text-sm dark:border-neutral-700 md:flex-row md:gap-12 md:px-4 min-[1320px]:px-0">
-        <div>
-          <Link className="flex items-center gap-2 text-black dark:text-white md:pt-1" href="/">
-            <LogoSquare size="sm" />
-            <span className="uppercase">{SITE_NAME}</span>
-          </Link>
-        </div>
-        <Suspense
-          fallback={
-            <div className="flex h-[188px] w-[200px] flex-col gap-2">
-              <div className={skeleton} />
-              <div className={skeleton} />
-              <div className={skeleton} />
-              <div className={skeleton} />
-              <div className={skeleton} />
-              <div className={skeleton} />
+    <footer className="bg-primary text-base text-white" aria-labelledby="footer-heading">
+      <h2 id="footer-heading" className="sr-only">
+        Footer
+      </h2>
+      <div className="mx-auto max-w-lg px-6 pb-8 pt-16 sm:pt-24 md:max-w-2xl lg:max-w-7xl lg:px-8 lg:pt-32">
+        <div className="mt-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-4 xl:mt-0">
+          <div>
+            <h3 className="text-xl tracking-wider text-secondary">Wachmacherei</h3>
+            <p className="my-3">
+              Die Rösterei in Ottobeuren
+              <br />
+              Bahnhofstraße 6<br />
+              87724 Ottobeuren
+            </p>
+            <p className="my-3 flex items-end hover:underline">
+              <EnvelopeIcon className="mr-2 h-5 w-5" />
+              <a href="mailto:kaffee@wachamcherei.de">kaffee(at)wachmadcherei.de</a>
+            </p>
+            <p className="flex items-end hover:underline">
+              <DevicePhoneMobileIcon className="mr-2 inline-block h-5 w-5" />
+              <a href="tel:+4983324134076">+49 (0) 8332 413 40 76</a>
+            </p>
+          </div>
+          <div>
+            <h3 className="text-xl tracking-wider text-secondary">Öffnungszeiten</h3>
+            <div className="my-3 grid grid-cols-3 gap-y-2">
+              <span>Mo + So</span>
+              <span className="col-span-2">geschlossen</span>
+              <span>Di + Mi</span>
+              <span className="col-span-2">8:30 - 12:30 Uhr</span>
+              <span>Do + Fr</span>
+              <span className="col-span-2">
+                8:30 - 12:30 Uhr
+                <br />
+                14:30 - 18:00 Uhr
+              </span>
+              <span>Sa</span>
+              <span className="col-span-2">08:00 - 12:00 Uhr</span>
             </div>
-          }
-        >
-          <FooterMenu menu={menu} />
-        </Suspense>
-        <div className="md:ml-auto">
-          <a
-            className="flex h-8 w-max flex-none items-center justify-center rounded-md border border-neutral-200 bg-white text-xs text-black dark:border-neutral-700 dark:bg-black dark:text-white"
-            aria-label="Deploy on Vercel"
-            href="https://vercel.com/templates/next.js/nextjs-commerce"
-          >
-            <span className="px-3">▲</span>
-            <hr className="h-full border-r border-neutral-200 dark:border-neutral-700" />
-            <span className="px-3">Deploy</span>
-          </a>
-        </div>
-      </div>
-      <div className="border-t border-neutral-200 py-6 text-sm dark:border-neutral-700">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-1 px-4 md:flex-row md:gap-0 md:px-4 min-[1320px]:px-0">
-          <p>
-            &copy; {copyrightDate} {copyrightName}
-            {copyrightName.length && !copyrightName.endsWith('.') ? '.' : ''} All rights reserved.
-          </p>
-          <hr className="mx-4 hidden h-4 w-[1px] border-l border-neutral-400 md:inline-block" />
-          <p>Designed in California</p>
-          <p className="md:ml-auto">
-            <a href="https://vercel.com" className="text-black dark:text-white">
-              Crafted by ▲ Vercel
-            </a>
-          </p>
+          </div>
+          <div className="max-w-xs self-center">
+            <Image alt="Logo Ottobeuren in weiß" src={ottobeurenWhite} />
+          </div>
+          <div>
+            <h3 className="text-xl tracking-wider text-secondary">
+              &copy; {copyrightDate} {copyrightName}
+            </h3>
+            <Suspense
+              fallback={
+                <div className="flex h-[188px] w-[200px] flex-col gap-2">
+                  <div className={skeleton} />
+                  <div className={skeleton} />
+                  <div className={skeleton} />
+                  <div className={skeleton} />
+                  <div className={skeleton} />
+                  <div className={skeleton} />
+                </div>
+              }
+            >
+              <FooterMenu menu={menu} />
+            </Suspense>
+            <div className="mt-3 inline-flex gap-3">
+              <a href="https://www.facebook.com/WACHMACHEREI">
+                <FacebookIcon className="h-8 w-8 rounded bg-secondary p-1" />
+              </a>
+              <a href="https://www.instagram.com/wach.macherei/">
+                <InstagramIcon className="h-8 w-8 rounded bg-secondary p-1" />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
