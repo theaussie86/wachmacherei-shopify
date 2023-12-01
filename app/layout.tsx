@@ -1,4 +1,4 @@
-import Navbar from 'components/layout/navbar';
+import MenuBar from 'components/layout/menu';
 import { ensureStartsWith } from 'lib/utils';
 import { ReactNode, Suspense } from 'react';
 import './globals.css';
@@ -34,7 +34,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="de">
       <body className="bg-white text-primary selection:bg-secondary dark:bg-primary dark:text-white dark:selection:bg-secondary dark:selection:text-white">
-        <Navbar />
+        <MenuBar />
         <Suspense>
           <main>{children}</main>
         </Suspense>
