@@ -1,6 +1,6 @@
 'use client';
 import { Popover, Transition } from '@headlessui/react';
-import { Bars3Icon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ShoppingCartIcon } from '@heroicons/react/24/solid';
 import FacebookIcon from 'components/icons/facebook';
 import InstagramIcon from 'components/icons/instagram';
@@ -37,19 +37,25 @@ const MenuBar = () => {
               leaveTo="opacity-0 -translate-x-full"
             >
               <Popover.Panel className="absolute inset-x-0 top-0 z-10 flex h-screen w-full flex-col justify-between bg-primary px-6 py-14 md:w-60">
-                <div className="mx-auto grid max-w-7xl gap-y-4 lg:px-8 xl:gap-y-8">
-                  {[
-                    { name: 'Home', to: '/' },
-                    { name: 'Shop', to: '/shop' },
-                    { name: 'Über Uns', to: '/about' },
-                    { name: 'Kontakt', to: '/kontakt' }
-                  ].map((item) => (
-                    <Link key={item.name} href={item.to} className="block">
-                      <span className="group relative font-gin text-3xl leading-loose tracking-wide hover:underline">
-                        {item.name}
-                      </span>
-                    </Link>
-                  ))}
+                <div className="px-6 lg:px-8">
+                  <Popover.Button className=" absolute right-6 top-6 flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 md:hidden">
+                    <span className="sr-only">Menü schließen</span>
+                    <XMarkIcon className="h-9 w-9 text-secondary" aria-hidden="true" />
+                  </Popover.Button>
+                  <div className="grid max-w-7xl gap-y-4 lg:px-8 xl:gap-y-8">
+                    {[
+                      { name: 'Home', to: '/' },
+                      { name: 'Shop', to: '/shop' },
+                      { name: 'Über Uns', to: '/about' },
+                      { name: 'Kontakt', to: '/kontakt' }
+                    ].map((item) => (
+                      <Popover.Button as={Link} key={item.name} href={item.to} className="block">
+                        <span className="group relative font-gin text-3xl leading-loose tracking-wide hover:underline">
+                          {item.name}
+                        </span>
+                      </Popover.Button>
+                    ))}
+                  </div>
                 </div>
                 <div className="">
                   <div className="mx-auto flex max-w-7xl flex-col gap-y-6 px-6 lg:px-8">
