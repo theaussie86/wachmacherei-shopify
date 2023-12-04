@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment } from 'react';
 import WMLogoSchriftWeiß from '../../images/Schriftzug_Wachmacherei_weiss640x250.png';
+import WMLogoIcon from '../../images/favicon.png';
 
 const MenuBar = () => {
   const currentYear = new Date().getFullYear();
@@ -17,12 +18,12 @@ const MenuBar = () => {
   return (
     <header className="relative isolate z-10 bg-primary ">
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between text-secondary lg:px-8"
+        className="mx-auto flex max-w-7xl items-center justify-between px-6 text-secondary md:px-8"
         aria-label="Global"
       >
-        <Popover.Group className="flex lg:flex-1">
+        <Popover.Group className="flex">
           <Popover>
-            <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+            <Popover.Button className="mt-4 flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 md:mt-0">
               <span className="sr-only">Menü öffnen</span>
               <Bars3Icon className="h-9 w-9 text-secondary" aria-hidden="true" />
             </Popover.Button>
@@ -38,7 +39,7 @@ const MenuBar = () => {
             >
               <Popover.Panel className="absolute inset-x-0 top-0 z-10 flex h-screen w-full flex-col justify-between bg-primary px-6 py-14 md:w-60">
                 <div className="px-6 lg:px-8">
-                  <Popover.Button className=" absolute right-6 top-6 flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 md:hidden">
+                  <Popover.Button className=" absolute right-6 top-6 flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
                     <span className="sr-only">Menü schließen</span>
                     <XMarkIcon className="h-9 w-9 text-secondary" aria-hidden="true" />
                   </Popover.Button>
@@ -78,13 +79,18 @@ const MenuBar = () => {
         </Popover.Group>
         <Link href="/" className="relative -mb-4 bg-secondary">
           <span className="sr-only">Wachmacherei</span>
-          <Image className=" h-24 w-auto" src={WMLogoSchriftWeiß} alt="Wachmacherei Logo" />
+          <Image
+            className="hidden h-16 w-auto md:block md:h-24"
+            src={WMLogoSchriftWeiß}
+            alt="Wachmacherei Logo"
+          />
+          <Image className="h-12 w-auto md:hidden" src={WMLogoIcon} alt="Wachmacherei Logo" />
           <div
-            className="absolute left-0 mt-[2px] h-[2px] w-full bg-secondary"
+            className="absolute left-0 mt-[2px] hidden h-[2px] w-full bg-secondary md:block"
             style={{ top: '100%', transform: 'translateY(4px)' }}
           ></div>
         </Link>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className="mt-4 flex md:mt-0">
           <Link href="/shop">
             <span className="sr-only">Wachmacherei Shop</span>
             <ShoppingCartIcon className="h-9 w-9 text-secondary" aria-hidden="true" />
