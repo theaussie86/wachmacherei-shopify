@@ -23,7 +23,7 @@ const MenuBar = () => {
       >
         <Popover.Group className="flex">
           <Popover>
-            <Popover.Button className="mt-4 flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 md:mt-0">
+            <Popover.Button className="flex items-center gap-x-1 p-4 text-sm font-semibold leading-6 text-gray-900 md:p-0">
               <span className="sr-only">Menü öffnen</span>
               <Bars3Icon className="h-9 w-9 text-secondary" aria-hidden="true" />
             </Popover.Button>
@@ -84,13 +84,13 @@ const MenuBar = () => {
             src={WMLogoSchriftWeiß}
             alt="Wachmacherei Logo"
           />
-          <Image className="h-12 w-auto md:hidden" src={WMLogoIcon} alt="Wachmacherei Logo" />
+          <Image className="h-16 w-auto md:hidden" src={WMLogoIcon} alt="Wachmacherei Logo" />
           <div
             className="absolute left-0 mt-[2px] hidden h-[2px] w-full bg-secondary md:block"
             style={{ top: '100%', transform: 'translateY(4px)' }}
           ></div>
         </Link>
-        <div className="mt-4 flex md:mt-0">
+        <div className="flex p-4 md:p-0">
           <Link href="/shop">
             <span className="sr-only">Wachmacherei Shop</span>
             <ShoppingCartIcon className="h-9 w-9 text-secondary" aria-hidden="true" />
