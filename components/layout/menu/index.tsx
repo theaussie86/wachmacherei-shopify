@@ -48,7 +48,7 @@ const MenuBar = () => {
                     {[
                       { name: 'Home', to: '/' },
                       { name: 'Shop', to: '/shop' },
-                      { name: 'Über Uns', to: '/about' },
+                      { name: 'Über Uns', to: '/ueber-uns' },
                       { name: 'Kontakt', to: '/kontakt' }
                     ].map((item) => (
                       <Popover.Button as={Link} key={item.name} href={item.to} className="block">
