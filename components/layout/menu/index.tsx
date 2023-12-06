@@ -27,6 +27,7 @@ const MenuBar = () => {
               <span className="sr-only">Menü öffnen</span>
               <Bars3Icon className="h-9 w-9 text-secondary" aria-hidden="true" />
             </Popover.Button>
+            <Popover.Overlay className="fixed inset-0 bg-primary opacity-50" />
 
             <Transition
               as={Fragment}
@@ -43,7 +44,7 @@ const MenuBar = () => {
                     <span className="sr-only">Menü schließen</span>
                     <XMarkIcon className="h-9 w-9 text-secondary" aria-hidden="true" />
                   </Popover.Button>
-                  <div className="grid max-w-7xl gap-y-4 lg:px-8 xl:gap-y-8">
+                  <div className="grid max-w-7xl gap-y-4 xl:gap-y-8">
                     {[
                       { name: 'Home', to: '/' },
                       { name: 'Shop', to: '/shop' },
