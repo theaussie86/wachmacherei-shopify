@@ -3,6 +3,7 @@
 import { Dialog, Disclosure, Switch, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { DevTool } from '@hookform/devtools';
+import Cookies from 'js-cookie';
 import { cookieConfigurations, useCookie } from 'lib/context/cookies';
 import { Fragment } from 'react';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
@@ -20,7 +21,15 @@ const CookieSettings = () => {
     decline();
   };
 
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control } = useForm({
+    defaultValues: Object.entries(cookieConfigurations).reduce<Record<string, boolean>>(
+      (acc, [key]) => ({
+        ...acc,
+        [key]: key === 'necessary' || Cookies.get(`wm-${key}`) === 'true'
+      }),
+      {}
+    )
+  });
 
   return (
     <Transition show={isSettingOpen} as={Fragment}>

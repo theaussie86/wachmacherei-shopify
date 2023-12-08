@@ -1,7 +1,6 @@
 'use client';
 
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
 import {
   Dispatch,
   PropsWithChildren,
@@ -78,8 +77,6 @@ const CookieContext = createContext<CookieContextProps>({
 });
 
 export function CookieProvider({ children }: PropsWithChildren) {
-  const router = useRouter();
-
   const [isConsentOpen, setIsConsentOpen] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
 
@@ -100,7 +97,7 @@ export function CookieProvider({ children }: PropsWithChildren) {
     Cookies.set(USER_CONSENT_DATE_KEY, Date.now().toString(), {
       expires: EXPIRE_DATE
     });
-    router.refresh();
+    window.location.reload();
   };
 
   const decline = () => {
@@ -117,7 +114,7 @@ export function CookieProvider({ children }: PropsWithChildren) {
     Cookies.set(USER_CONSENT_DATE_KEY, Date.now().toString(), {
       expires: EXPIRE_DATE
     });
-    router.refresh();
+    window.location.reload();
   };
 
   const acceptNecessary = () => {
