@@ -67,7 +67,7 @@ const CookieConsent = () => {
               <div className="mt-4 flex gap-x-1">
                 <button
                   type="button"
-                  className="rounded-sm bg-secondary px-4 py-2 text-sm outline-none hover:bg-secondary/90"
+                  className="rounded-sm bg-secondary px-4 py-2 text-sm outline-none hover:bg-secondary/80 focus-visible:ring-2 focus-visible:ring-secondary/50 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   onClick={handleAccept}
                 >
                   Akzeptieren

@@ -2,7 +2,6 @@
 
 import { Dialog, Disclosure, Switch, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { DevTool } from '@hookform/devtools';
 import Cookies from 'js-cookie';
 import { cookieConfigurations, useCookie } from 'lib/context/cookies';
 import { Fragment } from 'react';
@@ -117,23 +116,51 @@ const CookieSettings = () => {
                         )}
                       </Switch.Group>
                       <Disclosure as="div" className="mt-4">
-                        <Disclosure.Button className="inline-flex items-center text-sm text-primary">
-                          Dienste anzeigen
-                          <ChevronDownIcon className="ml-1 h-4 w-4" />
-                        </Disclosure.Button>
-                        <Disclosure.Panel>
-                          {Object.entries(services).map(([key, { name, purpose, url }]) => (
-                            <div key={key}>
-                              <h5 className="text-lg font-medium leading-6 text-gray-900">
-                                {name}
-                              </h5>
-                              <p className="text-sm text-gray-500">{purpose}</p>
-                              <a href={url} className="text-sm text-gray-500 underline">
-                                {url}
-                              </a>
-                            </div>
-                          ))}
-                        </Disclosure.Panel>
+                        {({ open }) => (
+                          <>
+                            <Disclosure.Button className="inline-flex items-center text-sm text-primary">
+                              Dienste anzeigen
+                              <ChevronDownIcon
+                                className={twMerge(
+                                  open ? '-rotate-90 transform' : '',
+                                  'ml-1 h-4 w-4'
+                                )}
+                              />
+                            </Disclosure.Button>
+                            <Disclosure.Panel>
+                              <div className="grid grid-cols-[repeat(2,minmax(0,max-content))] bg-white p-2">
+                                <div className="border-b-2 py-3.5 pl-4 pr-3 text-left text-sm font-medium text-primary sm:pl-0">
+                                  Dienst
+                                </div>
+                                <div className="border-b-2 px-3 py-3.5 text-left text-sm font-medium text-primary">
+                                  Beschreibung
+                                </div>
+                                {Object.entries(services).map(([key, { name, purpose }], index) => (
+                                  <>
+                                    <div
+                                      key={key}
+                                      className={twMerge(
+                                        index % 2 === 0 ? 'bg-gray-100' : '',
+                                        'whitespace-nowrap py-4 pl-4 pr-3 text-sm text-primary sm:pl-0'
+                                      )}
+                                    >
+                                      {name}
+                                    </div>
+                                    <div
+                                      key={key}
+                                      className={twMerge(
+                                        index % 2 === 0 ? 'bg-gray-100' : '',
+                                        'break-words px-3 py-4 text-sm text-gray-500'
+                                      )}
+                                    >
+                                      {purpose}
+                                    </div>
+                                  </>
+                                ))}
+                              </div>
+                            </Disclosure.Panel>
+                          </>
+                        )}
                       </Disclosure>
                     </div>
                   )
@@ -155,7 +182,6 @@ const CookieSettings = () => {
                   </button>
                 </div>
               </form>
-              <DevTool control={control} />
             </div>
           </Transition.Child>
         </div>
