@@ -1,5 +1,6 @@
 'use client';
 
+import { format } from 'date-fns';
 import Cookies from 'js-cookie';
 import {
   Dispatch,
@@ -31,7 +32,7 @@ export const cookieConfigurations: Record<string, CookieCategory> = {
       owner: {
         name: 'Wachmacherei',
         purpose:
-          'Wachmacherei verwendet Cookies, die grundlegende Funktionen ermöglichen, die für die Funktion dieses Cookie-Banners unerlässlich sind.',
+          'Wachmacherei verwendet Cookies, die für die Funktion dieses Cookie-Banners unerlässlich sind.',
         url: 'https://wachmacherei.de/datenschutz'
       },
       recaptcha: {
@@ -65,6 +66,7 @@ type CookieContextProps = {
   setIsSettingOpen: Dispatch<SetStateAction<boolean>>;
   accept: Function;
   decline: () => void;
+  consentDate?: string;
 };
 
 const CookieContext = createContext<CookieContextProps>({
@@ -79,6 +81,7 @@ const CookieContext = createContext<CookieContextProps>({
 export function CookieProvider({ children }: PropsWithChildren) {
   const [isConsentOpen, setIsConsentOpen] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
+  const [consentDate, setConsentDate] = useState<string>();
 
   const accept = (categories?: Record<string, boolean>) => {
     acceptNecessary();
@@ -125,6 +128,8 @@ export function CookieProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     const alreadyShown = Cookies.get(CONSENT_DISPLAY_KEY) === 'true';
     setIsConsentOpen(!alreadyShown);
+    const d = Cookies.get(USER_CONSENT_DATE_KEY);
+    setConsentDate(d ? format(Number(d), 'dd.MM.yyyy HH:mm') : 'noch nicht akzeptiert');
 
     Object.entries(cookieConfigurations).forEach(([key, { cookies }]) => {
       if (key === 'necessary') return;
@@ -140,7 +145,15 @@ export function CookieProvider({ children }: PropsWithChildren) {
 
   return (
     <CookieContext.Provider
-      value={{ isConsentOpen, setIsConsentOpen, isSettingOpen, setIsSettingOpen, accept, decline }}
+      value={{
+        isConsentOpen,
+        setIsConsentOpen,
+        isSettingOpen,
+        setIsSettingOpen,
+        accept,
+        decline,
+        consentDate
+      }}
     >
       {children}
     </CookieContext.Provider>
