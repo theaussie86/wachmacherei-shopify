@@ -27,14 +27,19 @@
     "clsx": "^2.0.0",
     "geist": "^1.0.0",
     "google-map-react": "^2.2.1",
+    "js-cookie": "^3.0.5",
     "next": "14.0.3",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.48.2",
+    "tailwind-merge": "^2.1.0"
   },
   "devDependencies": {
+    "@hookform/devtools": "^4.3.1",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/typography": "^0.5.10",
     "@types/google-map-react": "^2.1.10",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "20.8.9",
     "@types/react": "18.2.33",
     "@types/react-dom": "18.2.14",

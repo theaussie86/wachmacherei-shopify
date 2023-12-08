@@ -1,0 +1,158 @@
+'use client';
+
+import { Dialog, Disclosure, Switch, Transition } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { DevTool } from '@hookform/devtools';
+import { cookieConfigurations, useCookie } from 'lib/context/cookies';
+import { Fragment } from 'react';
+import { Controller, FieldValues, useForm } from 'react-hook-form';
+import { twMerge } from 'tailwind-merge';
+
+const CookieSettings = () => {
+  const { accept, decline, isSettingOpen, setIsSettingOpen } = useCookie();
+  const onSubmit = (data: FieldValues) => {
+    setIsSettingOpen(false);
+    accept(data);
+  };
+
+  const handleDecline = () => {
+    setIsSettingOpen(false);
+    decline();
+  };
+
+  const { handleSubmit, control } = useForm();
+
+  return (
+    <Transition show={isSettingOpen} as={Fragment}>
+      <Dialog
+        as="div"
+        className="fixed inset-0 z-10 overflow-y-auto"
+        onClose={() => setIsSettingOpen(false)}
+      >
+        <div className="min-h-screen px-4 text-center">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Dialog.Overlay className="fixed inset-0 bg-primary bg-opacity-50 transition-opacity" />
+          </Transition.Child>
+
+          <span className="inline-block h-screen align-middle" aria-hidden="true">
+            &#8203;
+          </span>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <div className="my-8 inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                Cookie Einstellungen
+              </Dialog.Title>
+              <div className="my-3">
+                <p className="text-sm text-gray-500">
+                  Diese Website nutzt die folgenden Arten von Diensten. Erfahren Sie mehr in unserer
+                  Cookie-Richtlinie.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit(onSubmit)}>
+                {Object.entries(cookieConfigurations).map(
+                  ([key, { name, description, services }]) => (
+                    <div key={key} className="border bg-gray-50 p-4">
+                      <Switch.Group as="div" className="flex items-center justify-between">
+                        <span className="flex flex-grow flex-col">
+                          <Switch.Label
+                            as="h4"
+                            className="text-sm font-medium leading-6 text-gray-900"
+                            passive
+                          >
+                            {name}
+                          </Switch.Label>
+                          <Switch.Description as="span" className="text-sm text-gray-500">
+                            {description}
+                          </Switch.Description>
+                        </span>
+                        {key !== 'necessary' && (
+                          <Controller
+                            name={key}
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                              <Switch
+                                checked={value}
+                                onChange={onChange}
+                                className={twMerge(
+                                  value ? 'bg-secondary' : 'bg-gray-200',
+                                  'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2'
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={twMerge(
+                                    value ? 'translate-x-5' : 'translate-x-0',
+                                    'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                                  )}
+                                />
+                              </Switch>
+                            )}
+                          />
+                        )}
+                      </Switch.Group>
+                      <Disclosure as="div" className="mt-4">
+                        <Disclosure.Button className="inline-flex items-center text-sm text-primary">
+                          Dienste anzeigen
+                          <ChevronDownIcon className="ml-1 h-4 w-4" />
+                        </Disclosure.Button>
+                        <Disclosure.Panel>
+                          {Object.entries(services).map(([key, { name, purpose, url }]) => (
+                            <div key={key}>
+                              <h5 className="text-lg font-medium leading-6 text-gray-900">
+                                {name}
+                              </h5>
+                              <p className="text-sm text-gray-500">{purpose}</p>
+                              <a href={url} className="text-sm text-gray-500 underline">
+                                {url}
+                              </a>
+                            </div>
+                          ))}
+                        </Disclosure.Panel>
+                      </Disclosure>
+                    </div>
+                  )
+                )}
+
+                <div className="mt-4 flex justify-between text-sm">
+                  <button
+                    type="button"
+                    onClick={handleDecline}
+                    className="px-4 py-2 text-sm text-primary outline-none"
+                  >
+                    Alle Ablehnen
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-sm bg-secondary px-4 py-2 text-sm outline-none hover:bg-secondary/90"
+                  >
+                    Auswahl speichern
+                  </button>
+                </div>
+              </form>
+              <DevTool control={control} />
+            </div>
+          </Transition.Child>
+        </div>
+      </Dialog>
+    </Transition>
+  );
+};
+
+export default CookieSettings;
