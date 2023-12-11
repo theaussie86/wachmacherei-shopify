@@ -6,7 +6,7 @@ export type ListItem = SortFilterItem | PathFilterItem;
 export type PathFilterItem = {
   title: string;
   path: string;
-  image?: { src: string; altText: string };
+  image?: { url: string; altText: string };
 };
 
 function FilterItemList({ list }: { list: ListItem[] }) {

@@ -7,7 +7,7 @@ const collectionFragment = /* GraphQL */ `
     title
     description
     image {
-      src
+      url
       altText
     }
     seo {

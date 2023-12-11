@@ -32,7 +32,7 @@ function PathFilterItem({ item }: { item: PathFilterItem }) {
         {(item.image && (
           <Image
             className="mb-2"
-            src={item.image.src}
+            src={item.image.url}
             width={350}
             height={350}
             alt={item.image.altText}
