@@ -139,7 +139,7 @@ const reshapeCollection = (collection: ShopifyCollection): Collection | undefine
 
   return {
     ...collection,
-    path: `/search/${collection.handle}`
+    path: `/shop/${collection.handle}`
   };
 };
 
@@ -324,7 +324,7 @@ export async function getCollections(): Promise<Collection[]> {
         title: 'All',
         description: 'All products'
       },
-      path: '/search',
+      path: '/shop',
       updatedAt: new Date().toISOString()
     },
     // Filter out the `hidden` collections.
