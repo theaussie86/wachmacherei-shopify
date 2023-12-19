@@ -29,6 +29,8 @@ const productFragment = /* GraphQL */ `
         node {
           id
           title
+          weight
+          weightUnit
           availableForSale
           selectedOptions {
             name

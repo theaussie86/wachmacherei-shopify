@@ -81,6 +81,8 @@ export type ProductVariant = {
     value: string;
   }[];
   price: Money;
+  weight: number;
+  weightUnit: string;
 };
 
 export type SEO = {

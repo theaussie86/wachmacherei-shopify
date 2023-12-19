@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { formatPrice } from 'lib/utils';
 
 const Price = ({
   amount,
@@ -13,11 +14,7 @@ const Price = ({
 } & React.ComponentProps<'p'>) => (
   <p suppressHydrationWarning={true} className={className}>
     <span className={clsx('mr-1 inline font-gin', currencyCodeClassName)}>ab</span>
-    {`${new Intl.NumberFormat(undefined, {
-      style: 'currency',
-      currency: currencyCode,
-      currencyDisplay: 'narrowSymbol'
-    }).format(parseFloat(amount))}`}
+    {`${formatPrice(amount, currencyCode)}`}
   </p>
 );
 
