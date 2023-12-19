@@ -9,6 +9,28 @@ const productFragment = /* GraphQL */ `
     title
     description
     descriptionHtml
+    metafields(
+      identifiers: [
+        { key: "herkunft", namespace: "custom" }
+        { key: "region", namespace: "custom" }
+        { key: "hersteller", namespace: "custom" }
+        { key: "veredelung", namespace: "custom" }
+        { key: "farbe", namespace: "custom" }
+        { key: "inhalt", namespace: "custom" }
+        { key: "slogan", namespace: "custom" }
+        { key: "zutaten_allergene", namespace: "custom" }
+        { key: "kakaogehalt", namespace: "custom" }
+        { key: "zubereitungsempfehlung", namespace: "custom" }
+        { key: "aufbereitung", namespace: "custom" }
+        { key: "anbauhoehe_start", namespace: "custom" }
+        { key: "anbauhoehe_ende", namespace: "custom" }
+        { key: "strength", namespace: "custom" }
+        { key: "charakter", namespace: "custom" }
+      ]
+    ) {
+      key
+      value
+    }
     options {
       id
       name
