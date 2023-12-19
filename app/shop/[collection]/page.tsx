@@ -34,15 +34,20 @@ export default async function CategoryPage({
   const { sort } = searchParams as { [key: string]: string };
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
   const products = await getCollectionProducts({ collection: params.collection, sortKey, reverse });
-
+  console.log(params.collection);
   return (
-    <section>
+    <section className="mx-auto max-w-5xl">
       {products.length === 0 ? (
         <p className="py-3 text-lg">{`No products found in this collection`}</p>
       ) : (
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          <ProductGridItems products={products} />
-        </Grid>
+        <>
+          <h3 className="mb-6 text-4xl text-neutral-500 dark:text-neutral-400">
+            {params.collection}
+          </h3>
+          <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <ProductGridItems products={products} />
+          </Grid>
+        </>
       )}
     </section>
   );

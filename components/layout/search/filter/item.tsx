@@ -31,7 +31,7 @@ function PathFilterItem({ item }: { item: PathFilterItem }) {
       >
         {(item.image && (
           <Image
-            className="mb-2"
+            className="mb-2 h-48 w-48 object-cover"
             src={item.image.url}
             width={350}
             height={350}

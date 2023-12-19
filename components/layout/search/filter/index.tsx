@@ -1,5 +1,4 @@
 import { SortFilterItem } from 'lib/constants';
-import FilterItemDropdown from './dropdown';
 import { FilterItem } from './item';
 
 export type ListItem = SortFilterItem | PathFilterItem;
@@ -22,15 +21,12 @@ function FilterItemList({ list }: { list: ListItem[] }) {
 export default function FilterList({ list, title }: { list: ListItem[]; title?: string }) {
   return (
     <>
-      <nav className="mx-auto max-w-5xl p-6">
+      <nav className="mx-auto max-w-5xl py-6">
         {title ? (
-          <h3 className="mb-3 text-xl text-neutral-500 dark:text-neutral-400">{title}</h3>
+          <h3 className="mb-3 text-4xl text-neutral-500 dark:text-neutral-400">{title}</h3>
         ) : null}
-        <ul className="hidden justify-between md:grid md:auto-cols-fr md:grid-flow-col md:gap-8">
+        <ul className="mx-auto flex flex-wrap justify-center gap-8">
           <FilterItemList list={list} />
-        </ul>
-        <ul className="md:hidden">
-          <FilterItemDropdown list={list} />
         </ul>
       </nav>
     </>
