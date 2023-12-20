@@ -5,7 +5,6 @@ import { calculateAveragePrice, formatPrice, isMinEqualMaxPrice } from 'lib/util
 import { useSearchParams } from 'next/navigation';
 
 function ProductPrice({ product }: { product: Product }) {
-  console.log(product);
   const { variants, priceRange } = product;
   const searchParams = useSearchParams();
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;

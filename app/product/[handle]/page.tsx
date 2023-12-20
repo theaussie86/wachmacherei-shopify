@@ -74,7 +74,7 @@ export default async function ProductPage({ params }: { params: { handle: string
   };
 
   return (
-    <>
+    <div className="mt-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -103,7 +103,7 @@ export default async function ProductPage({ params }: { params: { handle: string
       <Suspense>
         <Footer />
       </Suspense>
-    </>
+    </div>
   );
 }
 
