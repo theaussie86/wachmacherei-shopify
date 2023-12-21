@@ -1,10 +1,22 @@
 'use client';
 
 import { submitContactForm } from 'actions';
+import { startVerifyRecaptcha } from 'lib/utils';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 function ContactForm() {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const onSubmit = async (data: FormData) => {
+    try {
+      await startVerifyRecaptcha(executeRecaptcha, 'contact');
+
+      await submitContactForm(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
-    <form className="mt-6 flex flex-col gap-4" action={submitContactForm}>
+    <form className="mt-6 flex flex-col gap-4" action={onSubmit}>
       <div>
         <label htmlFor="name" className="sr-only">
           Name
