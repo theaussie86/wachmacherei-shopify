@@ -5,15 +5,19 @@ const Price = ({
   amount,
   className,
   currencyCode = 'USD',
-  currencyCodeClassName
+  currencyCodeClassName,
+  isRange = false
 }: {
   amount: string;
   className?: string;
   currencyCode: string;
   currencyCodeClassName?: string;
+  isRange?: boolean;
 } & React.ComponentProps<'p'>) => (
   <p suppressHydrationWarning={true} className={className}>
-    <span className={clsx('mr-1 inline font-gin', currencyCodeClassName)}>ab</span>
+    {isRange ? (
+      <span className={clsx('mr-1 inline font-gin', currencyCodeClassName)}>ab</span>
+    ) : null}
     {`${formatPrice(amount, currencyCode)}`}
   </p>
 );

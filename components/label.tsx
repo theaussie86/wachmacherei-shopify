@@ -23,6 +23,7 @@ const Label = ({
         <Price
           className="flex-none rounded-full bg-secondary p-2 text-white"
           amount={amount}
+          isRange
           currencyCode={currencyCode}
           currencyCodeClassName="hidden @[275px]/label:inline"
         />
