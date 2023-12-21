@@ -1,6 +1,10 @@
 'use server';
+import { kv } from '@vercel/kv';
 
 export async function submitContactForm(data: FormData) {
+  await kv.set('token', 'my test token');
+  const token = await kv.get('token');
+  console.log('token', token);
   console.log('submitContactForm', data);
   return new Promise((resolve) => {
     resolve({ payload: data });
