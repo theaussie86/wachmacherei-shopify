@@ -22,20 +22,26 @@
     "*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "@google-cloud/local-auth": "^3.0.0",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@hookform/resolvers": "^3.3.3",
+    "@tailwindcss/forms": "^0.5.7",
     "@vercel/kv": "^1.0.1",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "geist": "^1.0.0",
+    "google-auth-library": "^9.4.1",
     "google-map-react": "^2.2.1",
+    "googleapis": "^129.0.0",
     "js-cookie": "^3.0.5",
     "next": "14.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-google-recaptcha-v3": "^1.10.1",
     "react-hook-form": "^7.48.2",
-    "tailwind-merge": "^2.1.0"
+    "tailwind-merge": "^2.1.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
