@@ -22,7 +22,6 @@
     "*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@google-cloud/local-auth": "^3.0.0",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.3.3",
@@ -40,6 +39,7 @@
     "react-dom": "18.2.0",
     "react-google-recaptcha-v3": "^1.10.1",
     "react-hook-form": "^7.48.2",
+    "sharp": "^0.33.1",
     "tailwind-merge": "^2.1.0",
     "zod": "^3.22.4"
   },
