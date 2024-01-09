@@ -110,6 +110,30 @@ export type ShopifyCollection = {
   updatedAt: string;
 };
 
+export type ShopifyCustomer = {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  default_address: {
+    address1: string;
+    address2: string;
+    city: string;
+    company: string;
+    country: string;
+    country_code: string;
+    country_name: string;
+    first_name: string;
+    last_name: string;
+    name: string;
+    phone: string;
+    province: string;
+    zip: string;
+    default: boolean;
+  };
+};
+
 export type ShopifyProduct = {
   id: string;
   handle: string;
