@@ -91,3 +91,15 @@ function createCustomer(data: ShopifyCustomer) {
     customerCategory_id: 125301
   };
 }
+
+export async function fetchStock(sku: string) {
+  const response = await fetch(`${process.env.R2O_BASE_URL}/v1/products/itemNumber/${sku}/stock`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${process.env.R2O_AUTH_TOKEN}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  const stock = await response.json();
+  return stock;
+}

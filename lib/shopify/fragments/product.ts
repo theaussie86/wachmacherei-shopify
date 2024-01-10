@@ -51,6 +51,7 @@ const productFragment = /* GraphQL */ `
         node {
           id
           title
+          sku
           weight
           weightUnit
           availableForSale

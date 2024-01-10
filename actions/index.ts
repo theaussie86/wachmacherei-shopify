@@ -1,5 +1,7 @@
 'use server';
 import { kv } from '@vercel/kv';
+import { fetchStock } from 'lib/r2o';
+import { getProduct } from 'lib/shopify';
 
 export async function submitContactForm(data: FormData) {
   await kv.set('token', 'my test token');
@@ -26,4 +28,27 @@ export async function verifyRecaptcha(token: string) {
   console.log('recaptcha result', data);
 
   return data;
+}
+
+export async function updateStock(input: FormData) {
+  const handle = input.get('handle');
+
+  if (handle && typeof handle === 'string') {
+    const product = await getProduct(handle);
+    const variants = product?.variants.map((v) => ({ id: v.id, sku: v.sku }));
+    const unigueVariants = variants?.filter((v, i, a) => a.findIndex((t) => t.sku === v.sku) === i);
+
+    if (!unigueVariants) return console.log('no variants found');
+
+    const inputs = [];
+    for (const variant of unigueVariants) {
+      console.log('variant', variant);
+      const stock = await fetchStock(variant.sku);
+      console.log('stock', stock);
+
+      variants
+        ?.filter((v) => v.sku === variant.sku)
+        .forEach((v) => inputs.push({ id: v.id, newStock: stock[0].product_stock }));
+    }
+  }
 }

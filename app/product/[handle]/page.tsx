@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+import { updateStock } from 'actions';
 import { GridTileImage } from 'components/grid/tile';
 import Footer from 'components/layout/footer';
 import { Gallery } from 'components/product/gallery';
@@ -12,6 +13,8 @@ import { Image } from 'lib/shopify/types';
 import Link from 'next/link';
 
 export const runtime = 'edge';
+
+const isDev = process.env.NODE_ENV === 'development';
 
 export async function generateMetadata({
   params
@@ -94,6 +97,25 @@ export default async function ProductPage({ params }: { params: { handle: string
 
           <div className="basis-full lg:basis-2/6">
             <ProductDescription product={product} />
+            {isDev && (
+              <form action={updateStock}>
+                <input
+                  type="text"
+                  hidden
+                  value={params.handle}
+                  name="handle"
+                  id="handle"
+                  placeholder="Enter product handle"
+                  className="mt-8 text-sm text-neutral-700 dark:text-neutral-300"
+                />
+                <button
+                  type="submit"
+                  className="mt-8 text-sm text-neutral-700 dark:text-neutral-300"
+                >
+                  Fetch latest Stock
+                </button>
+              </form>
+            )}
           </div>
         </div>
         <Suspense>
