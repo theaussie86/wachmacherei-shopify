@@ -1,3 +1,5 @@
+import { inventoryLevelConnectionFragment } from '../fragments/inventory';
+
 export const getStockLevelsQuery = /* GraphQL */ `
   query getStockLevels($query: String!) {
     inventoryItems(query: $query, first: 10) {
@@ -6,31 +8,11 @@ export const getStockLevelsQuery = /* GraphQL */ `
           id
           sku
           inventoryLevels(first: 5) {
-            edges {
-              node {
-                available
-                location {
-                  id
-                  name
-                }
-              }
-            }
+            ...inventoryLevelConnection
           }
         }
       }
     }
   }
-`;
-
-export const getLocationsQuery = /* GraphQL */ `
-  query getLocations {
-    locations(first: 3) {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-  }
+  ${inventoryLevelConnectionFragment}
 `;

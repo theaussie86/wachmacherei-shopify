@@ -300,7 +300,7 @@ export type ShopifyLocation = {
 export type ShopifyStockLevel = {
   id: string;
   sku: string;
-  inventoryLevels: Connection<{
+  inventoryLevels: Array<{
     available: number;
     location: ShopifyLocation;
   }>;
@@ -312,5 +312,23 @@ export type ShopifyStockLevelsOperation = {
   };
   variables: {
     query: string;
+  };
+};
+
+export type ShopifyInventoryItemAdjustment = {
+  inventoryItemId: string;
+  availableDelta: number;
+};
+
+export type ShopifyStockLevelsAdjustment = {
+  data: {
+    inventoryLevels: Array<{
+      available: number;
+      location: ShopifyLocation;
+    }>;
+  };
+  variables: {
+    inventoryItemAdjustments: Array<ShopifyInventoryItemAdjustment>;
+    locationId: string;
   };
 };

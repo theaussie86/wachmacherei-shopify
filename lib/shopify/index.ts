@@ -15,6 +15,7 @@ import {
   editCartItemsMutation,
   removeFromCartMutation
 } from './mutations/cart';
+import { adjustStockLevelsMutation } from './mutations/inventory';
 import { getCartQuery } from './queries/cart';
 import {
   getCollectionProductsQuery,
@@ -45,6 +46,7 @@ import {
   ShopifyCollectionProductsOperation,
   ShopifyCollectionsOperation,
   ShopifyCreateCartOperation,
+  ShopifyInventoryItemAdjustment,
   ShopifyMenuOperation,
   ShopifyPageOperation,
   ShopifyPagesOperation,
@@ -54,6 +56,7 @@ import {
   ShopifyProductsOperation,
   ShopifyRemoveFromCartOperation,
   ShopifyStockLevel,
+  ShopifyStockLevelsAdjustment,
   ShopifyStockLevelsOperation,
   ShopifyUpdateCartOperation
 } from './types';
@@ -492,9 +495,33 @@ export async function getStockLevels(handle: string): Promise<ShopifyStockLevel[
     }
   });
 
-  console.log(res.body);
+  const inventoryItems = removeEdgesAndNodes(res.body.data.inventoryItems);
 
-  return removeEdgesAndNodes(res.body.data.inventoryItems);
+  return inventoryItems.map((item) => {
+    const inventoryLevels = removeEdgesAndNodes(item.inventoryLevels);
+
+    return {
+      ...item,
+      inventoryLevels
+    };
+  });
+}
+
+export async function adjustStockLevels(
+  adjustments: Array<ShopifyInventoryItemAdjustment>,
+  location: string
+) {
+  const res = await shopifyAdminFetch<ShopifyStockLevelsAdjustment>({
+    query: adjustStockLevelsMutation,
+    variables: {
+      inventoryItemAdjustments: adjustments,
+      locationId: location
+    }
+  });
+
+  const inventoryItems = res.body.data.inventoryLevels;
+
+  return inventoryItems;
 }
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.
