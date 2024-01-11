@@ -102,6 +102,7 @@ export default async function ProductPage({ params }: { params: { handle: string
                 <input
                   type="text"
                   hidden
+                  readOnly
                   value={params.handle}
                   name="handle"
                   id="handle"

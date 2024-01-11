@@ -291,3 +291,26 @@ export type ShopifyProductsOperation = {
     sortKey?: string;
   };
 };
+
+export type ShopifyLocation = {
+  id: string;
+  name: string;
+};
+
+export type ShopifyStockLevel = {
+  id: string;
+  sku: string;
+  inventoryLevels: Connection<{
+    available: number;
+    location: ShopifyLocation;
+  }>;
+};
+
+export type ShopifyStockLevelsOperation = {
+  data: {
+    inventoryItems: Connection<ShopifyStockLevel>;
+  };
+  variables: {
+    query: string;
+  };
+};

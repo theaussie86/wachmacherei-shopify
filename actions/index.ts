@@ -1,7 +1,7 @@
 'use server';
 import { kv } from '@vercel/kv';
 import { fetchStock } from 'lib/r2o';
-import { getProduct } from 'lib/shopify';
+import { getProduct, getStockLevels } from 'lib/shopify';
 
 export async function submitContactForm(data: FormData) {
   await kv.set('token', 'my test token');
@@ -32,6 +32,12 @@ export async function verifyRecaptcha(token: string) {
 
 export async function updateStock(input: FormData) {
   const handle = input.get('handle');
+
+  if (!handle) return console.error('no handle found');
+  if (typeof handle !== 'string') return console.error('handle is not a string');
+
+  const stockLevels = await getStockLevels('E-BRA-1000');
+  console.log('stockLevels', stockLevels);
 
   if (handle && typeof handle === 'string') {
     const product = await getProduct(handle);

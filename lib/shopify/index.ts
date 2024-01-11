@@ -21,6 +21,7 @@ import {
   getCollectionQuery,
   getCollectionsQuery
 } from './queries/collection';
+import { getStockLevelsQuery } from './queries/inventory';
 import { getMenuQuery } from './queries/menu';
 import { getPageQuery, getPagesQuery } from './queries/page';
 import {
@@ -52,6 +53,8 @@ import {
   ShopifyProductRecommendationsOperation,
   ShopifyProductsOperation,
   ShopifyRemoveFromCartOperation,
+  ShopifyStockLevel,
+  ShopifyStockLevelsOperation,
   ShopifyUpdateCartOperation
 } from './types';
 
@@ -135,6 +138,7 @@ export async function shopifyAdminFetch<T>({
   variables?: ExtractVariables<T>;
 }): Promise<{ status: number; body: T } | never> {
   try {
+    console.log('inputs', { query, variables });
     const result = await fetch(adminEndpoint, {
       method: 'POST',
       headers: {
@@ -478,6 +482,19 @@ export async function getProducts({
   });
 
   return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
+}
+
+export async function getStockLevels(handle: string): Promise<ShopifyStockLevel[]> {
+  const res = await shopifyAdminFetch<ShopifyStockLevelsOperation>({
+    query: getStockLevelsQuery,
+    variables: {
+      query: `sku:${handle}`
+    }
+  });
+
+  console.log(res.body);
+
+  return removeEdgesAndNodes(res.body.data.inventoryItems);
 }
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.
