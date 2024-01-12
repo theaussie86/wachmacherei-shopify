@@ -1,8 +1,8 @@
 import { OAuth2Client } from 'google-auth-library';
 import { google } from 'googleapis';
 
-const GMAIL_ADRESS = 'christoph.weissteiner@gmail.com';
-const CONTACT_ADRESS = 'chmurat86@gmail.com';
+const GMAIL_ADRESS = 'wachmacherei@gmail.com';
+const CONTACT_ADRESS = 'kaffee@wachmacherei.de';
 
 /**
  * Load or request or authorization to call APIs.
@@ -41,7 +41,7 @@ export async function sendEmail(
   const htmlBody = `
       <html>
         <body>
-          <>Hallo Bernd,<br>
+          Hallo Bernd,<br>
           du hast eine neue Kontaktanfrage von deiner Website erhalten:</p>
           <p>Nachricht:<br>
           ${data.message}</p>
