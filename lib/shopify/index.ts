@@ -489,6 +489,7 @@ export async function getProducts({
 
 export async function getStockLevels(handle: string): Promise<ShopifyStockLevel[]> {
   const res = await shopifyAdminFetch<ShopifyStockLevelsOperation>({
+    cache: 'reload',
     query: getStockLevelsQuery,
     variables: {
       query: `sku:${handle}`
@@ -512,6 +513,7 @@ export async function adjustStockLevels(
   location: string
 ) {
   const res = await shopifyAdminFetch<ShopifyStockLevelsAdjustment>({
+    cache: 'no-store',
     query: adjustStockLevelsMutation,
     variables: {
       inventoryItemAdjustments: adjustments,
