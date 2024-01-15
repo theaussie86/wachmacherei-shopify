@@ -409,6 +409,7 @@ export async function getCollections(): Promise<Collection[]> {
 
 export async function getMenu(handle: string): Promise<Menu[]> {
   const res = await shopifyFetch<ShopifyMenuOperation>({
+    cache: 'no-cache',
     query: getMenuQuery,
     tags: [TAGS.collections],
     variables: {
@@ -419,7 +420,10 @@ export async function getMenu(handle: string): Promise<Menu[]> {
   return (
     res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
       title: item.title,
-      path: item.url.replace(domain, '').replace('/collections', '/search').replace('/pages', '')
+      path: item.url
+        .replace(domain.replace('15c1d2-4', 'wachmacherei'), '')
+        .replace('/collections', '/search')
+        .replace('/pages', '')
     })) || []
   );
 }
