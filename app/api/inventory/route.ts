@@ -42,6 +42,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: 202 });
     }
 
+    await kv.set(`${sku}-stock`, true);
+
     const r2oStock = await fetchStock(sku);
     const r2oStockLevel = r2oStock[0].product_stock;
 
