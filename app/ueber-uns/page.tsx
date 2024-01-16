@@ -4,8 +4,6 @@ import Footer from 'components/layout/footer';
 import BackgroundOverlay from 'components/overlay';
 import { Suspense } from 'react';
 
-export const runtime = 'edge';
-
 export const metadata = {
   description: 'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
   openGraph: {
