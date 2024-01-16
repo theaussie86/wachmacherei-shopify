@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const key = `${req.method}:${req.url}`;
   if (activeRequests.has(key)) {
     // If a request is already in progress, send a 429 (Too Many Requests) response
-    return NextResponse.json({ status: 429, error: 'Request in progress' });
+    return NextResponse.json({ status: 202, error: 'Request in progress' });
   }
 
   try {
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     // fetch actual data from r2o, because old and new stock values are being mixed up.
     const sku = data['resource[product_itemnumber]'];
 
-    if (!sku) {
+    if (!sku || sku === 'null') {
       console.error('No sku found in data.', data);
       return NextResponse.json({ status: 200 });
     }
