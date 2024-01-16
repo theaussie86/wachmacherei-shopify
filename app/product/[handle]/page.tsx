@@ -12,8 +12,6 @@ import { getProduct, getProductRecommendations } from 'lib/shopify';
 import { Image } from 'lib/shopify/types';
 import Link from 'next/link';
 
-export const runtime = 'edge';
-
 const isDev = process.env.NODE_ENV === 'development';
 
 export async function generateMetadata({
