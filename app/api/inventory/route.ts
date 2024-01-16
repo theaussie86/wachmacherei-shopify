@@ -1,20 +1,12 @@
+import { kv } from '@vercel/kv';
 import { fetchStock } from 'lib/r2o';
 import { adjustStockLevels, getStockLevels } from 'lib/shopify';
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-const activeRequests = new Map();
-
 export async function POST(req: NextRequest) {
-  const key = `${req.method}:${req.url}`;
-  if (activeRequests.has(key)) {
-    // If a request is already in progress, send a 429 (Too Many Requests) response
-    return NextResponse.json({ status: 202, error: 'Request in progress' });
-  }
-
+  let sku;
   try {
-    activeRequests.set(key, true);
-
     const secret = req.nextUrl.searchParams.get('secret');
 
     if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
@@ -37,11 +29,17 @@ export async function POST(req: NextRequest) {
     const params = new URLSearchParams(decodeURIComponent(dataString));
     const data = Object.fromEntries(params);
     // fetch actual data from r2o, because old and new stock values are being mixed up.
-    const sku = data['resource[product_itemnumber]'];
+    sku = data['resource[product_itemnumber]'];
 
     if (!sku || sku === 'null') {
       console.error('No sku found in data.', data);
       return NextResponse.json({ status: 200 });
+    }
+
+    const isAlreadyBeingFetched = await kv.get(`${sku}-stock`);
+    if (isAlreadyBeingFetched) {
+      console.log('Already being fetched.', sku);
+      return NextResponse.json({ status: 202 });
     }
 
     const r2oStock = await fetchStock(sku);
@@ -64,6 +62,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ status: 200, body: data });
   } finally {
     // Remove the request from active requests after completion or error
-    activeRequests.delete(key);
+    await kv.del(`${sku}-stock`);
   }
 }
