@@ -44,7 +44,6 @@ export function VariantSelector({
       <dd className="flex flex-wrap gap-3">
         {option.values.map((value) => {
           const optionNameLowerCase = option.name.toLowerCase();
-          console.log('name', optionNameLowerCase);
 
           // Base option params on current params so we can preserve any other param state in the url.
           const optionSearchParams = new URLSearchParams(searchParams.toString());
