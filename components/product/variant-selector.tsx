@@ -44,6 +44,7 @@ export function VariantSelector({
       <dd className="flex flex-wrap gap-3">
         {option.values.map((value) => {
           const optionNameLowerCase = option.name.toLowerCase();
+          console.log('name', optionNameLowerCase);
 
           // Base option params on current params so we can preserve any other param state in the url.
           const optionSearchParams = new URLSearchParams(searchParams.toString());
@@ -51,12 +52,30 @@ export function VariantSelector({
           // The option is active if it's in the url params.
           const isActive = searchParams.get(optionNameLowerCase) === value;
 
+          let otherOption: string | undefined;
+          //
+          if (optionNameLowerCase === 'zustand' || optionNameLowerCase.startsWith('mahlgrad')) {
+            otherOption =
+              optionNameLowerCase === 'zustand'
+                ? options.map((o) => o.name.toLowerCase()).find((k) => k.startsWith('mahlgrad'))
+                : 'zustand';
+          }
           // Update the option params using the current option to reflect how the url *would* change,
           // if the option was clicked.
           if (isActive) {
             optionSearchParams.delete(optionNameLowerCase);
+
+            // automatically unset Ungemahlen
+            if (otherOption && value.toLowerCase() === 'ungemahlen') {
+              optionSearchParams.delete(otherOption);
+            }
           } else {
             optionSearchParams.set(optionNameLowerCase, value);
+
+            // automatically set Ungemahlen
+            if (otherOption && value.toLowerCase() === 'ungemahlen') {
+              optionSearchParams.set(otherOption, value);
+            }
           }
           const optionUrl = createUrl(pathname, optionSearchParams);
 
