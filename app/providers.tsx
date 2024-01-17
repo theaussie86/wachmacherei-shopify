@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react';
 function Providers({ children }: PropsWithChildren) {
   return (
     <ReCaptchaProvider lng="de">
-      <CookieProvider>{children}</CookieProvider>;
+      <CookieProvider>{children}</CookieProvider>
     </ReCaptchaProvider>
   );
 }
