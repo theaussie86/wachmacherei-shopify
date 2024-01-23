@@ -1,5 +1,7 @@
-import { checkIsAlreadyACustomer, createCustomerInR2O } from 'lib/r2o';
-import { ShopifyCustomer } from 'lib/shopify/types';
+import { createOrUpdateCustomerInR2O } from 'lib/r2o';
+import { shopifyAdminFetch } from 'lib/shopify';
+import { getCustomerByIdQuery } from 'lib/shopify/queries/customer';
+import { ShopifyCustomer, ShopifyCustomerOperation } from 'lib/shopify/types';
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -28,12 +30,19 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   const data: ShopifyCustomer = await req.json();
-  const isAlreadyCustomer = await checkIsAlreadyACustomer(data.email);
+  const res = await shopifyAdminFetch<ShopifyCustomerOperation>({
+    query: getCustomerByIdQuery,
+    variables: {
+      id: data.admin_graphql_api_id
+    },
+    cache: 'no-cache'
+  });
+  const customerData = res.body.data.customer;
+  const customerId = customerData.metafield?.value;
 
-  if (isAlreadyCustomer) {
-    return NextResponse.json({ status: 200 });
-  }
-
-  const customerData = await createCustomerInR2O(data);
-  return NextResponse.json({ status: 200, body: customerData });
+  const customerR2OData = await createOrUpdateCustomerInR2O(
+    customerData,
+    customerId ? parseInt(customerId) : undefined
+  );
+  return NextResponse.json({ status: 200, body: customerR2OData });
 }

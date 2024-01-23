@@ -1,3 +1,4 @@
+import { updateShopifyCustomerMetafield } from 'lib/shopify';
 import { ShopifyCustomer } from 'lib/shopify/types';
 
 type R20Address = {
@@ -15,6 +16,7 @@ type R20Address = {
 };
 
 type R2OCustomer = {
+  customer_id: number;
   address: {
     delivery?: R20Address;
     invoice?: R20Address;
@@ -27,7 +29,7 @@ type R2OCustomer = {
   customerCategory_id: number;
 };
 
-export async function checkIsAlreadyACustomer(email: string) {
+export async function getCustomerID(email: string) {
   const response = await fetch(process.env.R2O_BASE_URL + '/v1/customers', {
     method: 'GET',
     headers: {
@@ -36,58 +38,88 @@ export async function checkIsAlreadyACustomer(email: string) {
     }
   });
   const customers = await response.json();
+
   const filteredCustomers = customers.filter(
     (customer: R2OCustomer) =>
       customer.address.invoice?.email === email || customer.address.delivery?.email === email
   );
-  return filteredCustomers.length > 0;
+
+  console.log('filtered customers', filteredCustomers);
+  const isAlreadyCustomer = filteredCustomers.length > 0;
+  let customerId;
+  if (isAlreadyCustomer) {
+    customerId = filteredCustomers[0].customer_id;
+    console.log('customer', customerId);
+  }
+
+  return customerId;
 }
 
-export async function createCustomerInR2O(data: ShopifyCustomer) {
-  const customerData = createCustomer(data);
-  const response = await fetch(process.env.R2O_BASE_URL + '/v1/customers', {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${process.env.R2O_AUTH_TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(customerData)
-  });
+export async function createOrUpdateCustomerInR2O(data: ShopifyCustomer, customerId?: number) {
+  console.log('source data', data, customerId);
+  const customerData = prepareCustomerData(data);
+  console.log('customer data', customerData);
+  const response = await fetch(
+    `${process.env.R2O_BASE_URL}/v1/customers/${customerId ? `${customerId}/` : ''}`,
+    {
+      method: customerId ? 'POST' : 'PUT',
+      headers: {
+        Authorization: `Bearer ${process.env.R2O_AUTH_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(customerData)
+    }
+  );
   const customer = await response.json();
+  console.log('customer after update', customer);
+  if (!customerId) {
+    await updateShopifyCustomerMetafield({
+      input: {
+        id: data.id,
+        metafields: [
+          {
+            key: 'r2o_id',
+            namespace: 'custom',
+            value: customer.customer_id.toString()
+          }
+        ]
+      }
+    });
+  }
   return customer;
 }
 
-function createCustomer(data: ShopifyCustomer) {
+function prepareCustomerData(data: ShopifyCustomer) {
   return {
     address: {
       delivery: {
-        company: data.default_address?.company,
-        city: data.default_address?.city,
-        country: data.default_address?.country_code,
+        company: data.defaultAddress?.company,
+        city: data.defaultAddress?.city,
+        country: data.defaultAddress?.countryCodeV2,
         email: data.email,
-        firstName: data.first_name,
-        lastName: data.last_name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         phone: data.phone,
-        street: data.default_address?.address1 + ' ' + data.default_address?.address2,
-        zip: data.default_address?.zip
+        street: data.defaultAddress?.address1 + ' ' + data.defaultAddress?.address2,
+        zip: data.defaultAddress?.zip
       },
       invoice: {
-        company: data.default_address?.company,
-        city: data.default_address?.city,
-        country: data.default_address?.country_code,
+        company: data.defaultAddress?.company,
+        city: data.defaultAddress?.city,
+        country: data.defaultAddress?.countryCodeV2,
         email: data.email,
-        firstName: data.first_name,
-        lastName: data.last_name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         phone: data.phone,
-        street: data.default_address?.address1 + ' ' + data.default_address?.address2,
-        zip: data.default_address?.zip
+        street: data.defaultAddress?.address1 + ' ' + data.defaultAddress?.address2,
+        zip: data.defaultAddress?.zip
       }
     },
     email: data.email,
-    firstName: data.first_name,
-    lastName: data.last_name,
+    firstName: data.firstName,
+    lastName: data.lastName,
     phone: data.phone,
-    company: data.default_address?.company,
+    company: data.defaultAddress?.company,
     customerCategory_id: 125301
   };
 }

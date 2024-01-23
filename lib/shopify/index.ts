@@ -15,6 +15,7 @@ import {
   editCartItemsMutation,
   removeFromCartMutation
 } from './mutations/cart';
+import { updateCustomerMetafieldMutation } from './mutations/customer';
 import { adjustStockLevelsMutation } from './mutations/inventory';
 import { getCartQuery } from './queries/cart';
 import {
@@ -46,6 +47,8 @@ import {
   ShopifyCollectionProductsOperation,
   ShopifyCollectionsOperation,
   ShopifyCreateCartOperation,
+  ShopifyCustomerMetafieldUpdateInput,
+  ShopifyCustomerUpdateOperation,
   ShopifyInventoryItemAdjustment,
   ShopifyMenuOperation,
   ShopifyPageOperation,
@@ -509,6 +512,14 @@ export async function getStockLevels(handle: string): Promise<ShopifyStockLevel[
       ...item,
       inventoryLevels
     };
+  });
+}
+
+export async function updateShopifyCustomerMetafield(input: ShopifyCustomerMetafieldUpdateInput) {
+  await shopifyAdminFetch<ShopifyCustomerUpdateOperation>({
+    query: updateCustomerMetafieldMutation,
+    variables: input,
+    cache: 'no-cache'
   });
 }
 

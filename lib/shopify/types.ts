@@ -111,27 +111,56 @@ export type ShopifyCollection = {
   updatedAt: string;
 };
 
+export type ShopifyMetaField = {
+  id?: string;
+  namespace?: string;
+  key?: string;
+  value?: string;
+};
+
 export type ShopifyCustomer = {
   id: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   phone: string;
-  default_address: {
+  defaultAddress: {
     address1: string;
     address2: string;
     city: string;
     company: string;
     country: string;
-    country_code: string;
-    country_name: string;
-    first_name: string;
-    last_name: string;
-    name: string;
+    countryCodeV2: string;
     phone: string;
-    province: string;
     zip: string;
-    default: boolean;
+  };
+  admin_graphql_api_id: string;
+  metafield: ShopifyMetaField | null;
+  metafields: Array<ShopifyMetaField | null>;
+};
+
+export type ShopifyCustomerMetafieldUpdateInput = {
+  input: {
+    id: string;
+    metafields: ShopifyMetaField[];
+  };
+};
+
+export type ShopifyCustomerUpdateOperation = {
+  data: {
+    customerUpdate: {
+      customer: ShopifyCustomer;
+    };
+  };
+  variables: ShopifyCustomerMetafieldUpdateInput;
+};
+
+export type ShopifyCustomerOperation = {
+  data: {
+    customer: ShopifyCustomer;
+  };
+  variables: {
+    id: string;
   };
 };
 
