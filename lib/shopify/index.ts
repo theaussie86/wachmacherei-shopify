@@ -23,6 +23,7 @@ import {
   getCollectionQuery,
   getCollectionsQuery
 } from './queries/collection';
+import { getCustomerByEmailQuery } from './queries/customer';
 import { getStockLevelsQuery } from './queries/inventory';
 import { getMenuQuery } from './queries/menu';
 import { getPageQuery, getPagesQuery } from './queries/page';
@@ -47,6 +48,7 @@ import {
   ShopifyCollectionProductsOperation,
   ShopifyCollectionsOperation,
   ShopifyCreateCartOperation,
+  ShopifyCustomerFindOperation,
   ShopifyCustomerMetafieldUpdateInput,
   ShopifyCustomerUpdateOperation,
   ShopifyInventoryItemAdjustment,
@@ -521,6 +523,18 @@ export async function updateShopifyCustomerMetafield(input: ShopifyCustomerMetaf
     variables: input,
     cache: 'no-cache'
   });
+}
+
+export async function getShopifyCustomerByEmailAddress(email: string) {
+  const res = await shopifyAdminFetch<ShopifyCustomerFindOperation>({
+    query: getCustomerByEmailQuery,
+    variables: {
+      query: `email:${email}`
+    },
+    cache: 'no-cache'
+  });
+
+  return removeEdgesAndNodes(res.body.data.customers);
 }
 
 export async function adjustStockLevels(

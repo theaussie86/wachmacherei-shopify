@@ -163,6 +163,14 @@ export type ShopifyCustomerOperation = {
     id: string;
   };
 };
+export type ShopifyCustomerFindOperation = {
+  data: {
+    customers: Connection<ShopifyCustomer>;
+  };
+  variables: {
+    query: string;
+  };
+};
 
 export type ShopifyProduct = {
   id: string;
