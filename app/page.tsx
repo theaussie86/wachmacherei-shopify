@@ -1,13 +1,13 @@
-import TasseImage from 'components/images/Tasse.png';
-import ResektImg from 'components/images/respekt.jpg';
-import HeroBgImage from 'components/images/roesterei-hero.jpg';
-import BohnenImage from 'components/images/wachmacherei-kaffeebohnen.jpg';
-import RoesterImage from 'components/images/wachmacherei-roester.jpg';
 import Footer from 'components/layout/footer';
 import BackgroundOverlay from 'components/overlay';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import TasseImage from '../components/images/Tasse.png';
+import HeroBgImage from '../components/images/roesterei-hero.jpg';
+import RoesterImage from '../components/images/wm_homepage_quer.jpg';
+import RespektImg from '../components/images/wm_homepage_respekt.jpg';
+import BohnenImage from '../components/images/wm_homepage_schwarzes_glueck.jpg';
 
 export const metadata = {
   description: 'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
@@ -40,11 +40,11 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <div className="lg:pr-4">
-              <div className="relative overflow-hidden px-6 pb-9 pt-64 shadow-2xl sm:px-12 lg:max-w-lg lg:px-8 lg:pb-8 xl:px-10 xl:pb-10">
+              <div className="shadow-2xl lg:max-w-lg">
                 <Image
-                  className="absolute inset-0 h-full w-full object-cover "
-                  src={ResektImg}
-                  alt=""
+                  className=" inset-0 w-full object-cover "
+                  src={RespektImg}
+                  alt="Respekt von Anfang an"
                 />
               </div>
             </div>

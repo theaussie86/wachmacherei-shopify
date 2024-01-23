@@ -1,8 +1,8 @@
 import RoesterImage from 'components/images/wachmacherei_roester.jpg';
-import HeroBgImage from 'components/images/wachmacherei_ueber_uns_hero.jpg';
 import Footer from 'components/layout/footer';
 import BackgroundOverlay from 'components/overlay';
 import { Suspense } from 'react';
+import HeroBgImage from '../../components/images/wm_ueberuns_hero.jpg';
 
 export const metadata = {
   description: 'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
