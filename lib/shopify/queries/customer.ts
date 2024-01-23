@@ -10,8 +10,8 @@ export const getCustomerByIdQuery = /* GraphQL */ `
 `;
 
 export const getCustomerByEmailQuery = /* GraphQL */ `
-  query getCustomerByEmail($email: String!) {
-    customers(first: 3, query: $email) {
+  query getCustomerByEmail($query: String!) {
+    customers(first: 3, query: $query) {
       edges {
         node {
           ...customer
