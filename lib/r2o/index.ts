@@ -61,33 +61,33 @@ function createCustomer(data: ShopifyCustomer) {
   return {
     address: {
       delivery: {
-        company: data.default_address.company,
-        city: data.default_address.city,
-        country: data.default_address.country_code,
+        company: data.default_address?.company,
+        city: data.default_address?.city,
+        country: data.default_address?.country_code,
         email: data.email,
         firstName: data.first_name,
         lastName: data.last_name,
         phone: data.phone,
-        street: data.default_address.address1 + ' ' + data.default_address.address2,
-        zip: data.default_address.zip
+        street: data.default_address?.address1 + ' ' + data.default_address?.address2,
+        zip: data.default_address?.zip
       },
       invoice: {
-        company: data.default_address.company,
-        city: data.default_address.city,
-        country: data.default_address.country_code,
+        company: data.default_address?.company,
+        city: data.default_address?.city,
+        country: data.default_address?.country_code,
         email: data.email,
         firstName: data.first_name,
         lastName: data.last_name,
         phone: data.phone,
-        street: data.default_address.address1 + ' ' + data.default_address.address2,
-        zip: data.default_address.zip
+        street: data.default_address?.address1 + ' ' + data.default_address?.address2,
+        zip: data.default_address?.zip
       }
     },
     email: data.email,
     firstName: data.first_name,
     lastName: data.last_name,
     phone: data.phone,
-    company: data.default_address.company,
+    company: data.default_address?.company,
     customerCategory_id: 125301
   };
 }
