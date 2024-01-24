@@ -39,10 +39,10 @@ export default async function HomePage() {
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-            <div className="lg:pr-4">
-              <div className="shadow-2xl lg:max-w-lg">
+            <div className="">
+              <div className="shadow-2xl">
                 <Image
-                  className=" inset-0 w-full object-cover "
+                  className="inset-0 max-h-[600px] w-full object-cover object-top"
                   src={RespektImg}
                   alt="Respekt von Anfang an"
                 />
@@ -84,13 +84,9 @@ export default async function HomePage() {
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-            <div className="lg:order-2 lg:pr-4">
-              <div className="relative overflow-hidden px-6 pb-9 pt-64 shadow-2xl sm:px-12 lg:max-w-lg lg:px-8 lg:pb-8 xl:px-10 xl:pb-10">
-                <Image
-                  className="absolute inset-0 h-full w-full object-cover "
-                  src={BohnenImage}
-                  alt=""
-                />
+            <div className="place-self-center lg:order-2">
+              <div className="shadow-2xl">
+                <Image className="inset-0 w-full object-cover " src={BohnenImage} alt="" />
               </div>
             </div>
             <div className="lg:order-1">
