@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import clsx from 'clsx';
 import { startVerifyRecaptcha } from 'lib/utils';
 import { useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
@@ -25,7 +26,7 @@ function ContactForm() {
     register,
     reset,
     handleSubmit,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm<ContactFormValues>({ resolver: zodResolver(contactSchema) });
 
   const onSubmit = async (data: FieldValues) => {
@@ -114,9 +115,35 @@ function ContactForm() {
         ) : null}
       </div>
       <button
-        className="rounded px-5 py-1.5 text-xl tracking-widest text-secondary ring-2 ring-secondary"
+        className={clsx(
+          'flex items-center justify-center gap-x-2 rounded px-5 py-1.5 text-xl tracking-widest text-secondary ring-2 ring-secondary hover:opacity-80',
+          isSubmitting && 'cursor-not-allowed opacity-50'
+        )}
         type="submit"
+        disabled={isSubmitting}
       >
+        {isSubmitting && (
+          <svg
+            className="-ml-1 mr-3 h-5 w-5 animate-spin text-secondary"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+        )}
         Absenden
       </button>
     </form>
