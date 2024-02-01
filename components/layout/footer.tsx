@@ -33,7 +33,7 @@ export default async function Footer() {
             </p>
             <p className="my-3 flex items-end hover:underline">
               <EnvelopeIcon className="mr-2 h-5 w-5" />
-              <a href="mailto:kaffee@wachamcherei.de">kaffee(at)wachmacherei.de</a>
+              <a href="mailto:kaffee@wachmacherei.de">kaffee(at)wachmacherei.de</a>
             </p>
             <p className="flex items-end hover:underline">
               <DevicePhoneMobileIcon className="mr-2 inline-block h-5 w-5" />
