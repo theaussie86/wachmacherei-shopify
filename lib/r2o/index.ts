@@ -100,7 +100,7 @@ function prepareCustomerData(data: ShopifyCustomer) {
         firstName: data.firstName,
         lastName: data.lastName,
         phone: data.phone,
-        street: data.defaultAddress?.address1 + ' ' + data.defaultAddress?.address2,
+        street: `${data.defaultAddress?.address1} ${data.defaultAddress?.address2 ?? ''}`,
         zip: data.defaultAddress?.zip
       },
       invoice: {
@@ -111,7 +111,7 @@ function prepareCustomerData(data: ShopifyCustomer) {
         firstName: data.firstName,
         lastName: data.lastName,
         phone: data.phone,
-        street: data.defaultAddress?.address1 + ' ' + data.defaultAddress?.address2,
+        street: `${data.defaultAddress?.address1} ${data.defaultAddress?.address2 ?? ''}`,
         zip: data.defaultAddress?.zip
       }
     },
