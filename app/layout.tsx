@@ -37,11 +37,6 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="de">
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `!function(t){function e(){var e=this||self;e.globalThis=e,delete t.prototype._T_}"object"!=typeof globalThis&&(this?e():(t.defineProperty(t.prototype,"_T_",{configurable:!0,get:e}),_T_))}(Object);`
-        }}
-      />
       <body className="bg-white text-primary selection:bg-secondary dark:bg-primary dark:text-white dark:selection:bg-secondary dark:selection:text-white">
         <GoogleAnalytics />
         <Providers>
