@@ -98,8 +98,8 @@ export function removeNullAndUndefined(obj: any): any {
   return obj;
 }
 
-function prepareCustomerData(data: ShopifyCustomer) {
-  return {
+export function prepareCustomerData(data: Partial<ShopifyCustomer>) {
+  return removeNullAndUndefined({
     address: {
       delivery: {
         company: data.defaultAddress?.company,
@@ -130,7 +130,7 @@ function prepareCustomerData(data: ShopifyCustomer) {
     phone: data.phone,
     company: data.defaultAddress?.company,
     customerCategory_id: 125301
-  };
+  });
 }
 
 export async function fetchStock(sku: string) {

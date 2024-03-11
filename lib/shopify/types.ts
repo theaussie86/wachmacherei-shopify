@@ -126,12 +126,12 @@ export type ShopifyCustomer = {
   phone: string;
   defaultAddress: {
     address1: string;
-    address2: string;
+    address2?: string;
     city: string;
-    company: string;
+    company?: string;
     country: string;
     countryCodeV2: string;
-    phone: string;
+    phone?: string;
     zip: string;
   };
   admin_graphql_api_id: string;
