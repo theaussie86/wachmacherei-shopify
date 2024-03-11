@@ -89,6 +89,15 @@ export async function createOrUpdateCustomerInR2O(data: ShopifyCustomer, custome
   return customer;
 }
 
+export function removeNullAndUndefined(obj: any): any {
+  Object.keys(obj).forEach((key) =>
+    obj[key] && typeof obj[key] === 'object'
+      ? removeNullAndUndefined(obj[key])
+      : obj[key] == null && delete obj[key]
+  );
+  return obj;
+}
+
 function prepareCustomerData(data: ShopifyCustomer) {
   return {
     address: {
