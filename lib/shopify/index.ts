@@ -487,7 +487,7 @@ export async function getProducts({
     query: getProductsQuery,
     tags: [TAGS.products],
     variables: {
-      query: query ? `${query} AND NOT (hidden)` : 'NOT (hidden)',
+      query,
       reverse,
       sortKey
     }
