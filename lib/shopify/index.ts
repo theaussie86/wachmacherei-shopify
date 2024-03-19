@@ -17,6 +17,7 @@ import {
 } from './mutations/cart';
 import { updateCustomerMetafieldMutation } from './mutations/customer';
 import { adjustStockLevelsMutation } from './mutations/inventory';
+import { createProductMutation } from './mutations/product';
 import { getCartQuery } from './queries/cart';
 import {
   getCollectionProductsQuery,
@@ -56,6 +57,8 @@ import {
   ShopifyPageOperation,
   ShopifyPagesOperation,
   ShopifyProduct,
+  ShopifyProductCreationOperation,
+  ShopifyProductInput,
   ShopifyProductOperation,
   ShopifyProductRecommendationsOperation,
   ShopifyProductsOperation,
@@ -448,6 +451,20 @@ export async function getPages(): Promise<Page[]> {
   });
 
   return removeEdgesAndNodes(res.body.data.pages);
+}
+
+export async function createProduct(input: ShopifyProductInput) {
+  const res = await shopifyAdminFetch<ShopifyProductCreationOperation>({
+    query: createProductMutation,
+    tags: [TAGS.products],
+    variables: {
+      input
+    }
+  });
+
+  console.log('createProduct', res.body.data);
+
+  return res.body.data.productCreate.product;
 }
 
 export async function getProduct(handle: string): Promise<Product | undefined> {

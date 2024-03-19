@@ -309,6 +309,20 @@ export type ShopifyProductOperation = {
   };
 };
 
+export type ShopifyProductInput = {
+  title: string;
+  status: string;
+  handle: string;
+  metafields: Array<{ key: string; value: string; namespace: string } | null>;
+};
+
+export type ShopifyProductCreationOperation = {
+  data: { productCreate: { product: ShopifyProduct } };
+  variables: {
+    input: ShopifyProductInput;
+  };
+};
+
 export type ShopifyProductRecommendationsOperation = {
   data: {
     productRecommendations: ShopifyProduct[];

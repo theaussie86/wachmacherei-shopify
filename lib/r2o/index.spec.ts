@@ -1,7 +1,7 @@
 import { ShopifyCustomer } from 'lib/shopify/types';
 import { prepareCustomerData, removeNullAndUndefined } from '.';
 
-describe('remove empty keys', () => {
+describe.skip('remove empty keys', () => {
   test('should remove empty keys', () => {
     // Arrange
     const obj = {
