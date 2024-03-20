@@ -19,6 +19,7 @@ import { updateCustomerMetafieldMutation } from './mutations/customer';
 import { adjustStockLevelsMutation } from './mutations/inventory';
 import { createProductMutation } from './mutations/product';
 import { getCartQuery } from './queries/cart';
+import { getChannelsQuery } from './queries/channel';
 import {
   getCollectionProductsQuery,
   getCollectionQuery,
@@ -44,6 +45,7 @@ import {
   ShopifyAddToCartOperation,
   ShopifyCart,
   ShopifyCartOperation,
+  ShopifyChannelsQuery,
   ShopifyCollection,
   ShopifyCollectionOperation,
   ShopifyCollectionProductsOperation,
@@ -63,6 +65,7 @@ import {
   ShopifyProductRecommendationsOperation,
   ShopifyProductsOperation,
   ShopifyRemoveFromCartOperation,
+  ShopifySalesChannel,
   ShopifyStockLevel,
   ShopifyStockLevelsAdjustment,
   ShopifyStockLevelsOperation,
@@ -602,4 +605,13 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   }
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
+}
+
+// Fetch available sales channels
+export async function fetchAvailableSalesChannels(): Promise<ShopifySalesChannel[]> {
+  const res = await shopifyAdminFetch<ShopifyChannelsQuery>({
+    query: getChannelsQuery
+  });
+
+  return removeEdgesAndNodes(res.body.data.publications);
 }

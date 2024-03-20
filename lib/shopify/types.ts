@@ -314,6 +314,20 @@ export type ShopifyProductInput = {
   status: string;
   handle: string;
   metafields: Array<{ key: string; value: string; namespace: string } | null>;
+  publications: Array<{ publicationId: string }>;
+  vendor: string;
+  variants: Array<{
+    price: string;
+    sku: string;
+    inventoryItem: {
+      cost: string;
+      tracked: boolean;
+    };
+    inventoryQuantities: {
+      availableQuantity: number;
+      locationId: string;
+    };
+  }>;
 };
 
 export type ShopifyProductCreationOperation = {
@@ -381,5 +395,13 @@ export type ShopifyStockLevelsAdjustment = {
   variables: {
     inventoryItemAdjustments: Array<ShopifyInventoryItemAdjustment>;
     locationId: string;
+  };
+};
+
+export type ShopifySalesChannel = { id: string; name: string };
+
+export type ShopifyChannelsQuery = {
+  data: {
+    publications: Connection<ShopifySalesChannel>;
   };
 };
