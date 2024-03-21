@@ -26,6 +26,7 @@ const productFragment = /* GraphQL */ `
         { key: "anbauhoehe_ende", namespace: "custom" }
         { key: "strength", namespace: "custom" }
         { key: "charakter", namespace: "custom" }
+        { key: "r2o_prod_id", namespace: "wachmacherei" }
       ]
     ) {
       key
@@ -55,6 +56,10 @@ const productFragment = /* GraphQL */ `
           weight
           weightUnit
           availableForSale
+          metafield(key: "r2o_id", namespace: "custom") {
+            key
+            value
+          }
           selectedOptions {
             name
             value

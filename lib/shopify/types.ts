@@ -77,6 +77,10 @@ export type ProductVariant = {
   title: string;
   sku: string;
   availableForSale: boolean;
+  metafield: {
+    key: string;
+    value: string;
+  } | null;
   selectedOptions: {
     name: string;
     value: string;
