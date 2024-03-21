@@ -1,7 +1,7 @@
 import { ShopifyCustomer } from 'lib/shopify/types';
 import { prepareCustomerData, removeNullAndUndefined } from '.';
 
-describe.skip('remove empty keys', () => {
+describe('remove empty keys', () => {
   test('should remove empty keys', () => {
     // Arrange
     const obj = {
@@ -112,7 +112,7 @@ describe('prepareCustomerData', () => {
           firstName: 'firstName',
           lastName: 'lastName',
           phone: 'phone',
-          street: 'address1 ',
+          street: 'address1',
           zip: 'zip'
         },
         invoice: {
@@ -122,7 +122,7 @@ describe('prepareCustomerData', () => {
           firstName: 'firstName',
           lastName: 'lastName',
           phone: 'phone',
-          street: 'address1 ',
+          street: 'address1',
           zip: 'zip'
         }
       },

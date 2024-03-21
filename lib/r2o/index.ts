@@ -93,12 +93,17 @@ export function removeNullAndUndefined(obj: any): any {
   Object.keys(obj).forEach((key) =>
     obj[key] && typeof obj[key] === 'object'
       ? removeNullAndUndefined(obj[key])
-      : obj[key] == null && delete obj[key]
+      : (obj[key] === null || obj[key] === undefined) && delete obj[key]
   );
   return obj;
 }
 
 export function prepareCustomerData(data: Partial<ShopifyCustomer>) {
+  const street = [data.defaultAddress?.address1, data.defaultAddress?.address2]
+    .map((addr) => (typeof addr === 'string' ? addr.trim() : addr))
+    .filter((addr) => !!addr)
+    .join(' ');
+
   return removeNullAndUndefined({
     address: {
       delivery: {
@@ -109,7 +114,7 @@ export function prepareCustomerData(data: Partial<ShopifyCustomer>) {
         firstName: data.firstName,
         lastName: data.lastName,
         phone: data.phone,
-        street: `${data.defaultAddress?.address1 ?? ''} ${data.defaultAddress?.address2 ?? ''}`,
+        street,
         zip: data.defaultAddress?.zip
       },
       invoice: {
@@ -120,7 +125,7 @@ export function prepareCustomerData(data: Partial<ShopifyCustomer>) {
         firstName: data.firstName,
         lastName: data.lastName,
         phone: data.phone,
-        street: `${data.defaultAddress?.address1} ${data.defaultAddress?.address2 ?? ''}`,
+        street,
         zip: data.defaultAddress?.zip
       }
     },
