@@ -2,6 +2,7 @@ import CookieConsent from 'components/cookies/consent';
 import CookieSettings from 'components/cookies/settings';
 import MenuBar from 'components/layout/menu';
 import { GoogleAnalytics } from 'lib/scripts/ga';
+import MetaPixel from 'lib/scripts/meta';
 import { ensureStartsWith } from 'lib/utils';
 import { ReactNode, Suspense } from 'react';
 import './globals.css';
@@ -39,6 +40,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang="de">
       <body className="bg-white text-primary selection:bg-secondary dark:bg-primary dark:text-white dark:selection:bg-secondary dark:selection:text-white">
         <GoogleAnalytics />
+        <MetaPixel />
         <Providers>
           <MenuBar />
           <Suspense>
