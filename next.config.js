@@ -14,6 +14,9 @@ module.exports = {
       }
     ]
   },
+  experimental: {
+    instrumentationHook: true
+  },
   async redirects() {
     return [
       {
