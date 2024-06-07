@@ -20,7 +20,7 @@ export const metadata = {
   robots: {
     follow: true,
     index: true
-  },
+  }
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
