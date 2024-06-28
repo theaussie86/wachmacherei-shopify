@@ -2,15 +2,19 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
+import { sendContactEmail } from 'lib/microsoft';
 import { startVerifyRecaptcha } from 'lib/utils';
 import { useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
-import { FieldValues, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const contactSchema = z.object({
-  name: z.string({ required_error: 'Name ist erforderlich' }),
-  email: z.string().email({ message: 'Ungültige E-Mail-Adresse' }),
+  name: z.string().min(1, { message: 'Name ist erforderlich' }),
+  email: z
+    .string()
+    .min(1, { message: 'E-Mail-Adresse ist erforderlich' })
+    .email({ message: 'Ungültige E-Mail-Adresse' }),
   message: z
     .string({ required_error: 'Nachricht ist erforderlich' })
     .min(20, 'Nachricht muss mindestens 20 Zeichen lang sein.')
@@ -20,33 +24,29 @@ const contactSchema = z.object({
 type ContactFormValues = z.infer<typeof contactSchema>;
 
 function ContactForm() {
-  const [message, setMessage] = useState();
+  const [message, setMessage] = useState<string>();
   const { executeRecaptcha } = useGoogleReCaptcha();
   const {
     register,
+    // control,
     reset,
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm<ContactFormValues>({ resolver: zodResolver(contactSchema) });
 
-  const onSubmit = async (data: FieldValues) => {
+  const onSubmit = async (data: ContactFormValues) => {
     try {
       await startVerifyRecaptcha(executeRecaptcha, 'contact');
       console.log('recaptcha verified');
       console.log('submitting data', data);
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+      await sendContactEmail(data).then(() => {
+        setMessage('Nachricht erfolgreich gesendet');
       });
-      const res = await response.json();
-      console.log(res);
-      setMessage(res.msg);
+
       reset();
     } catch (error) {
       console.error(error);
+      setMessage('Nachricht konnte nicht gesendet werden');
     }
   };
 
@@ -135,7 +135,7 @@ function ContactForm() {
               cy="12"
               r="10"
               stroke="currentColor"
-              stroke-width="4"
+              strokeWidth="4"
             ></circle>
             <path
               className="opacity-75"
@@ -146,6 +146,7 @@ function ContactForm() {
         )}
         Absenden
       </button>
+      {/* <DevTool control={control} placement="bottom-left" /> */}
     </form>
   );
 }
