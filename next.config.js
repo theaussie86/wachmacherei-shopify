@@ -23,6 +23,11 @@ module.exports = {
         source: '/password',
         destination: '/',
         permanent: true
+      },
+      {
+        source: '/produkt/:slug',
+        destination: '/product/:slug',
+        permanent: true
       }
     ];
   }
