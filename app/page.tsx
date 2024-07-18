@@ -11,6 +11,7 @@ import BohnenImage from '../components/images/wm_homepage_schwarzes_glueck.jpg';
 import { openGraphDefaults } from '../lib/utils';
 
 export const metadata = {
+  description: 'In der Wachmacherei in Ottobeuren wird Kaffee mit Respekt geröstet.',
   openGraph: openGraphDefaults
 };
 

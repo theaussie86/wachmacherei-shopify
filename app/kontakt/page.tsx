@@ -9,6 +9,8 @@ import { Suspense } from 'react';
 import { baseUrl, openGraphDefaults } from '../../lib/utils';
 
 export const metadata = {
+  title: 'Kontakt',
+  description: 'Wenn du Fragen zu uns oder unseren Kaffee hast, kannst du uns hier kontaktieren',
   openGraph: {
     ...openGraphDefaults,
     url: baseUrl + '/kontakt'

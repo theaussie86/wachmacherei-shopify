@@ -2,10 +2,16 @@ import Grid from 'components/grid';
 import ProductGridItems from 'components/layout/product-grid-items';
 import { defaultSort, sorting } from 'lib/constants';
 import { getProducts } from 'lib/shopify';
+import { baseUrl, openGraphDefaults } from '../../lib/utils';
 
 export const metadata = {
-  title: 'Search',
-  description: 'Search for products in the store.'
+  title: 'Shop',
+  description:
+    'Hier findest du alle Produkte aus unserem Sortiment. Nutze die Suchfunktion um Produkte zu finden.',
+  openGraph: {
+    ...openGraphDefaults,
+    url: baseUrl + '/shop'
+  }
 };
 
 export default async function ShopPage({

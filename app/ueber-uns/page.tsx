@@ -6,6 +6,8 @@ import HeroBgImage from '../../components/images/wm_ueberuns_hero.jpg';
 import { baseUrl, openGraphDefaults } from '../../lib/utils';
 
 export const metadata = {
+  title: 'Über uns',
+  description: 'Die Wachmacherei - Respekt. Zeit. Liebe. Neugier.',
   openGraph: {
     ...openGraphDefaults,
     url: baseUrl + '/ueber-uns'
