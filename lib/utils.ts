@@ -99,6 +99,7 @@ export const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
 export const openGraphDefaults = {
   type: 'website',
   title: SITE_NAME!,
+  siteName: 'Wachmacherei Ottobeuren',
   description: 'Ihre Kaffeerösterei im Allgäu im wunderschönen Ottobeuren',
   url: baseUrl,
   locale: 'de_DE'
