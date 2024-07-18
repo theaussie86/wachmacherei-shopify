@@ -8,12 +8,10 @@ import HeroBgImage from '../components/images/roesterei-hero.jpg';
 import RoesterImage from '../components/images/wm_homepage_quer.jpg';
 import RespektImg from '../components/images/wm_homepage_respekt.jpg';
 import BohnenImage from '../components/images/wm_homepage_schwarzes_glueck.jpg';
+import { openGraphDefaults } from '../lib/utils';
 
 export const metadata = {
-  description: 'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
-  openGraph: {
-    type: 'website'
-  }
+  openGraph: openGraphDefaults
 };
 
 export default async function HomePage() {

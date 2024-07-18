@@ -3,11 +3,12 @@ import Footer from 'components/layout/footer';
 import BackgroundOverlay from 'components/overlay';
 import { Suspense } from 'react';
 import HeroBgImage from '../../components/images/wm_ueberuns_hero.jpg';
+import { baseUrl, openGraphDefaults } from '../../lib/utils';
 
 export const metadata = {
-  description: 'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
   openGraph: {
-    type: 'website'
+    ...openGraphDefaults,
+    url: baseUrl + '/ueber-uns'
   }
 };
 

@@ -90,3 +90,16 @@ export const startVerifyRecaptcha = async (
     throw new Error('Recaptcha verification failed');
   }
 };
+
+export const { SITE_NAME } = process.env;
+export const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : 'http://localhost:3000';
+
+export const openGraphDefaults = {
+  type: 'website',
+  title: SITE_NAME!,
+  description: 'Ihre Kaffeerösterei im Allgäu im wunderschönen Ottobeuren',
+  url: baseUrl,
+  locale: 'de_DE'
+};

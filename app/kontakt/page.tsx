@@ -6,15 +6,16 @@ import Footer from 'components/layout/footer';
 import MapComponent from 'components/map';
 import BackgroundOverlay from 'components/overlay';
 import { Suspense } from 'react';
+import { baseUrl, openGraphDefaults } from '../../lib/utils';
 
 export const metadata = {
-  description: 'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
   openGraph: {
-    type: 'website'
+    ...openGraphDefaults,
+    url: baseUrl + '/kontakt'
   }
 };
 
-export default async function AboutPage() {
+export default async function ContactPage() {
   return (
     <>
       <BackgroundOverlay img={HeroBgImage}>

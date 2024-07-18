@@ -3,13 +3,9 @@ import CookieSettings from 'components/cookies/settings';
 import MenuBar from 'components/layout/menu';
 import { GoogleAnalytics } from 'lib/scripts/ga';
 import { ReactNode, Suspense } from 'react';
+import { SITE_NAME, baseUrl, openGraphDefaults } from '../lib/utils';
 import './globals.css';
 import Providers from './providers';
-
-const { SITE_NAME } = process.env;
-const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : 'http://localhost:3000';
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -17,6 +13,7 @@ export const metadata = {
     default: SITE_NAME!,
     template: `%s | ${SITE_NAME}`
   },
+  openGraph: openGraphDefaults,
   robots: {
     follow: true,
     index: true

@@ -16,10 +16,10 @@ export default async function OpengraphImage(props?: Props): Promise<ImageRespon
   return new ImageResponse(
     (
       <div tw="flex h-full w-full flex-col items-center justify-center bg-black">
-        <div tw="flex flex-none items-center justify-center border border-neutral-700 h-[160px] w-[160px] rounded-3xl">
-          <LogoIcon width="64" height="58" fill="white" />
+        <div tw="flex flex-none items-center justify-center h-[360px] w-[160px]">
+          <LogoIcon />
         </div>
-        <p tw="mt-12 text-6xl font-bold text-white">{title}</p>
+        <p tw="text-7xl text-white text-center">{title}</p>
       </div>
     ),
     {
@@ -27,12 +27,11 @@ export default async function OpengraphImage(props?: Props): Promise<ImageRespon
       height: 630,
       fonts: [
         {
-          name: 'Inter',
-          data: await fetch(new URL('../fonts/Inter-Bold.ttf', import.meta.url)).then((res) =>
-            res.arrayBuffer()
-          ),
-          style: 'normal',
-          weight: 700
+          name: 'IBM Plex Sans',
+          data: await fetch(
+            new URL('../public/fonts/IBMPlexSans/IBMPlexSans-SemiBold.ttf', import.meta.url)
+          ).then((res) => res.arrayBuffer()),
+          style: 'normal'
         }
       ]
     }
