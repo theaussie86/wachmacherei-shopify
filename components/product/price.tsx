@@ -27,7 +27,7 @@ function ProductPrice({ product }: { product: Product }) {
           selectedVariant.weightUnit
         )
       : null;
-  console.log(averageWeight, 'averageWeight');
+
   return (
     <div className="mb-6 flex flex-col items-start gap-2 pb-6">
       <div className="flex-none rounded-full bg-secondary p-2 text-white">

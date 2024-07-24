@@ -39,7 +39,10 @@ export function VariantSelector({
   }));
 
   return options.map((option) => (
-    <dl className="mb-8" key={option.id}>
+    <dl
+      className={clsx('mb-8', option.name.toLowerCase() === 'zustand' && 'hidden')}
+      key={option.id}
+    >
       <dt className="mb-4 text-sm uppercase tracking-wide">{option.name}</dt>
       <dd className="flex flex-wrap gap-3">
         {option.values.map((value) => {
@@ -51,29 +54,23 @@ export function VariantSelector({
           // The option is active if it's in the url params.
           const isActive = searchParams.get(optionNameLowerCase) === value;
 
-          let otherOption: string | undefined;
-          //
-          if (optionNameLowerCase === 'zustand' || optionNameLowerCase.startsWith('mahlgrad')) {
-            otherOption =
-              optionNameLowerCase === 'zustand'
-                ? options.map((o) => o.name.toLowerCase()).find((k) => k.startsWith('mahlgrad'))
-                : 'zustand';
-          }
           // Update the option params using the current option to reflect how the url *would* change,
           // if the option was clicked.
           if (isActive) {
             optionSearchParams.delete(optionNameLowerCase);
 
-            // automatically unset Ungemahlen
-            if (otherOption && value.toLowerCase() === 'ungemahlen') {
-              optionSearchParams.delete(otherOption);
+            // automatically unset Zustand if Mahlgrad is selected
+            if (optionNameLowerCase.startsWith('mahlgrad')) {
+              optionSearchParams.delete('zustand');
             }
           } else {
             optionSearchParams.set(optionNameLowerCase, value);
 
-            // automatically set Ungemahlen
-            if (otherOption && value.toLowerCase() === 'ungemahlen') {
-              optionSearchParams.set(otherOption, value);
+            // automatically set Zustand if Mahlgrad is selected
+            if (optionNameLowerCase.startsWith('mahlgrad')) {
+              console.log('setting Zustand');
+              const zustand = value === 'Ungemahlen' ? 'Ungemahlen' : 'Gemahlen';
+              optionSearchParams.set('zustand', zustand);
             }
           }
           const optionUrl = createUrl(pathname, optionSearchParams);
@@ -92,6 +89,7 @@ export function VariantSelector({
               (option) => option.name.toLowerCase() === key && option.values.includes(value)
             )
           );
+
           const isAvailableForSale = combinations.find((combination) =>
             filtered.every(
               ([key, value]) => combination[key] === value && combination.availableForSale
