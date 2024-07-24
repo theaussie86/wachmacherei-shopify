@@ -57,11 +57,10 @@ export const calculateAveragePrice = (
   console.log('price', price);
   console.log('weight', weight);
   console.log('weightUnit', weightUnit);
-  if (weightUnit === 'KILOGRAMS') {
-    return formatPrice((parseFloat(price) / weight).toString(), currencyCode) + ' / kg';
-  }
-  // we always return the average price in kilograms
-  return weight;
+  const factor = weightUnit === 'GRAMS' ? 1000 : 1;
+  // if (weightUnit === 'KILOGRAMS') {
+  return formatPrice(((parseFloat(price) / weight) * factor).toString(), currencyCode) + ' / kg';
+  // }
 };
 
 export const isMinEqualMaxPrice = (priceRange: Product['priceRange']) => {

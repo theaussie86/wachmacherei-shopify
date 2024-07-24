@@ -14,14 +14,20 @@ function ProductPrice({ product }: { product: Product }) {
     )
   );
   const selectedVariantId = variant?.id || defaultVariantId;
+  const selectedVariant = variant || variants.find((v) => v.id === selectedVariantId);
 
-  const amount = selectedVariantId ? variant?.price.amount : null;
-  const currency = selectedVariantId ? variant?.price.currencyCode : null;
+  const amount = selectedVariantId ? selectedVariant?.price.amount : null;
+  const currency = selectedVariantId ? selectedVariant?.price.currencyCode : null;
 
   const averageWeight =
-    selectedVariantId && variant && variant.weight !== 0
-      ? calculateAveragePrice(variant.price.amount, variant.weight, variant.weightUnit)
+    selectedVariantId && selectedVariant && selectedVariant.weight !== 0
+      ? calculateAveragePrice(
+          selectedVariant.price.amount,
+          selectedVariant.weight,
+          selectedVariant.weightUnit
+        )
       : null;
+  console.log(averageWeight, 'averageWeight');
   return (
     <div className="mb-6 flex flex-col items-start gap-2 pb-6">
       <div className="flex-none rounded-full bg-secondary p-2 text-white">
