@@ -5,6 +5,7 @@ import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
+  console.log('body ', req.body);
   let sku;
   try {
     const secret = req.nextUrl.searchParams.get('secret');
@@ -49,18 +50,28 @@ export async function POST(req: NextRequest) {
 
     // check stock levels in shopify and update if necessary
     const shopifyStock = await getStockLevels(sku);
-    const shopifyStockLevel = shopifyStock[0]?.inventoryLevels[0]?.available;
-    const locationId = shopifyStock[0]?.inventoryLevels[0]?.location.id;
-    console.log(r2oStockLevel, shopifyStock);
+    const adjustments = [];
+    let locationId: string | undefined = undefined;
+    for (const item of shopifyStock) {
+      const shopifyStockLevel = item.inventoryLevels[0]?.available;
+      if (!locationId) {
+        locationId = item.inventoryLevels[0]?.location.id;
+      }
 
-    if (r2oStockLevel !== shopifyStockLevel && locationId) {
-      const adjustments = shopifyStock.map((item) => ({
-        inventoryItemId: item.id,
-        availableDelta: r2oStockLevel - (shopifyStockLevel || 0)
-      }));
-
-      await adjustStockLevels(adjustments, locationId);
+      if (r2oStockLevel !== shopifyStockLevel && locationId) {
+        adjustments.push({
+          inventoryItemId: item.id,
+          availableDelta: r2oStockLevel - (shopifyStockLevel || 0)
+        });
+      }
     }
+
+    if (!locationId) {
+      console.error('No location id found.');
+      return NextResponse.json({ status: 200 });
+    }
+    console.log('Adjustments', adjustments);
+    await adjustStockLevels(adjustments, locationId);
     return NextResponse.json({ status: 200, body: data });
   } finally {
     // Remove the request from active requests after completion or error
