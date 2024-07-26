@@ -27,6 +27,10 @@ function ProductPrice({ product }: { product: Product }) {
           selectedVariant.weightUnit
         )
       : null;
+  const weight =
+    selectedVariantId && selectedVariant
+      ? `${selectedVariant.weight} ${selectedVariant.weightUnit === 'GRAMS' ? 'g' : 'kg'}`
+      : null;
 
   return (
     <div className="mb-6 flex flex-col items-start gap-2 pb-6">
@@ -43,7 +47,11 @@ function ProductPrice({ product }: { product: Product }) {
               priceRange.maxVariantPrice.currencyCode
             )}`}
       </div>
-      {averageWeight ? <span>({averageWeight})</span> : null}
+      {averageWeight && weight ? (
+        <span className="mt-3 text-sm">
+          Gewicht: {weight} ({averageWeight})
+        </span>
+      ) : null}
     </div>
   );
 }
