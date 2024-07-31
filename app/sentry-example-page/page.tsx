@@ -1,9 +1,16 @@
-'use client';
-
 import Head from 'next/head';
-import * as Sentry from '@sentry/nextjs';
+import ThrowErrorButton from './throw-error-button';
 
-export default function Page() {
+export const metadata = {
+  title: 'Sentry Onboarding',
+  description: 'Test Sentry for your Next.js app!',
+  robots: {
+    follow: false,
+    index: false
+  }
+};
+
+export default async function Page() {
   return (
     <div>
       <Head>
@@ -36,35 +43,7 @@ export default function Page() {
         </h1>
 
         <p>Get started by sending us a sample error:</p>
-        <button
-          type="button"
-          style={{
-            padding: '12px',
-            cursor: 'pointer',
-            backgroundColor: '#AD6CAA',
-            borderRadius: '4px',
-            border: 'none',
-            color: 'white',
-            fontSize: '14px',
-            margin: '18px'
-          }}
-          onClick={async () => {
-            await Sentry.startSpan(
-              {
-                name: 'Example Frontend Span',
-                op: 'test'
-              },
-              async () => {
-                const res = await fetch('/api/sentry-example-api');
-                if (!res.ok) {
-                  throw new Error('Sentry Example Frontend Error');
-                }
-              }
-            );
-          }}
-        >
-          Throw error!
-        </button>
+        <ThrowErrorButton />
 
         <p>
           Next, look for the error on the{' '}
