@@ -144,3 +144,18 @@ export async function fetchStock(sku: string) {
   const stock = await response.json();
   return stock;
 }
+
+export async function fetchProduct(productId: string) {
+  const response = await fetch(
+    `${process.env.R2O_BASE_URL}/v1/products/${productId}?includeVariations=true`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${process.env.R2O_AUTH_TOKEN}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  const product = await response.json();
+  return product;
+}

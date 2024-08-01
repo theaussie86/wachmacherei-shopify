@@ -16,6 +16,7 @@ import {
 } from './mutations/cart';
 import { updateCustomerMetafieldMutation } from './mutations/customer';
 import { adjustStockLevelsMutation } from './mutations/inventory';
+import { adjustVariantsPriceMutation } from './mutations/price';
 import { getCartQuery } from './queries/cart';
 import {
   getCollectionProductsQuery,
@@ -62,7 +63,8 @@ import {
   ShopifyStockLevel,
   ShopifyStockLevelsAdjustment,
   ShopifyStockLevelsOperation,
-  ShopifyUpdateCartOperation
+  ShopifyUpdateCartOperation,
+  ShopifyVariantsPriceAdjustment
 } from './types';
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN || '';
@@ -550,6 +552,24 @@ export async function adjustStockLevels(
   const inventoryItems = res.body.data.inventoryLevels;
 
   return inventoryItems;
+}
+
+export async function adjustVariantsPrice(
+  productId: string,
+  variants: { id: string; price: string }[]
+) {
+  const variables = {
+    productId,
+    variants
+  };
+
+  const res = await shopifyAdminFetch<ShopifyVariantsPriceAdjustment>({
+    query: adjustVariantsPriceMutation,
+    variables,
+    cache: 'no-store'
+  });
+
+  return res.body.data.productVariantsBulkUpdate.productVariants;
 }
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.

@@ -341,6 +341,17 @@ export type ShopifyStockLevel = {
     available: number;
     location: ShopifyLocation;
   }>;
+  variant: {
+    id: string;
+    metafield: ShopifyMetaField;
+    contextualPricing: {
+      price: Money;
+    };
+    product: {
+      id: string;
+      metafield: ShopifyMetaField;
+    };
+  };
 };
 
 export type ShopifyStockLevelsOperation = {
@@ -367,5 +378,25 @@ export type ShopifyStockLevelsAdjustment = {
   variables: {
     inventoryItemAdjustments: Array<ShopifyInventoryItemAdjustment>;
     locationId: string;
+  };
+};
+export type ShopifyVariantsPriceAdjustment = {
+  data: {
+    productVariantsBulkUpdate: {
+      product: {
+        id: string;
+      };
+      productVariants: Array<{
+        id: string;
+        price: string;
+      }>;
+    };
+  };
+  variables: {
+    productId: string;
+    variants: Array<{
+      id: string;
+      price: string;
+    }>;
   };
 };
