@@ -58,20 +58,8 @@ export function VariantSelector({
           // if the option was clicked.
           if (isActive) {
             optionSearchParams.delete(optionNameLowerCase);
-
-            // automatically unset Zustand if Mahlgrad is selected
-            if (optionNameLowerCase.startsWith('mahlgrad')) {
-              optionSearchParams.delete('zustand');
-            }
           } else {
             optionSearchParams.set(optionNameLowerCase, value);
-
-            // automatically set Zustand if Mahlgrad is selected
-            if (optionNameLowerCase.startsWith('mahlgrad')) {
-              console.log('setting Zustand');
-              const zustand = value === 'Ungemahlen' ? 'Ungemahlen' : 'Gemahlen';
-              optionSearchParams.set('zustand', zustand);
-            }
           }
           const optionUrl = createUrl(pathname, optionSearchParams);
 
