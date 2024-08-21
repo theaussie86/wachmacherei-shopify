@@ -1,3 +1,4 @@
+import Banner from 'components/banner';
 import CookieConsent from 'components/cookies/consent';
 import CookieSettings from 'components/cookies/settings';
 import MenuBar from 'components/layout/menu';
@@ -26,6 +27,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body className="bg-white text-primary selection:bg-secondary dark:bg-primary dark:text-white dark:selection:bg-secondary dark:selection:text-white">
         <GoogleAnalytics />
         <Providers>
+          <Banner />
           <MenuBar />
           <Suspense>
             <main>{children}</main>
