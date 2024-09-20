@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { SortFilterItem } from 'lib/constants';
+import type { SortFilterItem } from 'lib/constants';
 import { createUrl } from 'lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';

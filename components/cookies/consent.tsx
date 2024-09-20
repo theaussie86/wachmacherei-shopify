@@ -1,6 +1,12 @@
 'use client';
 
-import { Dialog, Transition } from '@headlessui/react';
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogTitle,
+  Transition,
+  TransitionChild
+} from '@headlessui/react';
 import { useCookie } from 'lib/context/cookies';
 import { Fragment } from 'react';
 
@@ -26,7 +32,7 @@ const CookieConsent = () => {
         onClose={() => setIsConsentOpen(false)}
       >
         <div className="min-h-screen px-4 text-center">
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -35,13 +41,13 @@ const CookieConsent = () => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-primary bg-opacity-50 transition-opacity" />
-          </Transition.Child>
+            <DialogBackdrop className="fixed inset-0 bg-primary bg-opacity-50 transition-opacity" />
+          </TransitionChild>
 
           <span className="inline-block h-screen align-middle" aria-hidden="true">
             &#8203;
           </span>
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95"
@@ -51,9 +57,9 @@ const CookieConsent = () => {
             leaveTo="opacity-0 scale-95"
           >
             <div className="my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-              <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+              <DialogTitle as="h3" className="text-lg font-medium leading-6 text-gray-900">
                 Verwendung von Cookies
-              </Dialog.Title>
+              </DialogTitle>
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
                   Wir verwenden Cookies (auch von Drittanbietern), um Informationen über die Nutzung
@@ -81,7 +87,7 @@ const CookieConsent = () => {
                 </button>
               </div>
             </div>
-          </Transition.Child>
+          </TransitionChild>
         </div>
       </Dialog>
     </Transition>

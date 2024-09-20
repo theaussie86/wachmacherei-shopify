@@ -1,6 +1,19 @@
 'use client';
 
-import { Dialog, Disclosure, Switch, Transition } from '@headlessui/react';
+import {
+  Description,
+  Dialog,
+  DialogBackdrop,
+  DialogTitle,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Field,
+  Label,
+  Switch,
+  Transition,
+  TransitionChild
+} from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import Cookies from 'js-cookie';
 import { cookieConfigurations, useCookie } from 'lib/context/cookies';
@@ -38,7 +51,7 @@ const CookieSettings = () => {
         onClose={() => setIsSettingOpen(false)}
       >
         <div className="min-h-screen px-4 text-center">
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -47,13 +60,13 @@ const CookieSettings = () => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-primary bg-opacity-50 transition-opacity" />
-          </Transition.Child>
+            <DialogBackdrop className="fixed inset-0 bg-primary bg-opacity-50 transition-opacity" />
+          </TransitionChild>
 
           <span className="inline-block h-screen align-middle" aria-hidden="true">
             &#8203;
           </span>
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95"
@@ -63,9 +76,9 @@ const CookieSettings = () => {
             leaveTo="opacity-0 scale-95"
           >
             <div className="my-8 inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-              <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+              <DialogTitle as="h3" className="text-lg font-medium leading-6 text-gray-900">
                 Cookie Einstellungen
-              </Dialog.Title>
+              </DialogTitle>
               <div className="my-3">
                 <p className="text-sm text-gray-500">
                   Diese Website nutzt die folgenden Arten von Diensten. Erfahren Sie mehr in unserer
@@ -77,18 +90,18 @@ const CookieSettings = () => {
                 {Object.entries(cookieConfigurations).map(
                   ([key, { name, description, services }]) => (
                     <div key={key} className="border bg-gray-50 p-4">
-                      <Switch.Group as="div" className="flex items-center justify-between">
+                      <Field as="div" className="flex items-center justify-between">
                         <span className="flex flex-grow flex-col">
-                          <Switch.Label
+                          <Label
                             as="h4"
                             className="text-sm font-medium leading-6 text-gray-900"
                             passive
                           >
                             {name}
-                          </Switch.Label>
-                          <Switch.Description as="span" className="text-sm text-gray-500">
+                          </Label>
+                          <Description as="span" className="text-sm text-gray-500">
                             {description}
-                          </Switch.Description>
+                          </Description>
                         </span>
                         {key !== 'necessary' && (
                           <Controller
@@ -114,11 +127,11 @@ const CookieSettings = () => {
                             )}
                           />
                         )}
-                      </Switch.Group>
+                      </Field>
                       <Disclosure as="div" className="mt-4">
                         {({ open }) => (
                           <>
-                            <Disclosure.Button className="inline-flex items-center text-sm text-primary">
+                            <DisclosureButton className="inline-flex items-center text-sm text-primary">
                               Dienste anzeigen
                               <ChevronDownIcon
                                 className={twMerge(
@@ -126,8 +139,8 @@ const CookieSettings = () => {
                                   'ml-1 h-4 w-4'
                                 )}
                               />
-                            </Disclosure.Button>
-                            <Disclosure.Panel>
+                            </DisclosureButton>
+                            <DisclosurePanel>
                               <div className="grid grid-cols-[repeat(2,minmax(0,max-content))] bg-white p-2">
                                 <div className="border-b-2 py-3.5 pl-4 pr-3 text-left text-sm font-medium text-primary sm:pl-0">
                                   Dienst
@@ -158,7 +171,7 @@ const CookieSettings = () => {
                                   </>
                                 ))}
                               </div>
-                            </Disclosure.Panel>
+                            </DisclosurePanel>
                           </>
                         )}
                       </Disclosure>
@@ -183,7 +196,7 @@ const CookieSettings = () => {
                 </div>
               </form>
             </div>
-          </Transition.Child>
+          </TransitionChild>
         </div>
       </Dialog>
     </Transition>

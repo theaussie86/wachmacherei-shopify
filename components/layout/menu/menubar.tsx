@@ -1,5 +1,12 @@
 'use client';
-import { Popover, Transition } from '@headlessui/react';
+import {
+  Popover,
+  PopoverBackdrop,
+  PopoverButton,
+  PopoverGroup,
+  PopoverPanel,
+  Transition
+} from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import FacebookIcon from 'components/icons/facebook';
 import InstagramIcon from 'components/icons/instagram';
@@ -12,13 +19,13 @@ function MenuBarList() {
   const copyrightName = 'Wachmacherei';
 
   return (
-    <Popover.Group className="flex">
+    <PopoverGroup className="flex">
       <Popover>
-        <Popover.Button className="flex items-center gap-x-1 p-4 text-sm font-semibold leading-6 text-gray-900 md:p-0">
+        <PopoverButton className="flex items-center gap-x-1 p-4 text-sm font-semibold leading-6 text-gray-900 md:p-0">
           <span className="sr-only">Menü öffnen</span>
           <Bars3Icon className="h-9 w-9 text-secondary" aria-hidden="true" />
-        </Popover.Button>
-        <Popover.Overlay className="fixed inset-0 bg-primary opacity-50" />
+        </PopoverButton>
+        <PopoverBackdrop className="fixed inset-0 bg-primary opacity-50" />
 
         <Transition
           as={Fragment}
@@ -29,12 +36,12 @@ function MenuBarList() {
           leaveFrom="opacity-100 translate-x-0"
           leaveTo="opacity-0 -translate-x-full"
         >
-          <Popover.Panel className="absolute inset-x-0 top-0 z-10 flex h-screen w-full flex-col justify-between bg-primary px-6 py-14 md:w-60">
+          <PopoverPanel className="absolute inset-x-0 top-0 z-10 flex h-screen w-full flex-col justify-between bg-primary px-6 py-14 md:w-60">
             <div className="px-6 lg:px-8">
-              <Popover.Button className=" absolute right-6 top-6 flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+              <PopoverButton className="absolute right-6 top-6 flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
                 <span className="sr-only">Menü schließen</span>
                 <XMarkIcon className="h-9 w-9 text-secondary" aria-hidden="true" />
-              </Popover.Button>
+              </PopoverButton>
               <div className="grid max-w-7xl gap-y-4 xl:gap-y-8">
                 {[
                   { name: 'Home', to: '/' },
@@ -42,11 +49,11 @@ function MenuBarList() {
                   { name: 'Über Uns', to: '/ueber-uns' },
                   { name: 'Kontakt', to: '/kontakt' }
                 ].map((item) => (
-                  <Popover.Button as={Link} key={item.name} href={item.to} className="block">
+                  <PopoverButton as={Link} key={item.name} href={item.to} className="block">
                     <span className="group relative font-gin text-3xl leading-loose tracking-wide hover:underline">
                       {item.name}
                     </span>
-                  </Popover.Button>
+                  </PopoverButton>
                 ))}
               </div>
             </div>
@@ -65,10 +72,10 @@ function MenuBarList() {
                 </div>
               </div>
             </div>
-          </Popover.Panel>
+          </PopoverPanel>
         </Transition>
       </Popover>
-    </Popover.Group>
+    </PopoverGroup>
   );
 }
 
