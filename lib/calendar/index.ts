@@ -1,7 +1,9 @@
+import { kv } from '@vercel/kv';
 import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns';
 
 const calBaseUrl = 'https://api.cal.com';
 const calEventType = '1216590';
+const revalidateInterval = 60 * 5;
 
 type Slots = Record<string, { time: string; attendees?: number; bookingUid?: string }[]>;
 
@@ -11,9 +13,17 @@ type SlotsResponse = {
 };
 
 export async function fetchAvailableDates(): Promise<SlotsResponse> {
+  const slots = await kv.get<SlotsResponse>(`cal-slots-${calEventType}`);
+  if (slots) {
+    return slots;
+  }
+
   // Get the maximum number of seats for the event type
   const eventTypeResponse = await fetch(
-    `${calBaseUrl}/v1/event-types/${calEventType}?apiKey=${process.env.CAL_API_KEY}`
+    `${calBaseUrl}/v1/event-types/${calEventType}?apiKey=${process.env.CAL_API_KEY}`,
+    {
+      next: { revalidate: revalidateInterval }
+    }
   );
   const eventTypeData = await eventTypeResponse.json();
   const maximumSeats = eventTypeData.event_type.seatsPerTimeSlot;
@@ -23,9 +33,14 @@ export async function fetchAvailableDates(): Promise<SlotsResponse> {
 
   // Get the available slots for the event type
   const slotsResponse = await fetch(
-    `${calBaseUrl}/v1/slots/?apiKey=${process.env.CAL_API_KEY}&eventTypeId=${calEventType}&startTime=${start}&endTime=${end}`
+    `${calBaseUrl}/v1/slots/?apiKey=${process.env.CAL_API_KEY}&eventTypeId=${calEventType}&startTime=${start}&endTime=${end}`,
+    {
+      next: { revalidate: revalidateInterval }
+    }
   );
   const slotsData = await slotsResponse.json();
+
+  await kv.set(`cal-slots-${calEventType}`, { ...slotsData, maximumSeats });
 
   return { ...slotsData, maximumSeats };
 }

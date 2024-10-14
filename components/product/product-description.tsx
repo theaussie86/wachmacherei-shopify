@@ -26,7 +26,7 @@ export function ProductDescription({ product }: { product: Product }) {
       <VariantSelector options={product.options} variants={product.variants} />
       {['barista-kurs'].includes(product.handle) ? (
         <Suspense fallback={'...loading'}>
-          <ProductDateSelector product={product} />
+          <ProductDateSelector />
         </Suspense>
       ) : null}
 
