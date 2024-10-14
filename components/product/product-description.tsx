@@ -1,7 +1,9 @@
 import { AddToCart } from 'components/cart/add-to-cart';
 import Prose from 'components/prose';
 import { Product } from 'lib/shopify/types';
+import { Suspense } from 'react';
 import ProductPrice from './price';
+import ProductDateSelector from './product-date';
 import ProductProperties from './product-properties';
 import { VariantSelector } from './variant-selector';
 
@@ -22,6 +24,11 @@ export function ProductDescription({ product }: { product: Product }) {
       <ProductProperties metafields={product.metafields} />
       <ProductPrice product={product} />
       <VariantSelector options={product.options} variants={product.variants} />
+      {['barista-kurs'].includes(product.handle) ? (
+        <Suspense fallback={'...loading'}>
+          <ProductDateSelector product={product} />
+        </Suspense>
+      ) : null}
 
       <AddToCart variants={product.variants} availableForSale={product.availableForSale} />
     </>
