@@ -27,6 +27,7 @@ export type CartItem = {
     }[];
     product: Product;
   };
+  attributes: { key: string; value: string }[];
 };
 
 export type Collection = ShopifyCollection & {
@@ -245,6 +246,7 @@ export type ShopifyUpdateCartOperation = {
       id: string;
       merchandiseId: string;
       quantity: number;
+      attributes?: { key: string; value: string }[];
     }[];
   };
 };

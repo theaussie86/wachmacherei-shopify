@@ -105,11 +105,11 @@ export function AddToCart({
     .map((attribute, _, array) => {
       const occurrences = array.filter((attr) => attr.name === attribute.name).length;
       if (occurrences > 1) {
-        indexes[attribute.name] = (indexes[attribute.name] || 0) + 1;
+        const count = (indexes[attribute.name] || 0) + 1;
+        indexes[attribute.name] = count;
 
-        const attrName = attribute.name === 'participant' ? 'Teilnehmer' : attribute.name;
         return {
-          key: `${indexes[attribute.name]}. ${attrName.charAt(0).toUpperCase()}${attrName.slice(1)}`,
+          key: `${count + 1}. ${attribute.name.charAt(0).toUpperCase()}${attribute.name.slice(1)}`,
           value: attribute.value
         };
       }
@@ -120,9 +120,12 @@ export function AddToCart({
     })
     .sort((a, b) => a.key.localeCompare(b.key));
 
+  const additionalQuantity = indexes['teilnehmer'] || 0;
+
   const actionWithVariantAndAttributes = formAction.bind(null, {
     selectedVariantId,
-    additionalData
+    additionalData,
+    quantity: additionalQuantity + 1
   });
 
   return (

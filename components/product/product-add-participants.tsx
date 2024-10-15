@@ -4,9 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
 import { SlotsResponse } from 'lib/calendar';
 import { createUrl } from 'lib/utils';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { updateCourseItem } from './actions';
 
 const formSchema = z.object({
   participant: z.string().email({ message: 'Ungültige E-Mail-Adresse' })
@@ -16,18 +17,15 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function ProductAddParticipants({ slots, maximumSeats }: SlotsResponse) {
   const searchParams = useSearchParams();
+  const { handle } = useParams();
   const pathname = usePathname();
   const router = useRouter();
 
-  const initialParticipant = searchParams.getAll('participant');
+  const initialParticipant = searchParams.getAll('teilnehmer');
 
   const attendees = slots[searchParams.get('datum') ?? '']?.[0]?.attendees ?? 0;
 
   const disabled = maximumSeats - 1 - attendees - initialParticipant.length <= 0;
-
-  console.log('slots', slots);
-  console.log('maximumSeats', maximumSeats);
-  console.log('disabled', disabled);
 
   const {
     handleSubmit,
@@ -36,13 +34,21 @@ export default function ProductAddParticipants({ slots, maximumSeats }: SlotsRes
     formState: { errors }
   } = useForm<FormValues>({ resolver: zodResolver(formSchema) });
 
-  const onSubmit = ({ participant }: FormValues) => {
+  const onSubmit = async ({ participant }: FormValues) => {
     const participantEmail = participant.trim();
+
+    try {
+      if (typeof handle === 'string') {
+        await updateCourseItem(handle, participantEmail, searchParams.get('datum') ?? '', 'add');
+      }
+    } catch (error) {
+      console.error(error);
+    }
     const newSearchParams = new URLSearchParams();
     searchParams.forEach((value, key) => {
       newSearchParams.append(key, value);
     });
-    newSearchParams.append('participant', participantEmail);
+    newSearchParams.append('teilnehmer', participantEmail);
 
     const newUrl = createUrl(pathname, newSearchParams);
     router.replace(newUrl, { scroll: false });
@@ -107,6 +113,7 @@ export default function ProductAddParticipants({ slots, maximumSeats }: SlotsRes
 
 function AdditionalParticipant({ email }: { email: string }) {
   const router = useRouter();
+  const params = useParams();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const newSearchParams = new URLSearchParams();
@@ -114,17 +121,24 @@ function AdditionalParticipant({ email }: { email: string }) {
     newSearchParams.append(key, value);
   });
 
+  async function removeParticipant() {
+    newSearchParams.delete('teilnehmer', email);
+    const { handle } = params;
+    try {
+      if (handle && typeof handle === 'string') {
+        await updateCourseItem(handle, email, searchParams.get('datum') ?? '', 'remove');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    const newUrl = createUrl(pathname, newSearchParams);
+    router.replace(newUrl, { scroll: false });
+  }
+
   return (
     <div className="flex items-center justify-between py-2">
       <div className="text-sm text-gray-900 dark:text-gray-400">{email}</div>
-      <button
-        onClick={() => {
-          newSearchParams.delete('participant', email);
-          const newUrl = createUrl(pathname, newSearchParams);
-          router.replace(newUrl, { scroll: false });
-        }}
-        className="text-sm text-red-500"
-      >
+      <button onClick={removeParticipant} className="text-sm text-red-500">
         <TrashIcon className="size-5" />
       </button>
     </div>

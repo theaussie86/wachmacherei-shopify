@@ -8,6 +8,7 @@ import { cookies } from 'next/headers';
 export type AddItemFormData = {
   selectedVariantId: string | undefined;
   additionalData: Record<string, string>[];
+  quantity?: number;
 };
 
 export async function addItem(prevState: any, formData: AddItemFormData) {
@@ -32,7 +33,7 @@ export async function addItem(prevState: any, formData: AddItemFormData) {
     await addToCart(cartId, [
       {
         merchandiseId: formData.selectedVariantId,
-        quantity: 1,
+        quantity: formData.quantity ?? 1,
         attributes: formData.additionalData
       }
     ]);
