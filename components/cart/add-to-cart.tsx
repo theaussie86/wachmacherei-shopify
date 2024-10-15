@@ -100,19 +100,39 @@ export function AddToCart({
       )
   );
 
+  const indexes: Record<string, number> = {};
+  const additionalData = additionalAttributes
+    .map((attribute, _, array) => {
+      const occurrences = array.filter((attr) => attr.name === attribute.name).length;
+      if (occurrences > 1) {
+        indexes[attribute.name] = (indexes[attribute.name] || 0) + 1;
+
+        const attrName = attribute.name === 'participant' ? 'Teilnehmer' : attribute.name;
+        return {
+          key: `${indexes[attribute.name]}. ${attrName.charAt(0).toUpperCase()}${attrName.slice(1)}`,
+          value: attribute.value
+        };
+      }
+      return {
+        key: attribute.name.charAt(0).toUpperCase() + attribute.name.slice(1),
+        value: attribute.value
+      };
+    })
+    .sort((a, b) => a.key.localeCompare(b.key));
+
   const actionWithVariantAndAttributes = formAction.bind(null, {
     selectedVariantId,
-    additionalData: additionalAttributes.map((attribute) => ({
-      key: attribute.name.charAt(0).toUpperCase() + attribute.name.slice(1),
-      value: attribute.value
-    }))
+    additionalData
   });
 
   return (
     <form action={actionWithVariantAndAttributes}>
       <SubmitButton
         availableForSale={
-          isCourseProduct ? availableForSale && additionalAttributes.length > 0 : availableForSale
+          isCourseProduct
+            ? availableForSale &&
+              additionalAttributes.findIndex((attr) => attr.name === 'datum') > -1
+            : availableForSale
         }
         selectedVariantId={selectedVariantId}
       />
