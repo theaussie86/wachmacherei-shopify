@@ -65,10 +65,12 @@ function SubmitButton({
 
 export function AddToCart({
   variants,
-  availableForSale
+  availableForSale,
+  isCourseProduct
 }: {
   variants: ProductVariant[];
   availableForSale: boolean;
+  isCourseProduct: boolean;
 }) {
   const [message, formAction] = useFormState(addItem, null);
   const searchParams = useSearchParams();
@@ -108,7 +110,12 @@ export function AddToCart({
 
   return (
     <form action={actionWithVariantAndAttributes}>
-      <SubmitButton availableForSale={availableForSale} selectedVariantId={selectedVariantId} />
+      <SubmitButton
+        availableForSale={
+          isCourseProduct ? availableForSale && additionalAttributes.length > 0 : availableForSale
+        }
+        selectedVariantId={selectedVariantId}
+      />
       <p aria-live="polite" className="sr-only" role="status">
         {message}
       </p>

@@ -32,7 +32,7 @@ export default async function CategoryPage({
   const { sort } = searchParams as { [key: string]: string };
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
   const products = await getCollectionProducts({ collection: params.collection, sortKey, reverse });
-  console.log(params.collection);
+
   return (
     <section className="mx-auto max-w-5xl">
       {products.length === 0 ? (

@@ -5,6 +5,8 @@ import { format } from 'date-fns';
 import { createUrl } from 'lib/utils';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
+const optionName = 'Datum';
+
 export default function ProductDateButton({
   isAvailableForSale,
   slot
@@ -18,7 +20,7 @@ export default function ProductDateButton({
   const key = slot.date;
   const value = slot.timestamp;
 
-  const optionNameLowerCase = 'date';
+  const optionNameLowerCase = optionName.toLowerCase();
 
   // base option params on current params so we can preserve any other param state in the url.
   const optionSearchParams = new URLSearchParams(searchParams.toString());

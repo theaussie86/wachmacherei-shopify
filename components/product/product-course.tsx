@@ -1,15 +1,17 @@
 import clsx from 'clsx';
 import { fetchAvailableDates } from 'lib/calendar';
+import ProductAddParticipants from './product-add-participants';
 import ProductDateButton from './product-date-btn';
+import ProductDateSeats from './product-date-seats';
 
-export default async function ProductDateSelector() {
+export default async function ProductCourseSelector() {
   const dates = await fetchAvailableDates();
 
   return (
     <dl className={clsx('mb-8')}>
       <dt className="mb-4 text-sm uppercase tracking-wide">Datum auswählen</dt>
       <dd className="flex flex-wrap gap-3">
-        {Object.entries(dates?.slots).map((slot) => {
+        {Object.entries(dates.slots).map((slot) => {
           const key = slot[0];
           const timeSlot = slot[1][0];
           const value = timeSlot?.time;
@@ -25,6 +27,8 @@ export default async function ProductDateSelector() {
           ) : null;
         })}
       </dd>
+      <ProductDateSeats {...dates} />
+      <ProductAddParticipants {...dates} />
     </dl>
   );
 }

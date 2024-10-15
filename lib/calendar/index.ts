@@ -7,7 +7,7 @@ const revalidateInterval = 60 * 5;
 
 type Slots = Record<string, { time: string; attendees?: number; bookingUid?: string }[]>;
 
-type SlotsResponse = {
+export type SlotsResponse = {
   slots: Slots;
   maximumSeats: number;
 };
