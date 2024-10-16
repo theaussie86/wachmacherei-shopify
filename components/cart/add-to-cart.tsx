@@ -100,11 +100,15 @@ export function AddToCart({
       )
   );
 
+  const additionalQuantity =
+    additionalAttributes.filter((attr) => attr.name === 'teilnehmer').length || 0;
+  console.log('additionalQuantity', additionalQuantity);
+
   const indexes: Record<string, number> = {};
   const additionalData = additionalAttributes
     .map((attribute, _, array) => {
       const occurrences = array.filter((attr) => attr.name === attribute.name).length;
-      if (occurrences > 1) {
+      if (occurrences > 0 && attribute.name == 'teilnehmer') {
         const count = (indexes[attribute.name] || 0) + 1;
         indexes[attribute.name] = count;
 
@@ -119,8 +123,7 @@ export function AddToCart({
       };
     })
     .sort((a, b) => a.key.localeCompare(b.key));
-
-  const additionalQuantity = indexes['teilnehmer'] || 0;
+  console.log('additionalData', additionalData);
 
   const actionWithVariantAndAttributes = formAction.bind(null, {
     selectedVariantId,

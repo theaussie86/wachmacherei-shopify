@@ -12,11 +12,6 @@ export type SlotsResponse = {
 };
 
 export async function fetchAvailableDates(): Promise<SlotsResponse> {
-  // const slots = await kv.get<SlotsResponse>(`cal-slots-${calEventType}`);
-  // if (slots) {
-  //   return slots;
-  // }
-
   // Get the maximum number of seats for the event type
   const eventTypeResponse = await fetch(
     `${calBaseUrl}/v1/event-types/${calEventType}?apiKey=${process.env.CAL_API_KEY}`,
@@ -38,8 +33,6 @@ export async function fetchAvailableDates(): Promise<SlotsResponse> {
     }
   );
   const slotsData = await slotsResponse.json();
-
-  // await kv.set(`cal-slots-${calEventType}`, { ...slotsData, maximumSeats });
 
   return { ...slotsData, maximumSeats };
 }

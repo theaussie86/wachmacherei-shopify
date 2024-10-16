@@ -17,19 +17,3 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
 }
-
-// function validatePayload(hash: string, payload: string): boolean {
-//   const secret = process.env.CAL_WEBHOOK_SECRET;
-//   if (!secret) {
-//     throw new Error('CAL_WEBHOOK_SECRET is not set');
-//   }
-//   const hmac = createHmac('sha256', secret);
-
-//   hmac.update(payload);
-
-//   const computedHash = hmac.digest('hex');
-
-//   console.log('payload verified:', hash === computedHash);
-
-//   return hash === computedHash;
-// }

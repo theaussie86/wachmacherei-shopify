@@ -63,7 +63,7 @@ export default function ProductAddParticipants({ slots, maximumSeats }: SlotsRes
     <div>
       {disabled ? (
         <div className="block text-sm font-medium uppercase leading-6 tracking-wide">
-          Leider sind keine weiteren Plätze verfügbar.
+          Es können keine zusätzlichen Teilnehmer mehr hinzugefügt werden.
         </div>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
