@@ -4,8 +4,8 @@ import ProductAddParticipants from './product-add-participants';
 import ProductDateButton from './product-date-btn';
 import ProductDateSeats from './product-date-seats';
 
-export default async function ProductCourseSelector() {
-  const dates = await fetchAvailableDates();
+export default async function ProductCourseSelector({ eventType }: { eventType: string }) {
+  const dates = await fetchAvailableDates(eventType);
 
   return (
     <dl className={clsx('mb-8')}>

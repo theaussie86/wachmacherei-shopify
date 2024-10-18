@@ -1,7 +1,6 @@
 import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns';
 
 const calBaseUrl = 'https://api.cal.com';
-const calEventType = process.env.CAL_EVENT_TYPE_IDS?.split(',')[0];
 const revalidateInterval = 60 * 2; // 2 minutes
 
 type Slots = Record<string, { time: string; attendees?: number; bookingUid?: string }[]>;
@@ -11,7 +10,7 @@ export type SlotsResponse = {
   maximumSeats: number;
 };
 
-export async function fetchAvailableDates(): Promise<SlotsResponse> {
+export async function fetchAvailableDates(calEventType: string): Promise<SlotsResponse> {
   // Get the maximum number of seats for the event type
   const eventTypeResponse = await fetch(
     `${calBaseUrl}/v1/event-types/${calEventType}?apiKey=${process.env.CAL_API_KEY}`,

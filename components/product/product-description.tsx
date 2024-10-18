@@ -8,7 +8,9 @@ import ProductProperties from './product-properties';
 import { VariantSelector } from './variant-selector';
 
 export function ProductDescription({ product }: { product: Product }) {
-  const isCourseProduct = ['barista-kurs'].includes(product.handle);
+  const isCourseProduct = product.metafields.some(
+    (metafield) => metafield?.key === 'cal_eventtypeid'
+  );
   return (
     <>
       <div className="mb-6 flex flex-col border-b pb-6 dark:border-neutral-700">
@@ -27,7 +29,12 @@ export function ProductDescription({ product }: { product: Product }) {
       <VariantSelector options={product.options} variants={product.variants} />
       {isCourseProduct ? (
         <Suspense fallback={'...loading'}>
-          <ProductCourseSelection />
+          <ProductCourseSelection
+            eventType={
+              product.metafields.find((metafield) => metafield?.key === 'cal_eventtypeid')?.value ??
+              'MISSING_EVENT_TYPE'
+            }
+          />
         </Suspense>
       ) : null}
 

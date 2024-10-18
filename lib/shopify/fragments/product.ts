@@ -26,6 +26,7 @@ const productFragment = /* GraphQL */ `
         { key: "anbauhoehe_ende", namespace: "custom" }
         { key: "strength", namespace: "custom" }
         { key: "charakter", namespace: "custom" }
+        { key: "cal_eventtypeid", namespace: "custom" }
       ]
     ) {
       key
