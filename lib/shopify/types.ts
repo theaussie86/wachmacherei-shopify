@@ -311,6 +311,13 @@ export type ShopifyProductOperation = {
   };
 };
 
+export type ShopifyGetCalEventTypeIdOfProductOperation = {
+  data: { product: { title: ShopifyProduct['title']; metafield: { key: string; value: string } } };
+  variables: {
+    id: string;
+  };
+};
+
 export type ShopifyProductRecommendationsOperation = {
   data: {
     productRecommendations: ShopifyProduct[];

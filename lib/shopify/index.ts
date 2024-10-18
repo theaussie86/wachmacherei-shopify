@@ -145,7 +145,6 @@ export async function shopifyAdminFetch<T>({
   variables?: ExtractVariables<T>;
 }): Promise<{ status: number; body: T } | never> {
   try {
-    console.log('inputs', { query, variables });
     const result = await fetch(adminEndpoint, {
       method: 'POST',
       headers: {
