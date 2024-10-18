@@ -2,7 +2,6 @@
 
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
-import clsx from 'clsx';
 import Price from 'components/price';
 import { DEFAULT_OPTION } from 'lib/constants';
 import type { Cart } from 'lib/shopify/types';
@@ -89,12 +88,12 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                       });
 
                       item.attributes.forEach(({ key, value }) => {
-                        const isParticipant = key.endsWith('Teilnehmer');
-                        if (isParticipant) {
-                          merchandiseSearchParams.append('teilnehmer', value);
-                        } else {
-                          merchandiseSearchParams.append(key.toLowerCase(), value);
-                        }
+                        // const isParticipant = key.endsWith('Teilnehmer');
+                        // if (isParticipant) {
+                        //   merchandiseSearchParams.append('teilnehmer', value);
+                        // } else {
+                        merchandiseSearchParams.append(key.toLowerCase(), value);
+                        // }
                       });
 
                       const merchandiseUrl = createUrl(
@@ -102,7 +101,7 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                         merchandiseSearchParams
                       );
 
-                      const isCourse = ['barista-kurs'].includes(item.merchandise.product.handle);
+                      // const isCourse = ['barista-kurs'].includes(item.merchandise.product.handle);
 
                       return (
                         <li
@@ -155,21 +154,11 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                                 currencyCode={item.cost.totalAmount.currencyCode}
                               />
                               <div className="ml-auto flex h-9 flex-row items-center rounded-full border border-neutral-200 dark:border-neutral-700">
-                                {isCourse ? null : (
-                                  <EditItemQuantityButton item={item} type="minus" />
-                                )}
-                                <p
-                                  className={clsx(
-                                    'text-center',
-                                    { 'w-6': !isCourse },
-                                    { 'w-10': isCourse }
-                                  )}
-                                >
+                                <EditItemQuantityButton item={item} type="minus" />
+                                <p className="w-6 text-center">
                                   <span className="w-full text-sm">{item.quantity}</span>
                                 </p>
-                                {isCourse ? null : (
-                                  <EditItemQuantityButton item={item} type="plus" />
-                                )}
+                                <EditItemQuantityButton item={item} type="plus" />
                               </div>
                             </div>
                           </div>

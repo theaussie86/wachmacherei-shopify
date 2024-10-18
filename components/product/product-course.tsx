@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { fetchAvailableDates } from 'lib/calendar';
-import ProductAddParticipants from './product-add-participants';
 import ProductDateButton from './product-date-btn';
 import ProductDateSeats from './product-date-seats';
 
@@ -28,7 +27,6 @@ export default async function ProductCourseSelector({ eventType }: { eventType: 
         })}
       </dd>
       <ProductDateSeats {...dates} />
-      <ProductAddParticipants {...dates} />
     </dl>
   );
 }

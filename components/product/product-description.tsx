@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { AddToCart } from 'components/cart/add-to-cart';
 import Prose from 'components/prose';
 import { Product } from 'lib/shopify/types';
@@ -28,7 +29,7 @@ export function ProductDescription({ product }: { product: Product }) {
       <ProductPrice product={product} />
       <VariantSelector options={product.options} variants={product.variants} />
       {isCourseProduct ? (
-        <Suspense fallback={'...loading'}>
+        <Suspense fallback={<DatesSkeleton />}>
           <ProductCourseSelection
             eventType={
               product.metafields.find((metafield) => metafield?.key === 'cal_eventtypeid')?.value ??
@@ -44,5 +45,19 @@ export function ProductDescription({ product }: { product: Product }) {
         isCourseProduct={isCourseProduct}
       />
     </>
+  );
+}
+
+function DatesSkeleton() {
+  return (
+    <dl className={clsx('mb-8')}>
+      <dt className="mb-4 text-sm uppercase tracking-wide">Datum auswählen</dt>
+      <dd className="flex flex-wrap gap-3">
+        {new Array(4).fill(null).map((_, index) => {
+          return <div key={index} className="skeleton h-6 w-20"></div>;
+        })}
+      </dd>
+      <dt className="skeleton my-4 h-6 w-20"></dt>
+    </dl>
   );
 }
