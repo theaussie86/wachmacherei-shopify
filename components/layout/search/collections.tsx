@@ -6,7 +6,6 @@ import FilterList from './filter';
 
 async function CollectionList() {
   const collections = await getCollections();
-  console.log(collections);
   return (
     <FilterList
       list={collections.filter((c) => c.title !== 'All' && !c.title.startsWith('Hidden:'))}

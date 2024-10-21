@@ -9,6 +9,18 @@ export const getProductQuery = /* GraphQL */ `
   ${productFragment}
 `;
 
+export const getCalEventIdOfProduct = /* GraphQL */ `
+  query getProductById($id: ID!) {
+    product(id: $id) {
+      title
+      metafield(namespace: "custom", key: "cal_eventTypeId") {
+        key
+        value
+      }
+    }
+  }
+`;
+
 export const getProductsQuery = /* GraphQL */ `
   query getProducts($sortKey: ProductSortKeys, $reverse: Boolean, $query: String) {
     products(sortKey: $sortKey, reverse: $reverse, query: $query, first: 100) {

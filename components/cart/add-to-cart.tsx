@@ -2,7 +2,7 @@
 
 import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import { addItem } from 'components/cart/actions';
+import { addItem, AddItemFormData } from 'components/cart/actions';
 import LoadingDots from 'components/loading-dots';
 import { ProductVariant } from 'lib/shopify/types';
 import { useSearchParams } from 'next/navigation';
@@ -13,7 +13,7 @@ function SubmitButton({
   selectedVariantId
 }: {
   availableForSale: boolean;
-  selectedVariantId: string | undefined;
+  selectedVariantId: AddItemFormData['selectedVariantId'];
 }) {
   const { pending } = useFormStatus();
   const buttonClasses =
@@ -65,13 +65,16 @@ function SubmitButton({
 
 export function AddToCart({
   variants,
-  availableForSale
+  availableForSale,
+  isCourseProduct
 }: {
   variants: ProductVariant[];
   availableForSale: boolean;
+  isCourseProduct: boolean;
 }) {
   const [message, formAction] = useFormState(addItem, null);
   const searchParams = useSearchParams();
+
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
   const variant = variants.find((variant: ProductVariant) =>
     variant.selectedOptions.every(
@@ -79,11 +82,64 @@ export function AddToCart({
     )
   );
   const selectedVariantId = variant?.id || defaultVariantId;
-  const actionWithVariant = formAction.bind(null, selectedVariantId);
+
+  // filter searchParams for additional attributes. For example, if you have a product with a custom attribute "date" we want to add this to the cart as a line item property.
+  const selectedOptions = variants.find(
+    (variant) => variant.id === selectedVariantId
+  )?.selectedOptions;
+  // convert searchParams to array with items of name and value pairs
+  const searchParamsArray = Array.from(searchParams.entries()).map(([name, value]) => ({
+    name,
+    value
+  }));
+
+  const additionalAttributes = searchParamsArray.filter(
+    (searchParam) =>
+      !selectedOptions?.some(
+        (selectedOption) => selectedOption.name.toLowerCase() === searchParam.name
+      )
+  );
+
+  const additionalQuantity =
+    additionalAttributes.filter((attr) => attr.name === 'teilnehmer').length || 0;
+
+  const indexes: Record<string, number> = {};
+  const additionalData = additionalAttributes
+    .map((attribute, _, array) => {
+      const occurrences = array.filter((attr) => attr.name === attribute.name).length;
+      if (occurrences > 0 && attribute.name == 'teilnehmer') {
+        const count = (indexes[attribute.name] || 0) + 1;
+        indexes[attribute.name] = count;
+
+        return {
+          key: `${count + 1}. ${attribute.name.charAt(0).toUpperCase()}${attribute.name.slice(1)}`,
+          value: attribute.value
+        };
+      }
+      return {
+        key: attribute.name.charAt(0).toUpperCase() + attribute.name.slice(1),
+        value: attribute.value
+      };
+    })
+    .sort((a, b) => a.key.localeCompare(b.key));
+
+  const actionWithVariantAndAttributes = formAction.bind(null, {
+    selectedVariantId,
+    additionalData,
+    quantity: additionalQuantity + 1
+  });
 
   return (
-    <form action={actionWithVariant}>
-      <SubmitButton availableForSale={availableForSale} selectedVariantId={selectedVariantId} />
+    <form action={actionWithVariantAndAttributes}>
+      <SubmitButton
+        availableForSale={
+          isCourseProduct
+            ? availableForSale &&
+              additionalAttributes.findIndex((attr) => attr.name === 'datum') > -1
+            : availableForSale
+        }
+        selectedVariantId={selectedVariantId}
+      />
       <p aria-live="polite" className="sr-only" role="status">
         {message}
       </p>

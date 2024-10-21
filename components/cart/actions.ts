@@ -5,7 +5,13 @@ import { addToCart, createCart, getCart, removeFromCart, updateCart } from 'lib/
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
-export async function addItem(prevState: any, selectedVariantId: string | undefined) {
+export type AddItemFormData = {
+  selectedVariantId: string | undefined;
+  additionalData: Record<string, string>[];
+  quantity?: number;
+};
+
+export async function addItem(prevState: any, formData: AddItemFormData) {
   let cartId = cookies().get('cartId')?.value;
   let cart;
 
@@ -19,12 +25,18 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
     cookies().set('cartId', cartId);
   }
 
-  if (!selectedVariantId) {
+  if (!formData.selectedVariantId) {
     return 'Missing product variant ID';
   }
 
   try {
-    await addToCart(cartId, [{ merchandiseId: selectedVariantId, quantity: 1 }]);
+    await addToCart(cartId, [
+      {
+        merchandiseId: formData.selectedVariantId,
+        quantity: formData.quantity ?? 1,
+        attributes: formData.additionalData
+      }
+    ]);
     revalidateTag(TAGS.cart);
   } catch (e) {
     return 'Error adding item to cart';

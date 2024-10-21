@@ -27,6 +27,7 @@ export type CartItem = {
     }[];
     product: Product;
   };
+  attributes: { key: string; value: string }[];
 };
 
 export type Collection = ShopifyCollection & {
@@ -245,6 +246,7 @@ export type ShopifyUpdateCartOperation = {
       id: string;
       merchandiseId: string;
       quantity: number;
+      attributes?: { key: string; value: string }[];
     }[];
   };
 };
@@ -306,6 +308,13 @@ export type ShopifyProductOperation = {
   data: { product: ShopifyProduct };
   variables: {
     handle: string;
+  };
+};
+
+export type ShopifyGetCalEventTypeIdOfProductOperation = {
+  data: { product: { title: ShopifyProduct['title']; metafield: { key: string; value: string } } };
+  variables: {
+    id: string;
   };
 };
 

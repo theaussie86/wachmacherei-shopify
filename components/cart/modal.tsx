@@ -14,10 +14,6 @@ import { DeleteItemButton } from './delete-item-button';
 import { EditItemQuantityButton } from './edit-item-quantity-button';
 import OpenCart from './open-cart';
 
-type MerchandiseSearchParams = {
-  [key: string]: string;
-};
-
 export default function CartModal({ cart }: { cart: Cart | undefined }) {
   console.log(cart);
   const [isOpen, setIsOpen] = useState(false);
@@ -83,18 +79,29 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                 <div className="flex h-full flex-col justify-between overflow-hidden p-1">
                   <ul className="flex-grow overflow-auto py-4">
                     {cart.lines.map((item, i) => {
-                      const merchandiseSearchParams = {} as MerchandiseSearchParams;
+                      const merchandiseSearchParams = new URLSearchParams();
 
                       item.merchandise.selectedOptions.forEach(({ name, value }) => {
                         if (value !== DEFAULT_OPTION) {
-                          merchandiseSearchParams[name.toLowerCase()] = value;
+                          merchandiseSearchParams.append(name.toLowerCase(), value);
                         }
+                      });
+
+                      item.attributes.forEach(({ key, value }) => {
+                        // const isParticipant = key.endsWith('Teilnehmer');
+                        // if (isParticipant) {
+                        //   merchandiseSearchParams.append('teilnehmer', value);
+                        // } else {
+                        merchandiseSearchParams.append(key.toLowerCase(), value);
+                        // }
                       });
 
                       const merchandiseUrl = createUrl(
                         `/product/${item.merchandise.product.handle}`,
-                        new URLSearchParams(merchandiseSearchParams)
+                        merchandiseSearchParams
                       );
+
+                      // const isCourse = ['barista-kurs'].includes(item.merchandise.product.handle);
 
                       return (
                         <li
@@ -130,6 +137,12 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                                 {item.merchandise.title !== DEFAULT_OPTION ? (
                                   <p className="text-sm text-neutral-500 dark:text-neutral-400">
                                     {item.merchandise.title}
+                                  </p>
+                                ) : item.attributes.length ? (
+                                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                                    {item.attributes
+                                      .map((attr) => `${attr.key}: ${attr.value}`)
+                                      .join(' / ')}
                                   </p>
                                 ) : null}
                               </div>

@@ -46,6 +46,7 @@ function MenuBarList() {
                 {[
                   { name: 'Home', to: '/' },
                   { name: 'Shop', to: '/shop' },
+                  { name: 'Kurse', to: '/kurse' },
                   { name: 'Über Uns', to: '/ueber-uns' },
                   { name: 'Kontakt', to: '/kontakt' }
                 ].map((item) => (
