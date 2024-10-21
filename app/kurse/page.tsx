@@ -1,8 +1,11 @@
-import RoesterImage from 'components/images/wachmacherei_roester.jpg';
 import Footer from 'components/layout/footer';
 import BackgroundOverlay from 'components/overlay';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import RoesterImage from '../../components/images/wachmacherei-roester.jpg';
+import BaristaImage from '../../components/images/wm-barista-kurs.jpeg';
+import SeminarImage from '../../components/images/wm-kaffee-seminar.jpeg';
 import HeroBgImage from '../../components/images/wm_ueberuns_hero.jpg';
 import { baseUrl, openGraphDefaults } from '../../lib/utils';
 
@@ -29,7 +32,16 @@ export default async function AboutPage() {
       </BackgroundOverlay>
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+            <div className="">
+              <div className="shadow-2xl">
+                <Image
+                  className="inset-0 max-h-[600px] w-full object-cover object-top"
+                  src={BaristaImage}
+                  alt="Respekt von Anfang an"
+                />
+              </div>
+            </div>
             <div>
               <div className="text-base leading-7 text-primary lg:max-w-lg">
                 <h2 className="mt-2 text-3xl tracking-tight text-secondary sm:text-4xl">
@@ -71,7 +83,16 @@ export default async function AboutPage() {
       </BackgroundOverlay>
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+            <div className="place-self-center lg:order-2">
+              <div className="shadow-2xl">
+                <Image
+                  className="inset-0 max-h-[600px] w-full object-cover object-top"
+                  src={SeminarImage}
+                  alt="Respekt von Anfang an"
+                />
+              </div>
+            </div>
             <div className="lg:order-1">
               <div className="text-base leading-7 text-primary lg:max-w-lg">
                 <h2 className="mt-2 text-3xl tracking-tight text-secondary sm:text-4xl">
