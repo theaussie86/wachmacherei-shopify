@@ -102,7 +102,6 @@ export function AddToCart({
 
   const additionalQuantity =
     additionalAttributes.filter((attr) => attr.name === 'teilnehmer').length || 0;
-  console.log('additionalQuantity', additionalQuantity);
 
   const indexes: Record<string, number> = {};
   const additionalData = additionalAttributes
@@ -123,7 +122,6 @@ export function AddToCart({
       };
     })
     .sort((a, b) => a.key.localeCompare(b.key));
-  console.log('additionalData', additionalData);
 
   const actionWithVariantAndAttributes = formAction.bind(null, {
     selectedVariantId,
