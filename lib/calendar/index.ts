@@ -26,14 +26,18 @@ export async function fetchAvailableDates(calEventType: string): Promise<SlotsRe
 
   // Get the available slots for the event type
   const slotsResponse = await fetch(
-    `${calBaseUrl}/v1/slots/?apiKey=${process.env.CAL_API_KEY}&eventTypeId=${calEventType}&startTime=${start}&endTime=${end}`,
+    `${calBaseUrl}/v2/slots/available/?eventTypeId=${calEventType}&startTime=${start}&endTime=${end}`,
     {
-      next: { tags: ['calendar'], revalidate: revalidateInterval }
+      next: { tags: ['calendar'], revalidate: revalidateInterval },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.CAL_API_KEY}`,
+        'cal-api-version': '2024-06-14'
+      }
     }
   );
   const slotsData = await slotsResponse.json();
-
-  return { ...slotsData, maximumSeats };
+  return { ...slotsData.data, maximumSeats };
 }
 
 export async function createCalEventBooking({
