@@ -7,7 +7,7 @@ import LoadingDots from 'components/loading-dots';
 import type { CartItem } from 'lib/shopify/types';
 import { useFormState, useFormStatus } from 'react-dom';
 
-function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
+function SubmitButton({ type, disabled = false }: { type: 'plus' | 'minus'; disabled?: boolean }) {
   const { pending } = useFormStatus();
 
   return (
@@ -17,7 +17,8 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
         if (pending) e.preventDefault();
       }}
       aria-label={type === 'plus' ? 'Increase item quantity' : 'Reduce item quantity'}
-      aria-disabled={pending}
+      aria-disabled={pending || disabled}
+      disabled={pending || disabled}
       className={clsx(
         'ease flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full px-2 transition-all duration-200 hover:border-neutral-800 hover:opacity-80',
         {
@@ -37,7 +38,15 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
   );
 }
 
-export function EditItemQuantityButton({ item, type }: { item: CartItem; type: 'plus' | 'minus' }) {
+export function EditItemQuantityButton({
+  item,
+  type,
+  disabled
+}: {
+  item: CartItem;
+  type: 'plus' | 'minus';
+  disabled?: boolean;
+}) {
   const [message, formAction] = useFormState(updateItemQuantity, null);
   const payload = {
     lineId: item.id,
@@ -48,7 +57,7 @@ export function EditItemQuantityButton({ item, type }: { item: CartItem; type: '
 
   return (
     <form action={actionWithVariant}>
-      <SubmitButton type={type} />
+      <SubmitButton type={type} disabled={disabled} />
       <p aria-live="polite" className="sr-only" role="status">
         {message}
       </p>

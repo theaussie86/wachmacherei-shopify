@@ -1,3 +1,4 @@
+import { queryOptions } from '@tanstack/react-query';
 import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns';
 
 const calBaseUrl = 'https://api.cal.com';
@@ -13,10 +14,7 @@ export type SlotsResponse = {
 export async function fetchAvailableDates(calEventType: string): Promise<SlotsResponse> {
   // Get the maximum number of seats for the event type
   const eventTypeResponse = await fetch(
-    `${calBaseUrl}/v1/event-types/${calEventType}?apiKey=${process.env.CAL_API_KEY}`,
-    {
-      next: { tags: ['calendar'], revalidate: revalidateInterval }
-    }
+    `${calBaseUrl}/v1/event-types/${calEventType}?apiKey=${process.env.CAL_API_KEY}`
   );
   const eventTypeData = await eventTypeResponse.json();
   const maximumSeats = eventTypeData.event_type.seatsPerTimeSlot;
@@ -28,7 +26,6 @@ export async function fetchAvailableDates(calEventType: string): Promise<SlotsRe
   const slotsResponse = await fetch(
     `${calBaseUrl}/v2/slots/available/?eventTypeId=${calEventType}&startTime=${start}&endTime=${end}`,
     {
-      next: { tags: ['calendar'], revalidate: revalidateInterval },
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${process.env.CAL_API_KEY}`,
@@ -38,6 +35,13 @@ export async function fetchAvailableDates(calEventType: string): Promise<SlotsRe
   );
   const slotsData = await slotsResponse.json();
   return { ...slotsData.data, maximumSeats };
+}
+
+export function fetchAvailableDatesQueryOptions(calEventType: string) {
+  return queryOptions({
+    queryKey: ['calendar', calEventType],
+    queryFn: () => fetchAvailableDates(calEventType)
+  });
 }
 
 export async function createCalEventBooking({
