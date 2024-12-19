@@ -10,7 +10,6 @@ import CloseCart from './close-cart';
 import OpenCart from './open-cart';
 
 export default function CartModal({ cart }: { cart: Cart | undefined }) {
-  console.log(cart);
   const [isOpen, setIsOpen] = useState(false);
   const quantityRef = useRef(cart?.totalQuantity);
 
