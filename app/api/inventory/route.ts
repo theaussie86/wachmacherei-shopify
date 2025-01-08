@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
     let productID: string | undefined = undefined;
     const variants = [];
     for (const item of shopifyStock) {
-      const shopifyStockLevel = item.inventoryLevels[0]?.available;
+      const shopifyStockLevel = item.inventoryLevels[0]?.quantities.available;
       if (!locationId) {
         locationId = item.inventoryLevels[0]?.location.id;
       }

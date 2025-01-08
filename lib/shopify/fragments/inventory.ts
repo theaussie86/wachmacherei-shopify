@@ -1,9 +1,17 @@
 export const inventoryLevelFragment = /* GraphQL */ `
   fragment inventoryLevel on InventoryLevel {
-    available
+    id
     location {
       id
       name
+    }
+    quantities {
+      available
+      incoming
+    }
+    deactivationAlert {
+      title
+      action
     }
   }
 `;

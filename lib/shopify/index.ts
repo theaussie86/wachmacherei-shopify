@@ -15,7 +15,7 @@ import {
   removeFromCartMutation
 } from './mutations/cart';
 import { updateCustomerMetafieldMutation } from './mutations/customer';
-import { adjustStockLevelsMutation } from './mutations/inventory';
+import { adjustInventoryQuantityMutation } from './mutations/inventory';
 import { adjustVariantsPriceMutation } from './mutations/price';
 import { getCartQuery } from './queries/cart';
 import {
@@ -51,6 +51,7 @@ import {
   ShopifyCustomerFindOperation,
   ShopifyCustomerMetafieldUpdateInput,
   ShopifyCustomerUpdateOperation,
+  ShopifyInventoryAdjustQuantitiesOperation,
   ShopifyInventoryItemAdjustment,
   ShopifyMenuOperation,
   ShopifyPageOperation,
@@ -61,7 +62,6 @@ import {
   ShopifyProductsOperation,
   ShopifyRemoveFromCartOperation,
   ShopifyStockLevel,
-  ShopifyStockLevelsAdjustment,
   ShopifyStockLevelsOperation,
   ShopifyUpdateCartOperation,
   ShopifyVariantsPriceAdjustment
@@ -544,18 +544,21 @@ export async function adjustStockLevels(
   adjustments: Array<ShopifyInventoryItemAdjustment>,
   location: string
 ) {
-  const res = await shopifyAdminFetch<ShopifyStockLevelsAdjustment>({
-    cache: 'no-store',
-    query: adjustStockLevelsMutation,
-    variables: {
-      inventoryItemAdjustments: adjustments,
-      locationId: location
+  const input = adjustments.map((item) => ({
+    inventoryItemId: item.inventoryItemId,
+    locationId: location,
+    quantities: {
+      available: item.availableDelta
     }
+  }));
+
+  const res = await shopifyAdminFetch<ShopifyInventoryAdjustQuantitiesOperation>({
+    cache: 'no-store',
+    query: adjustInventoryQuantityMutation,
+    variables: { input }
   });
 
-  const inventoryItems = res.body.data.inventoryLevels;
-
-  return inventoryItems;
+  return res.body.data.inventoryAdjustQuantities.inventoryLevels;
 }
 
 export async function adjustVariantsPrice(
@@ -574,6 +577,29 @@ export async function adjustVariantsPrice(
   });
 
   return res.body.data.productVariantsBulkUpdate.productVariants;
+}
+
+export async function adjustInventoryQuantities(
+  items: Array<{ inventoryItemId: string; availableDelta: number }>,
+  locationId: string
+) {
+  const input = items.map((item) => ({
+    inventoryItemId: item.inventoryItemId,
+    locationId: locationId,
+    quantities: {
+      available: item.availableDelta
+    }
+  }));
+
+  const res = await shopifyFetch<ShopifyInventoryAdjustQuantitiesOperation>({
+    query: adjustInventoryQuantityMutation,
+    variables: {
+      input
+    },
+    cache: 'no-store'
+  });
+
+  return res;
 }
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.

@@ -347,7 +347,9 @@ export type ShopifyStockLevel = {
   id: string;
   sku: string;
   inventoryLevels: Array<{
-    available: number;
+    quantities: {
+      available: number;
+    };
     location: ShopifyLocation;
   }>;
   variant: {
@@ -406,6 +408,40 @@ export type ShopifyVariantsPriceAdjustment = {
     variants: Array<{
       id: string;
       price: string;
+    }>;
+  };
+};
+
+type InventoryLevel = {
+  id: string;
+  location: ShopifyLocation;
+  quantities: {
+    available: number;
+    incoming: number;
+  };
+  deactivationAlert?: {
+    title: string;
+    action: string;
+  };
+};
+
+export type ShopifyInventoryAdjustQuantitiesOperation = {
+  data: {
+    inventoryAdjustQuantities: {
+      inventoryLevels: Array<InventoryLevel>;
+      userErrors: Array<{
+        field: string[];
+        message: string;
+      }>;
+    };
+  };
+  variables: {
+    input: Array<{
+      inventoryItemId: string;
+      locationId: string;
+      quantities: {
+        available: number;
+      };
     }>;
   };
 };
