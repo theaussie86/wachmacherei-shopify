@@ -1,6 +1,6 @@
 import { kv } from '@vercel/kv';
 import { fetchStock } from 'lib/r2o';
-import { adjustStockLevels, adjustVariantsPrice, getStockLevels } from 'lib/shopify';
+import { adjustInventoryQuantities, adjustVariantsPrice, getStockLevels } from 'lib/shopify';
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -61,7 +61,9 @@ export async function POST(req: NextRequest) {
     let productID: string | undefined = undefined;
     const variants = [];
     for (const item of shopifyStock) {
-      const shopifyStockLevel = item.inventoryLevels[0]?.quantities.available;
+      const shopifyStockLevel = item.inventoryLevels[0]?.quantities.find(
+        (q) => q.name === 'available'
+      )?.quantity;
       if (!locationId) {
         locationId = item.inventoryLevels[0]?.location.id;
       }
@@ -93,7 +95,7 @@ export async function POST(req: NextRequest) {
       console.error('No location id found.');
       return NextResponse.json({ status: 200 });
     }
-    await adjustStockLevels(adjustments, locationId);
+    await adjustInventoryQuantities(adjustments, locationId);
 
     if (!productID) {
       console.error('No product id found.');

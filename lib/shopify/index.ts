@@ -540,26 +540,26 @@ export async function getShopifyCustomerByEmailAddress(email: string) {
   return removeEdgesAndNodes(res.body.data.customers);
 }
 
-export async function adjustStockLevels(
-  adjustments: Array<ShopifyInventoryItemAdjustment>,
-  location: string
-) {
-  const input = adjustments.map((item) => ({
-    inventoryItemId: item.inventoryItemId,
-    locationId: location,
-    quantities: {
-      available: item.availableDelta
-    }
-  }));
+// export async function adjustStockLevels(
+//   adjustments: Array<ShopifyInventoryItemAdjustment>,
+//   location: string
+// ) {
+//   const input = adjustments.map((item) => ({
+//     inventoryItemId: item.inventoryItemId,
+//     locationId: location,
+//     quantities: {
+//       available: item.availableDelta
+//     }
+//   }));
 
-  const res = await shopifyAdminFetch<ShopifyInventoryAdjustQuantitiesOperation>({
-    cache: 'no-store',
-    query: adjustInventoryQuantityMutation,
-    variables: { input }
-  });
+//   const res = await shopifyAdminFetch<ShopifyInventoryAdjustQuantitiesOperation>({
+//     cache: 'no-store',
+//     query: adjustInventoryQuantityMutation,
+//     variables: { input }
+//   });
 
-  return res.body.data.inventoryAdjustQuantities.inventoryLevels;
-}
+//   return res.body.data.inventoryAdjustQuantities.inventoryLevels;
+// }
 
 export async function adjustVariantsPrice(
   productId: string,
@@ -580,22 +580,22 @@ export async function adjustVariantsPrice(
 }
 
 export async function adjustInventoryQuantities(
-  items: Array<{ inventoryItemId: string; availableDelta: number }>,
+  items: Array<ShopifyInventoryItemAdjustment>,
   locationId: string
 ) {
-  const input = items.map((item) => ({
-    inventoryItemId: item.inventoryItemId,
-    locationId: locationId,
-    quantities: {
-      available: item.availableDelta
-    }
-  }));
+  const input = {
+    name: 'available',
+    reason: 'movement_update',
+    changes: items.map((item) => ({
+      inventoryItemId: item.inventoryItemId,
+      locationId: locationId,
+      delta: item.availableDelta
+    }))
+  };
 
   const res = await shopifyFetch<ShopifyInventoryAdjustQuantitiesOperation>({
     query: adjustInventoryQuantityMutation,
-    variables: {
-      input
-    },
+    variables: { input },
     cache: 'no-store'
   });
 

@@ -347,10 +347,14 @@ export type ShopifyStockLevel = {
   id: string;
   sku: string;
   inventoryLevels: Array<{
-    quantities: {
-      available: number;
-    };
+    id: string;
     location: ShopifyLocation;
+    quantities: Array<{
+      id: string;
+      name: string;
+      quantity: number;
+      updatedAt: string;
+    }>;
   }>;
   variant: {
     id: string;
@@ -428,7 +432,13 @@ type InventoryLevel = {
 export type ShopifyInventoryAdjustQuantitiesOperation = {
   data: {
     inventoryAdjustQuantities: {
-      inventoryLevels: Array<InventoryLevel>;
+      inventoryAdjustmentGroup: {
+        changes: Array<{
+          delta: number;
+          name: string;
+          location: ShopifyLocation;
+        }>;
+      };
       userErrors: Array<{
         field: string[];
         message: string;
@@ -436,12 +446,14 @@ export type ShopifyInventoryAdjustQuantitiesOperation = {
     };
   };
   variables: {
-    input: Array<{
-      inventoryItemId: string;
-      locationId: string;
-      quantities: {
-        available: number;
-      };
-    }>;
+    input: {
+      name: string;
+      reason?: string;
+      changes: Array<{
+        inventoryItemId: string;
+        locationId: string;
+        delta: number;
+      }>;
+    };
   };
 };

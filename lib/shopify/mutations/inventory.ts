@@ -1,10 +1,15 @@
-import { inventoryLevelFragment } from '../fragments/inventory';
-
 export const adjustInventoryQuantityMutation = /* GraphQL */ `
   mutation inventoryAdjustQuantities($input: InventoryAdjustQuantitiesInput!) {
     inventoryAdjustQuantities(input: $input) {
-      inventoryLevels {
-        ...inventoryLevel
+      inventoryAdjustmentGroup {
+        changes {
+          delta
+          name
+          location {
+            id
+            name
+          }
+        }
       }
       userErrors {
         field
@@ -12,5 +17,4 @@ export const adjustInventoryQuantityMutation = /* GraphQL */ `
       }
     }
   }
-  ${inventoryLevelFragment}
 `;

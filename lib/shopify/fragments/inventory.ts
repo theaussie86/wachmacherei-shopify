@@ -5,9 +5,11 @@ export const inventoryLevelFragment = /* GraphQL */ `
       id
       name
     }
-    quantities {
-      available
-      incoming
+    quantities(names: ["available"]) {
+      id
+      name
+      quantity
+      updatedAt
     }
     deactivationAlert {
       title

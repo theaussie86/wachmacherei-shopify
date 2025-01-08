@@ -1,6 +1,6 @@
 'use server';
 import { fetchStock } from 'lib/r2o';
-import { adjustStockLevels, getProduct, getStockLevels } from 'lib/shopify';
+import { adjustInventoryQuantities, getProduct, getStockLevels } from 'lib/shopify';
 import { ShopifyInventoryItemAdjustment } from 'lib/shopify/types';
 
 export async function verifyRecaptcha(token: string) {
@@ -45,7 +45,8 @@ export async function updateStock(input: FormData) {
           throw new Error('locationId mismatch');
         }
 
-        const currShopifyStock = sl.inventoryLevels[0]?.available || 0;
+        const currShopifyStock =
+          sl.inventoryLevels[0]?.quantities.find((q) => q.name === 'available')?.quantity || 0;
         const currR2OStock = R2OStock[0]?.product_stock || 0;
         const delta = currR2OStock - currShopifyStock;
         if (!delta) return;
@@ -56,6 +57,6 @@ export async function updateStock(input: FormData) {
         });
       });
     }
-    await adjustStockLevels(inventoryItemAdjustments, locationId);
+    await adjustInventoryQuantities(inventoryItemAdjustments, locationId);
   }
 }
