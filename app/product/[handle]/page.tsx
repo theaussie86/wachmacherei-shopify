@@ -85,10 +85,14 @@ export default async function ProductPage({ params }: { params: { handle: string
           <div className="h-full w-full basis-full lg:basis-4/6">
             <BackButton />
             <Gallery
-              images={product.images.map((image: Image) => ({
-                src: image.url,
-                altText: image.altText
-              }))}
+              images={
+                product.images
+                  ?.map((image: Image) => ({
+                    src: image?.url || '',
+                    altText: image?.altText || ''
+                  }))
+                  .filter((img) => img.src !== '') || []
+              }
             />
           </div>
 
