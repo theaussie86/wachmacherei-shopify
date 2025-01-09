@@ -11,10 +11,6 @@ export const inventoryLevelFragment = /* GraphQL */ `
       quantity
       updatedAt
     }
-    deactivationAlert {
-      title
-      action
-    }
   }
 `;
 

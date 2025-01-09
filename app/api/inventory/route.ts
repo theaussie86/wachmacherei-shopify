@@ -5,7 +5,7 @@ import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-  console.log('body ', req.body);
+  console.log(req.headers.get('x-r2o-webhook-created-at'));
   let sku;
   try {
     const secret = req.nextUrl.searchParams.get('secret');
@@ -14,6 +14,17 @@ export async function POST(req: NextRequest) {
       console.error('Invalid revalidation secret.');
       return NextResponse.json({ status: 200 });
     }
+    const lastRequestTime = await kv.get('x-r2o-webhook-created-at');
+    if (lastRequestTime) {
+      const currentRequestTime = headers().get('x-r2o-webhook-created-at');
+      if (currentRequestTime && currentRequestTime === lastRequestTime) {
+        console.warn('Too many requests in the last second.');
+        return NextResponse.json({ status: 200 });
+      }
+    } else {
+      await kv.set('x-r2o-webhook-created-at', headers().get('x-r2o-webhook-created-at'));
+    }
+
     const topic = headers().get('x-r2o-webhook-event');
     if (!topic || topic !== 'product.updated') {
       console.error('Invalid topic.', topic);
@@ -36,14 +47,15 @@ export async function POST(req: NextRequest) {
       console.error('No sku found in data.', data);
       return NextResponse.json({ status: 200 });
     }
-
+    // check if the product is already being fetched
     const isAlreadyBeingFetched = await kv.get(`${sku}-stock`);
+    console.log('isAlreadyBeingFetched', isAlreadyBeingFetched, `${sku}-stock`);
     if (isAlreadyBeingFetched) {
       console.log('Already being fetched.', sku);
       return NextResponse.json({ status: 202 });
     }
 
-    await kv.set(`${sku}-stock`, true);
+    const set = await kv.set(`${sku}-stock`, true);
     console.log('Data', data);
     // get product price and check if it changed
     const r2oProductID = data['resource[product_id]'];
@@ -96,15 +108,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: 200 });
     }
     await adjustInventoryQuantities(adjustments, locationId);
+    await kv.del(`${sku}-stock`);
 
     if (!productID) {
       console.error('No product id found.');
       return NextResponse.json({ status: 200 });
     }
     await adjustVariantsPrice(productID, variants);
+    await kv.del('x-r2o-webhook-created-at');
     return NextResponse.json({ status: 200, body: data });
-  } finally {
-    // Remove the request from active requests after completion or error
+  } catch (error) {
+    console.error('Error in inventory route.', error);
     await kv.del(`${sku}-stock`);
+    await kv.del('x-r2o-webhook-created-at');
+    return NextResponse.json({ status: 200, body: error });
   }
 }

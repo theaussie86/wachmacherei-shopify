@@ -585,7 +585,7 @@ export async function adjustInventoryQuantities(
 ) {
   const input = {
     name: 'available',
-    reason: 'movement_update',
+    reason: 'movement_updated',
     changes: items.map((item) => ({
       inventoryItemId: item.inventoryItemId,
       locationId: locationId,
@@ -593,7 +593,7 @@ export async function adjustInventoryQuantities(
     }))
   };
 
-  const res = await shopifyFetch<ShopifyInventoryAdjustQuantitiesOperation>({
+  const res = await shopifyAdminFetch<ShopifyInventoryAdjustQuantitiesOperation>({
     query: adjustInventoryQuantityMutation,
     variables: { input },
     cache: 'no-store'
