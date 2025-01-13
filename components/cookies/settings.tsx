@@ -75,12 +75,15 @@ const CookieSettings = () => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="my-8 inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-              <DialogTitle as="h3" className="text-lg font-medium leading-6 text-gray-900">
+            <div className="my-8 inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:border dark:border-white dark:bg-primary">
+              <DialogTitle
+                as="h3"
+                className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
+              >
                 Cookie Einstellungen
               </DialogTitle>
               <div className="my-3">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-300">
                   Diese Website nutzt die folgenden Arten von Diensten. Erfahren Sie mehr in unserer
                   Cookie-Richtlinie.
                 </p>
@@ -89,17 +92,23 @@ const CookieSettings = () => {
               <form onSubmit={handleSubmit(onSubmit)}>
                 {Object.entries(cookieConfigurations).map(
                   ([key, { name, description, services }]) => (
-                    <div key={key} className="border bg-gray-50 p-4">
+                    <div
+                      key={key}
+                      className="border bg-gray-50 p-4 dark:border-white dark:bg-primary/50"
+                    >
                       <Field as="div" className="flex items-center justify-between">
                         <span className="flex flex-grow flex-col">
                           <Label
                             as="h4"
-                            className="text-sm font-medium leading-6 text-gray-900"
+                            className="text-sm font-medium leading-6 text-gray-900 dark:text-white"
                             passive
                           >
                             {name}
                           </Label>
-                          <Description as="span" className="text-sm text-gray-500">
+                          <Description
+                            as="span"
+                            className="text-sm text-gray-500 dark:text-gray-300"
+                          >
                             {description}
                           </Description>
                         </span>
@@ -112,8 +121,8 @@ const CookieSettings = () => {
                                 checked={value}
                                 onChange={onChange}
                                 className={twMerge(
-                                  value ? 'bg-secondary' : 'bg-gray-200',
-                                  'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2'
+                                  value ? 'bg-secondary' : 'bg-gray-200 dark:bg-gray-700',
+                                  'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 dark:focus:ring-offset-primary'
                                 )}
                               >
                                 <span
@@ -131,7 +140,7 @@ const CookieSettings = () => {
                       <Disclosure as="div" className="mt-4">
                         {({ open }) => (
                           <>
-                            <DisclosureButton className="inline-flex items-center text-sm text-primary">
+                            <DisclosureButton className="inline-flex items-center text-sm text-primary dark:text-white">
                               Dienste anzeigen
                               <ChevronDownIcon
                                 className={twMerge(
@@ -141,11 +150,11 @@ const CookieSettings = () => {
                               />
                             </DisclosureButton>
                             <DisclosurePanel>
-                              <div className="grid grid-cols-[repeat(2,minmax(0,max-content))] bg-white p-2">
-                                <div className="border-b-2 py-3.5 pl-4 pr-3 text-left text-sm font-medium text-primary sm:pl-0">
+                              <div className="grid grid-cols-[repeat(2,minmax(0,max-content))] bg-white p-2 dark:bg-primary">
+                                <div className="border-b-2 py-3.5 pl-4 pr-3 text-left text-sm font-medium text-primary sm:pl-0 dark:border-white dark:text-white">
                                   Dienst
                                 </div>
-                                <div className="border-b-2 px-3 py-3.5 text-left text-sm font-medium text-primary">
+                                <div className="border-b-2 px-3 py-3.5 text-left text-sm font-medium text-primary dark:border-white dark:text-white">
                                   Beschreibung
                                 </div>
                                 {Object.entries(services).map(([key, { name, purpose }], index) => (
@@ -153,8 +162,8 @@ const CookieSettings = () => {
                                     <div
                                       key={key}
                                       className={twMerge(
-                                        index % 2 === 0 ? 'bg-gray-100' : '',
-                                        'whitespace-nowrap py-4 pl-4 pr-3 text-sm text-primary sm:pl-0'
+                                        index % 2 === 0 ? 'bg-gray-100 dark:bg-primary/50' : '',
+                                        'whitespace-nowrap py-4 pl-4 pr-3 text-sm text-primary sm:pl-0 dark:text-white'
                                       )}
                                     >
                                       {name}
@@ -162,8 +171,8 @@ const CookieSettings = () => {
                                     <div
                                       key={key}
                                       className={twMerge(
-                                        index % 2 === 0 ? 'bg-gray-100' : '',
-                                        'break-words px-3 py-4 text-sm text-gray-500'
+                                        index % 2 === 0 ? 'bg-gray-100 dark:bg-primary/50' : '',
+                                        'break-words px-3 py-4 text-sm text-gray-500 dark:text-gray-300'
                                       )}
                                     >
                                       {purpose}
