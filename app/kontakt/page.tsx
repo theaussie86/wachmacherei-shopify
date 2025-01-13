@@ -24,7 +24,7 @@ export default async function ContactPage() {
         <div className="relative mx-auto max-w-2xl p-8 sm:py-16 md:max-w-4xl">
           <h1 className="mb-12 text-4xl tracking-wider text-secondary">Kontakt</h1>
           <div className="grid gap-12 sm:grid-cols-2">
-            <div className="overflow-hidden rounded bg-primary shadow-lg">
+            <div className="overflow-hidden rounded bg-white shadow-lg dark:bg-primary">
               <div className="flex flex-col gap-y-3 p-10">
                 <div className="mb-2 font-gin text-2xl font-bold">Wachmacherei</div>
                 <p className="text-base text-secondary">
@@ -51,7 +51,7 @@ export default async function ContactPage() {
               </div>
               <MapComponent />
             </div>
-            <div className="overflow-hidden rounded bg-primary p-10 shadow-lg">
+            <div className="overflow-hidden rounded bg-white p-10 shadow-lg dark:bg-primary">
               <span className="font-gin text-2xl leading-none">
                 Falls du jetzt ein Kribbeln in den Fingern spürst, ist das der Drang uns hier zu
                 schreiben.

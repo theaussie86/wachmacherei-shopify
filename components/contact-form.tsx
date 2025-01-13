@@ -1,14 +1,16 @@
 'use client';
 
+import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
+import { EMAIL_ADDRESS } from 'lib/constants';
 import { sendContactEmail } from 'lib/microsoft';
 import { startVerifyRecaptcha } from 'lib/utils';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
 const contactSchema = z.object({
   name: z.string().min(1, { message: 'Name ist erforderlich' }),
   email: z
@@ -18,7 +20,10 @@ const contactSchema = z.object({
   message: z
     .string({ required_error: 'Nachricht ist erforderlich' })
     .min(20, 'Nachricht muss mindestens 20 Zeichen lang sein.')
-    .max(1500, 'Nachricht darf maximal 1500 Zeichen lang sein.')
+    .max(1500, 'Nachricht darf maximal 1500 Zeichen lang sein.'),
+  consent: z.boolean().refine((data) => data, {
+    message: 'Du musst zustimmen, dass wir deine Daten verarbeiten können.'
+  })
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
@@ -28,7 +33,7 @@ function ContactForm() {
   const { executeRecaptcha } = useGoogleReCaptcha();
   const {
     register,
-    // control,
+    control,
     reset,
     handleSubmit,
     formState: { errors, isSubmitting }
@@ -65,7 +70,7 @@ function ContactForm() {
           type="name"
           {...register('name')}
           id="name"
-          className="block w-full rounded-md border-0 bg-primary px-4 py-3 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary"
+          className="block w-full rounded-md border-0 bg-white px-4 py-3 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary dark:bg-primary dark:text-white"
           placeholder="Name"
         />
         {errors.name ? (
@@ -80,7 +85,7 @@ function ContactForm() {
         </label>
         <input
           {...register('email', { required: true })}
-          className="block w-full rounded-md border-0 bg-primary px-4 py-3 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary"
+          className="block w-full rounded-md border-0 bg-white px-4 py-3 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary dark:bg-primary dark:text-white"
           type="email"
           placeholder="E-Mail-Adresse"
           id="email"
@@ -99,7 +104,7 @@ function ContactForm() {
         </label>
         <textarea
           {...register('message', { required: true })}
-          className="block w-full rounded-md border-0 bg-primary px-4 py-3 text-white shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary"
+          className="block w-full rounded-md border-0 bg-white px-4 py-3 text-black shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary dark:bg-primary dark:text-white"
           name="message"
           id="message"
           cols={30}
@@ -111,6 +116,38 @@ function ContactForm() {
         {errors.message ? (
           <span className="mt-2 text-sm text-red-600" id="message-error">
             {errors.message.message}
+          </span>
+        ) : null}
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="text-sm opacity-50">
+          Die von Ihnen eingegebenen und an uns abgesendeten Daten werden nur zum Zweck der
+          Bearbeitung Ihres Anliegens verarbeitet. Mit der Absendung Ihrer Anfrage erklären Sie Ihre
+          diesbezügliche Einwilligung gem. Art. 6 Abs.1 a DSGVO zur o.g. Verarbeitung Ihrer Daten.
+          Die Daten werden nach abgeschlossener Bearbeitung Ihrer Anfrage gelöscht. Ihre
+          Einwilligung können Sie jederzeit auch für die Zukunft per E-Mail an{' '}
+          <Link className="underline" href={`mailto:${EMAIL_ADDRESS}`}>
+            {EMAIL_ADDRESS}
+          </Link>{' '}
+          widerrufen.
+        </p>
+        <div className="flex items-center gap-2 text-sm">
+          <input
+            className="h-4 w-4 rounded border border-gray-300 bg-white checked:border-secondary checked:bg-secondary hover:checked:border-secondary hover:checked:bg-secondary/80 focus:ring-2 focus:ring-secondary dark:border-gray-600 dark:bg-secondary dark:hover:border-secondary dark:hover:checked:bg-secondary/80"
+            type="checkbox"
+            {...register('consent')}
+          />
+          <label htmlFor="consent">
+            Die{' '}
+            <Link className="underline hover:opacity-80" href="/datenschutz">
+              Datenschutzbestimmungen
+            </Link>{' '}
+            habe ich zur Kenntnis genommen.
+          </label>
+        </div>
+        {errors.consent ? (
+          <span className="mt-2 text-sm text-red-600" id="message-error">
+            {errors.consent.message}
           </span>
         ) : null}
       </div>
@@ -146,7 +183,7 @@ function ContactForm() {
         )}
         Absenden
       </button>
-      {/* <DevTool control={control} placement="bottom-left" /> */}
+      <DevTool control={control} placement="bottom-left" />
     </form>
   );
 }

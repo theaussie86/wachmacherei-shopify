@@ -32,3 +32,5 @@ export const DEFAULT_OPTION = 'Default Title';
 export const SHOPIFY_API_VERSION = '2024-04';
 export const SHOPIFY_GRAPHQL_API_ENDPOINT = `/api/${SHOPIFY_API_VERSION}/graphql.json`;
 export const SHOPIFY_GRAPHQL_ADMIN_API_ENDPOINT = `/admin/api/${SHOPIFY_API_VERSION}/graphql.json`;
+
+export const EMAIL_ADDRESS = 'kaffee@wachmacherei.de';

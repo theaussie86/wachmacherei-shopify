@@ -81,8 +81,8 @@ function DatenschutzPage() {
         Leistungspflichten erforderlich ist und unsere Weisungen in Bezug auf diese Daten befolgen.
       </p>
       <p>Wir setzen folgenden Hoster ein:</p>
-      <p>Namecheap Inc</p>
-      <p>4600 East Washington Street Suite 305 Phoenix, AZ 85034 United States</p>
+      <p>Vercel Inc.</p>
+      <p>340S Lemon Ave #4133, Walnut, CA 91789, United States</p>
       <h2>3. Allgemeine Hinweise und Pflicht­informationen</h2>
       <h3>Datenschutz</h3>
       <p>
@@ -123,13 +123,6 @@ function DatenschutzPage() {
         steuer- oder handelsrechtliche Aufbewahrungsfristen); im letztgenannten Fall erfolgt die
         Löschung nach Fortfall dieser Gründe.
       </p>
-      <h3>Gesetzlich vorgeschriebener Datenschutz­beauftragter</h3>
-      <p>Wir haben für unser Unternehmen einen Datenschutzbeauftragten bestellt.</p>
-      <p>Bernd Frieß</p>
-      <p>Bahnhofstraße 6</p>
-      <p>87724 Ottobeuren</p>
-      <p>Telefon: +49 8332 413 40 76</p>
-      <p>E-Mail: kaffee@wachmacherei.de</p>
       <h3>Hinweis zur Datenweitergabe in die USA</h3>
       <p>
         Auf unserer Website sind unter anderem Tools von Unternehmen mit Sitz in den USA
