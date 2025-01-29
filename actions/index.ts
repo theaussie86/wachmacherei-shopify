@@ -1,4 +1,5 @@
 'use server';
+import { signIn, signOut as signOutAuth } from 'lib/auth';
 import { fetchStock } from 'lib/r2o';
 import { adjustInventoryQuantities, getProduct, getStockLevels } from 'lib/shopify';
 import { ShopifyInventoryItemAdjustment } from 'lib/shopify/types';
@@ -59,4 +60,15 @@ export async function updateStock(input: FormData) {
     }
     await adjustInventoryQuantities(inventoryItemAdjustments, locationId);
   }
+}
+
+export async function signInWithGoogle(input: FormData) {
+  const action = input.get('action');
+  if (!action) return console.error('no action found');
+  if (typeof action !== 'string') return console.error('action is not a string');
+  await signIn(action, { redirectTo: '/admin' });
+}
+
+export async function signOut() {
+  await signOutAuth();
 }
