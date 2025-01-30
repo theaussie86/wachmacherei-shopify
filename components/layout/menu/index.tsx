@@ -9,7 +9,7 @@ import MenuBarList from './menubar';
 
 const MenuBar = () => {
   return (
-    <header className="relative isolate z-10 bg-primary ">
+    <header className="relative isolate z-10 bg-primary">
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between px-6 text-secondary md:px-8"
         aria-label="Global"
