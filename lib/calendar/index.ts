@@ -2,6 +2,7 @@ import { queryOptions } from '@tanstack/react-query';
 import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns';
 
 const calBaseUrl = 'https://api.cal.com';
+const calApiVersion = '2024-06-14';
 const revalidateInterval = 60 * 2; // 2 minutes
 
 type Slots = Record<string, { time: string; attendees?: number; bookingUid?: string }[]>;
@@ -29,12 +30,28 @@ export async function fetchAvailableDates(calEventType: string): Promise<SlotsRe
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${process.env.CAL_API_KEY}`,
-        'cal-api-version': '2024-06-14'
+        'cal-api-version': calApiVersion
       }
     }
   );
   const slotsData = await slotsResponse.json();
   return { ...slotsData.data, maximumSeats };
+}
+
+export type EventType = {
+  id: string;
+  title: string;
+  seatsPerTimeSlot: number;
+};
+
+export async function fetchEventTypes(): Promise<EventType[]> {
+  const response = await fetch(`${calBaseUrl}/event-types/?apiKey=${process.env.CAL_API_KEY}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  const data = await response.json();
+  return data.event_types;
 }
 
 export function fetchAvailableDatesQueryOptions(calEventType: string) {
@@ -83,15 +100,22 @@ export async function createCalEventBooking({
 }
 
 export async function getCalEventBooking(bookingUid: string) {
-  const response = await fetch(
-    `${calBaseUrl}/v2/bookings/${bookingUid}?cal-api-version=2024-06-14`,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.CAL_API_KEY}`
-      }
+  const response = await fetch(`${calBaseUrl}/v2/bookings/${bookingUid}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.CAL_API_KEY}`,
+      'cal-api-version': calApiVersion
     }
-  );
+  });
+  return response.json();
+}
+
+export async function fetchAllAttendees() {
+  const response = await fetch(`${calBaseUrl}/attendees/?apiKey=${process.env.CAL_API_KEY}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
   return response.json();
 }
 
