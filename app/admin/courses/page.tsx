@@ -11,9 +11,9 @@ async function AdminCoursesPage({ searchParams }: { searchParams: { eventType?: 
   const eventType = eventTypes.find((eventType) => eventType.id.toString() === eventTypeId);
 
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(
-    fetchAvailableDatesQueryOptions(eventTypeId ?? 'MISSING_EVENT_TYPE_ID')
-  );
+  if (eventTypeId) {
+    await queryClient.prefetchQuery(fetchAvailableDatesQueryOptions(eventTypeId));
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

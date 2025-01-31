@@ -2,9 +2,9 @@ import {
   addAttendeeToCalEventBooking,
   createCalEventBooking,
   fetchAvailableDates,
-  getCalEventBooking,
-  getTimeRange
+  getCalEventBookings
 } from 'lib/calendar';
+import { getTimeRange } from 'lib/calendar/query-options';
 import { shopifyAdminFetch } from 'lib/shopify';
 import { getCalEventIdOfProduct } from 'lib/shopify/queries/product';
 import { ShopifyGetCalEventTypeIdOfProductOperation } from 'lib/shopify/types';
@@ -86,8 +86,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const promises = [];
     if (slotData.bookingUid) {
       // get the booking data
-      const bookingDataRes = await getCalEventBooking(slotData.bookingUid);
-      bookingData = bookingDataRes.data;
+      const bookingDataRes = await getCalEventBookings(slotData.bookingUid);
+      bookingData = bookingDataRes[0];
       if (!bookingData) {
         console.error('Booking data not found', slotData.bookingUid);
         continue;

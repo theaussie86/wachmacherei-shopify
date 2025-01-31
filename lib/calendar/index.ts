@@ -14,9 +14,12 @@ export type SlotsResponse = {
 };
 
 export async function fetchAvailableDates(calEventType: string): Promise<SlotsResponse> {
+  if (isNaN(parseInt(calEventType))) {
+    return { slots: {}, maximumSeats: 0 };
+  }
   // Get the maximum number of seats for the event type
   const eventTypeResponse = await fetch(
-    `${calBaseUrl}/v1/event-types/${calEventType}?apiKey=${process.env.CAL_API_KEY}`
+    `${calBaseUrl}/event-types/${calEventType}?apiKey=${process.env.CAL_API_KEY}`
   );
   const eventTypeData = await eventTypeResponse.json();
   const maximumSeats = eventTypeData.event_type.seatsPerTimeSlot;
