@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Price from 'components/price';
-import { fetchAvailableDatesQueryOptions } from 'lib/calendar';
+import { fetchAvailableDatesQueryOptions } from 'lib/calendar/query-options';
 import { DEFAULT_OPTION } from 'lib/constants';
 import type { CartItem } from 'lib/shopify/types';
 import { createUrl } from 'lib/utils';

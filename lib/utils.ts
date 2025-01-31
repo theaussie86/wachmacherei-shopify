@@ -1,4 +1,3 @@
-import { QueryClient } from '@tanstack/react-query';
 import { verifyRecaptcha } from 'actions';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { Product } from './shopify/types';
@@ -104,18 +103,3 @@ export const openGraphDefaults = {
   url: baseUrl,
   locale: 'de_DE'
 };
-
-export function getQueryClient() {
-  return new QueryClient({
-    defaultOptions: {
-      queries: {
-        // Serverseitige Anfragen sollten nicht erneut versucht werden
-        retry: false,
-        // Keine Refetches auf dem Server
-        refetchOnWindowFocus: false,
-        // Kürzere Stalezeit für SSR
-        staleTime: 30 * 1000 // 30 Sekunden
-      }
-    }
-  });
-}

@@ -30,10 +30,11 @@ export default function EventTypeButton({ eventType }: { eventType: EventType })
       `${pathname}?${createQueryString('eventType', isActive ? undefined : eventType.id)}`
     );
   };
+
   return (
     <button
       key={eventType.id}
-      className={twMerge('w-full', isActive && 'text-secondary')}
+      className={twMerge('btn btn-accent', isActive && 'btn-active')}
       onClick={handleClick}
     >
       {eventType.title}

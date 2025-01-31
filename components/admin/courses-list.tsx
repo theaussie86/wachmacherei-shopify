@@ -1,9 +1,20 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { EventType, getCalEventBooking } from 'lib/calendar';
+import type { Attendee } from 'lib/calendar';
+import {
+  addAttendeeToCalEventBooking,
+  createCalEventBooking,
+  EventType,
+  getCalEventBookings,
+  removeAttendeeFromCalEventBooking
+} from 'lib/calendar';
+import { fetchAvailableDatesQueryOptions, QUERY_KEYS } from 'lib/calendar/query-options';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { twMerge } from 'tailwind-merge';
 
 export type Course = {
@@ -14,13 +25,21 @@ export type Course = {
 };
 
 type CoursesListProps = {
-  courses: Course[];
   calEventType?: EventType;
   title?: string;
 };
 
-export default function CoursesList({ courses, calEventType, title }: CoursesListProps) {
+export default function CoursesList({ calEventType, title }: CoursesListProps) {
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
+  const { data, isFetching } = useQuery(
+    fetchAvailableDatesQueryOptions(calEventType?.id ?? 'MISSING_EVENT_TYPE_ID')
+  );
+  const courses = Object.entries(data?.slots || {}).map(([key, value]) => ({
+    id: key,
+    ...value[0]
+  }));
+
+  const maximumSeats = data?.maximumSeats;
 
   if (!calEventType) return <div>Wähle ein Event aus!</div>;
 
@@ -36,68 +55,220 @@ export default function CoursesList({ courses, calEventType, title }: CoursesLis
   };
 
   return (
-    <ul role="list" className="p-8">
-      {courses.map((course) => (
-        <li key={course.id} className="collapse collapse-arrow w-full py-5">
-          <input
-            type="radio"
-            name={`course-${title}`}
-            className="peer"
-            checked={selectedCourseId === course.id}
-            onChange={() => toggleCourse(course.id)}
-          />
-          <div
-            className="collapse-title min-w-0 cursor-pointer"
-            onClick={() => toggleCourse(course.id)}
+    <ul role="list" className="space-y-4">
+      {isFetching ? (
+        <div className="flex flex-col gap-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="skeleton h-32 w-full"></div>
+          ))}
+        </div>
+      ) : (
+        courses.map((course) => (
+          <li
+            key={course.id}
+            className="collapse collapse-arrow w-full rounded-lg border bg-base-100 shadow-sm transition-all hover:shadow-md"
           >
-            <div className="flex items-start gap-x-3">
-              <p className="text-sm/6 font-semibold">{title}</p>
-              <p
-                className={twMerge(
-                  statuses[course.attendees === 6 ? 'full' : 'available'],
-                  'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset'
+            <input
+              type="radio"
+              name={`course-${title}`}
+              className="peer"
+              checked={selectedCourseId === course.id}
+              onChange={() => toggleCourse(course.id)}
+            />
+            <div
+              className="collapse-title min-w-0 cursor-pointer py-4"
+              onClick={() => toggleCourse(course.id)}
+            >
+              <div className="flex items-start gap-x-3">
+                <p className="text-base font-semibold leading-6">{title}</p>
+                <p
+                  className={twMerge(
+                    statuses[course.attendees === 6 ? 'full' : 'available'],
+                    'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset'
+                  )}
+                >
+                  {course.attendees === 6 ? 'voll' : 'frei'}
+                </p>
+              </div>
+              <div className="mt-2 flex items-center gap-x-2 text-sm text-base-content/70">
+                <p className="whitespace-nowrap">
+                  Termin:{' '}
+                  <time dateTime={course.time}>
+                    {course.time ? format(new Date(course.time), 'dd.MM.yyyy HH:mm') : null}
+                  </time>{' '}
+                  Uhr
+                </p>
+                <svg viewBox="0 0 2 2" className="size-1 fill-current">
+                  <circle r={1} cx={1} cy={1} />
+                </svg>
+                {course.attendees ? (
+                  <p>{course.attendees} von 6 Plätzen belegt</p>
+                ) : (
+                  <p className="text-secondary">alle Plätze frei</p>
                 )}
-              >
-                {course.attendees === 6 ? 'voll' : 'frei'}
-              </p>
+              </div>
             </div>
-            <div className="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500">
-              <p className="whitespace-nowrap">
-                Termin:{' '}
-                <time dateTime={course.time}>
-                  {course.time ? format(new Date(course.time), 'dd.MM.yyyy HH:mm') : null}
-                </time>{' '}
-                Uhr
-              </p>
-              <svg viewBox="0 0 2 2" className="size-0.5 fill-current">
-                <circle r={1} cx={1} cy={1} />
-              </svg>
-              {course.attendees ? (
-                <p>{course.attendees} von 6 Plätzen belegt</p>
-              ) : (
-                <p className="text-secondary">alle Plätze frei</p>
-              )}
+            <div className="collapse-content border-t bg-base-200/50">
+              <div className="py-4">
+                <SlotContent course={course} maximumSeats={maximumSeats} />
+              </div>
             </div>
-          </div>
-          <div className="collapse-content flex flex-none items-center gap-x-4">
-            <SlotContent course={course} />
-          </div>
-        </li>
-      ))}
+          </li>
+        ))
+      )}
     </ul>
   );
 }
 
-function SlotContent({ course }: { course: Course }) {
+function SlotContent({ course, maximumSeats }: { course: Course; maximumSeats?: number }) {
   const { data, isLoading } = useQuery({
     queryKey: ['bookings', course.bookingUid],
-    queryFn: ({ queryKey }) => queryKey[1] && getCalEventBooking(queryKey[1]),
+    queryFn: ({ queryKey }) => getCalEventBookings(queryKey[1]),
     enabled: !!course.bookingUid
   });
+
+  const currentAttendees = data?.[0]?.attendees?.length ?? 0;
+  const isFull = maximumSeats ? currentAttendees >= maximumSeats : false;
+
   return (
-    <div>
-      {isLoading && <div>Loading...</div>}
-      {data && <div>{JSON.stringify(data.data.attendees)}</div>}
+    <div className="w-full space-y-6">
+      <div className="space-y-3">
+        {isLoading && <div>Loading...</div>}
+        {data &&
+          data[0]?.attendees.map((attendee) => (
+            <Attendee
+              key={attendee.id}
+              attendee={attendee}
+              bookingUid={course.bookingUid ?? 'MISSING_BOOKING_UID'}
+            />
+          ))}
+      </div>
+      {isFull ? (
+        <div className="rounded-lg border border-error/20 bg-error/10 p-4 text-center text-error">
+          Dieser Kurs ist bereits voll belegt.
+        </div>
+      ) : (
+        <div
+          className={twMerge(
+            'pt-4',
+            data && data?.[0]?.attendees && data?.[0]?.attendees?.length > 0 && 'border-t'
+          )}
+        >
+          <AddAttendee bookingUid={course.bookingUid} start={course.time} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AddAttendee({ bookingUid, start }: { bookingUid?: string; start?: string }) {
+  const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const eventTypeId = searchParams.get('eventType');
+  const { mutate: addAttendee } = useMutation({
+    mutationFn: addAttendeeToCalEventBooking,
+    onSuccess: () => {
+      console.log(eventTypeId);
+      toast.success('Teilnehmer erfolgreich hinzugefügt');
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.calendar.bookings(bookingUid)
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['calendar', 'availability']
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  });
+
+  const { mutate: createBooking, isPending: isCreatingBooking } = useMutation({
+    mutationFn: createCalEventBooking,
+    onSuccess: () => {
+      console.log(eventTypeId);
+      toast.success('Termin erfolgreich erstellt');
+      queryClient.invalidateQueries({
+        queryKey: ['calendar', 'availability']
+      });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.calendar.bookings()
+      });
+      reset();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  });
+
+  const onSubmit = async (input: { name: string; email: string }) => {
+    if (bookingUid) {
+      console.log('addAttendee', { bookingId: bookingUid, ...input });
+      await addAttendee({ bookingId: parseInt(bookingUid), ...input });
+    } else {
+      console.log('createBooking', { eventTypeId, start, ...input });
+      if (eventTypeId && start) {
+        await createBooking({ eventTypeId, start, ...input });
+      }
+    }
+  };
+
+  const { register, handleSubmit, reset } = useForm<{ name: string; email: string }>();
+
+  return (
+    <form className="flex w-full flex-wrap gap-x-2" onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex-grow space-x-3">
+        <input
+          type="text"
+          disabled={isCreatingBooking}
+          placeholder="Name"
+          className="input input-bordered w-48"
+          {...register('name')}
+        />
+        <input
+          type="email"
+          placeholder="E-Mail"
+          disabled={isCreatingBooking}
+          className="input input-bordered w-48"
+          {...register('email')}
+        />
+      </div>
+      <button type="submit" className="btn btn-secondary" disabled={isCreatingBooking}>
+        Teilnehmer hinzufügen
+      </button>
+    </form>
+  );
+}
+
+function Attendee({ attendee, bookingUid }: { attendee: Attendee; bookingUid: string }) {
+  const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const eventTypeId = searchParams.get('eventType');
+  const { mutate: removeAttendee } = useMutation({
+    mutationFn: () => removeAttendeeFromCalEventBooking({ attendeeId: attendee.id, bookingUid }),
+    onSuccess: () => {
+      console.log(eventTypeId, 'eventTypeId');
+      toast.success('Teilnehmer erfolgreich entfernt');
+      queryClient.invalidateQueries({ queryKey: ['calendar', 'availability'] });
+      queryClient.invalidateQueries({ queryKey: ['bookings', bookingUid] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  });
+  return (
+    <div
+      className="flex w-full items-center justify-between gap-x-2 rounded-lg bg-base-200/50 p-3"
+      key={attendee.id}
+    >
+      <div className="flex-grow-1 flex flex-col">
+        <p className="font-medium">{attendee.name ? attendee.name : attendee.email}</p>
+        {attendee.name && <p className="text-xs text-base-content/70">({attendee.email})</p>}
+      </div>
+      {attendee.id && (
+        <button className="btn btn-ghost btn-sm text-error" onClick={() => removeAttendee()}>
+          Löschen
+        </button>
+      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
-import { queryOptions } from '@tanstack/react-query';
-import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns';
+'use server';
+
+import { getTimeRange } from './query-options';
 
 const calBaseUrl = 'https://api.cal.com';
 const calApiVersion = '2024-06-14';
@@ -54,13 +55,6 @@ export async function fetchEventTypes(): Promise<EventType[]> {
   return data.event_types;
 }
 
-export function fetchAvailableDatesQueryOptions(calEventType: string) {
-  return queryOptions({
-    queryKey: ['calendar', calEventType],
-    queryFn: () => fetchAvailableDates(calEventType)
-  });
-}
-
 export async function createCalEventBooking({
   eventTypeId,
   start,
@@ -88,7 +82,7 @@ export async function createCalEventBooking({
     metadata: {}
   };
 
-  const response = await fetch(`${calBaseUrl}/bookings?apiKey=${process.env.CAL_API_KEY}`, {
+  const response = await fetch(`${calBaseUrl}/bookings/?apiKey=${process.env.CAL_API_KEY}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -99,15 +93,33 @@ export async function createCalEventBooking({
   return response.json();
 }
 
-export async function getCalEventBooking(bookingUid: string) {
-  const response = await fetch(`${calBaseUrl}/v2/bookings/${bookingUid}`, {
+export type Attendee = {
+  id?: string;
+  name: string;
+  email: string;
+  startTime: string;
+};
+
+export type Booking = {
+  id: string;
+  uid: string;
+  title: string;
+  start: string;
+  attendees: Attendee[];
+};
+
+export async function getCalEventBookings(bookingUid?: string): Promise<Booking[]> {
+  const response = await fetch(`${calBaseUrl}/v2/bookings/?cal-api-version=${calApiVersion}`, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.CAL_API_KEY}`,
-      'cal-api-version': calApiVersion
+      Authorization: `Bearer ${process.env.CAL_API_KEY}`
     }
   });
-  return response.json();
+
+  const res = await response.json();
+  const bookings = res.data.bookings;
+
+  return bookingUid ? bookings.filter((booking: Booking) => booking.uid === bookingUid) : bookings;
 }
 
 export async function fetchAllAttendees() {
@@ -146,13 +158,40 @@ export async function addAttendeeToCalEventBooking({
   return response.json();
 }
 
-export function getTimeRange() {
-  const now = new Date();
-  const startOfCurrentMonth = startOfMonth(now);
-  const dateInSixMonths = addMonths(now, 6);
-  const endOfMonthInSixMonths = endOfMonth(dateInSixMonths);
-  return {
-    start: format(startOfCurrentMonth, 'yyyy-MM-dd'),
-    end: format(endOfMonthInSixMonths, 'yyyy-MM-dd')
-  };
+export async function removeAttendeeFromCalEventBooking({
+  attendeeId,
+  bookingUid
+}: {
+  attendeeId: Attendee['id'];
+  bookingUid: string;
+}) {
+  const bookings = await getCalEventBookings(bookingUid);
+  const booking = bookings[0];
+  // check if the attendee is the last one
+  const attendeeIsLastOne =
+    booking?.attendees.filter((attendee) => attendee.id !== attendeeId).length === 0;
+
+  if (attendeeIsLastOne) {
+    const lastAttendee = booking?.attendees[0];
+    const cancellationReason = encodeURIComponent(
+      `Letzter Teilnehmer ${lastAttendee?.name} (${lastAttendee?.email}) hat abgesagt.`
+    );
+    await fetch(
+      `${calBaseUrl}/bookings/${booking.id}?apiKey=${process.env.CAL_API_KEY}&cancellationReason=${cancellationReason}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  } else {
+    // remove the attendee
+    await fetch(`${calBaseUrl}/attendees/${attendeeId}?apiKey=${process.env.CAL_API_KEY}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
 }

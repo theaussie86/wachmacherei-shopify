@@ -1,7 +1,7 @@
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import clsx from 'clsx';
-import { fetchAvailableDatesQueryOptions } from 'lib/calendar';
-import { getQueryClient } from 'lib/utils';
+import { fetchAvailableDatesQueryOptions } from 'lib/calendar/query-options';
+import { getQueryClient } from 'lib/context/query-client';
 import ProductDateButton from './product-date-btn';
 import ProductDateSeats from './product-date-seats';
 

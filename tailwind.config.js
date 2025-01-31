@@ -39,6 +39,36 @@ module.exports = {
   future: {
     hoverOnlyWhenSupported: true
   },
+  daisyui: {
+    themes: [
+      {
+        light: {
+          primary: '#0d181c',
+          'primary-content': '#ffffff',
+          secondary: '#e8b428',
+          'secondary-content': '#ffffff',
+          accent: '#98C3EA',
+          neutral: '#2a323c',
+          'base-100': '#ffffff',
+          'base-200': '#f9fafb',
+          'base-300': '#d1d5db',
+          'base-content': '#1f2937'
+        },
+        dark: {
+          primary: '#0d181c',
+          'primary-content': '#ffffff',
+          secondary: '#e8b428',
+          'secondary-content': '#ffffff',
+          accent: '#98C3EA',
+          neutral: '#191e24',
+          'base-100': '#2a323c',
+          'base-200': '#232a34',
+          'base-300': '#1d242d',
+          'base-content': '#ffffff'
+        }
+      }
+    ]
+  },
   plugins: [
     require('@tailwindcss/container-queries'),
     require('@tailwindcss/typography'),
