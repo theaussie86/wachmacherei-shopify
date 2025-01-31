@@ -100,7 +100,8 @@ export type Attendee = {
   id?: string;
   name: string;
   email: string;
-  startTime: string;
+  startTime?: string;
+  bookingId?: string;
 };
 
 export type Booking = {
@@ -125,13 +126,14 @@ export async function getCalEventBookings(bookingUid?: string): Promise<Booking[
   return bookingUid ? bookings.filter((booking: Booking) => booking.uid === bookingUid) : bookings;
 }
 
-export async function fetchAllAttendees() {
+export async function fetchAllAttendees(): Promise<Attendee[]> {
   const response = await fetch(`${calBaseUrl}/attendees/?apiKey=${process.env.CAL_API_KEY}`, {
     headers: {
       'Content-Type': 'application/json'
     }
   });
-  return response.json();
+  const data = await response.json();
+  return data.attendees;
 }
 
 export async function addAttendeeToCalEventBooking({
@@ -197,4 +199,5 @@ export async function removeAttendeeFromCalEventBooking({
       }
     });
   }
+  return { attendeeIsLastOne };
 }

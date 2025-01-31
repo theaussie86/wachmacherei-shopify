@@ -1,11 +1,12 @@
 import { queryOptions } from '@tanstack/react-query';
 import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns';
-import { fetchAvailableDates } from '.';
+import { fetchAllAttendees, fetchAvailableDates } from '.';
 
 export const QUERY_KEYS = {
   calendar: {
-    availability: (eventTypeId: string) => ['calendar', 'availability', eventTypeId],
-    bookings: (bookingUid?: string) => ['bookings', bookingUid]
+    availability: (eventTypeId: string) => ['calendar', 'availability', parseInt(eventTypeId)],
+    bookings: (bookingUid?: string) => ['bookings', bookingUid],
+    attendees: () => ['attendees']
   }
 } as const;
 
@@ -13,6 +14,13 @@ export function fetchAvailableDatesQueryOptions(calEventType: string) {
   return queryOptions({
     queryKey: QUERY_KEYS.calendar.availability(calEventType),
     queryFn: () => fetchAvailableDates(calEventType)
+  });
+}
+
+export function fetchAllAttendeesQueryOptions() {
+  return queryOptions({
+    queryKey: QUERY_KEYS.calendar.attendees(),
+    queryFn: () => fetchAllAttendees()
   });
 }
 

@@ -10,7 +10,11 @@ import {
   getCalEventBookings,
   removeAttendeeFromCalEventBooking
 } from 'lib/calendar';
-import { fetchAvailableDatesQueryOptions, QUERY_KEYS } from 'lib/calendar/query-options';
+import {
+  fetchAllAttendeesQueryOptions,
+  fetchAvailableDatesQueryOptions,
+  QUERY_KEYS
+} from 'lib/calendar/query-options';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -126,22 +130,24 @@ function SlotContent({ course, maximumSeats }: { course: Course; maximumSeats?: 
     queryFn: ({ queryKey }) => getCalEventBookings(queryKey[1]),
     enabled: !!course.bookingUid
   });
+  const { data: fetchedAttendees } = useQuery(fetchAllAttendeesQueryOptions());
 
-  const currentAttendees = data?.[0]?.attendees?.length ?? 0;
-  const isFull = maximumSeats ? currentAttendees >= maximumSeats : false;
+  const bookingId = data?.[0]?.id;
+  const attendees = fetchedAttendees?.filter((attendee) => attendee.bookingId === bookingId);
+
+  const isFull = maximumSeats ? (attendees ?? []).length >= maximumSeats : false;
 
   return (
     <div className="w-full space-y-6">
       <div className="space-y-3">
         {isLoading && <div>Loading...</div>}
-        {data &&
-          data[0]?.attendees.map((attendee) => (
-            <Attendee
-              key={attendee.id}
-              attendee={attendee}
-              bookingUid={course.bookingUid ?? 'MISSING_BOOKING_UID'}
-            />
-          ))}
+        {attendees?.map((attendee) => (
+          <Attendee
+            key={attendee.id}
+            attendee={attendee}
+            bookingUid={course.bookingUid ?? 'MISSING_BOOKING_UID'}
+          />
+        ))}
       </div>
       {isFull ? (
         <div className="rounded-lg border border-error/20 bg-error/10 p-4 text-center text-error">
@@ -154,28 +160,40 @@ function SlotContent({ course, maximumSeats }: { course: Course; maximumSeats?: 
             data && data?.[0]?.attendees && data?.[0]?.attendees?.length > 0 && 'border-t'
           )}
         >
-          <AddAttendee bookingUid={course.bookingUid} start={course.time} />
+          <AddAttendee
+            bookingUid={course.bookingUid}
+            bookingId={parseInt(bookingId ?? '')}
+            start={course.time}
+          />
         </div>
       )}
     </div>
   );
 }
 
-function AddAttendee({ bookingUid, start }: { bookingUid?: string; start?: string }) {
+function AddAttendee({
+  bookingUid,
+  bookingId,
+  start
+}: {
+  bookingUid?: string;
+  bookingId?: number;
+  start?: string;
+}) {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const eventTypeId = searchParams.get('eventType');
   const { mutate: addAttendee } = useMutation({
     mutationFn: addAttendeeToCalEventBooking,
     onSuccess: () => {
-      console.log(eventTypeId);
       toast.success('Teilnehmer erfolgreich hinzugefügt');
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.calendar.attendees()
+      });
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.calendar.bookings(bookingUid)
       });
-      queryClient.invalidateQueries({
-        queryKey: ['calendar', 'availability']
-      });
+      reset();
     },
     onError: (error) => {
       toast.error(error.message);
@@ -185,10 +203,12 @@ function AddAttendee({ bookingUid, start }: { bookingUid?: string; start?: strin
   const { mutate: createBooking, isPending: isCreatingBooking } = useMutation({
     mutationFn: createCalEventBooking,
     onSuccess: () => {
-      console.log(eventTypeId);
       toast.success('Termin erfolgreich erstellt');
       queryClient.invalidateQueries({
         queryKey: ['calendar', 'availability']
+      });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.calendar.attendees()
       });
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.calendar.bookings()
@@ -201,11 +221,9 @@ function AddAttendee({ bookingUid, start }: { bookingUid?: string; start?: strin
   });
 
   const onSubmit = async (input: { name: string; email: string }) => {
-    if (bookingUid) {
-      console.log('addAttendee', { bookingId: bookingUid, ...input });
-      await addAttendee({ bookingId: parseInt(bookingUid), ...input });
+    if (bookingId) {
+      await addAttendee({ bookingId, ...input });
     } else {
-      console.log('createBooking', { eventTypeId, start, ...input });
       if (eventTypeId && start) {
         await createBooking({ eventTypeId, start, ...input });
       }
@@ -245,11 +263,15 @@ function Attendee({ attendee, bookingUid }: { attendee: Attendee; bookingUid: st
   const eventTypeId = searchParams.get('eventType');
   const { mutate: removeAttendee } = useMutation({
     mutationFn: () => removeAttendeeFromCalEventBooking({ attendeeId: attendee.id, bookingUid }),
-    onSuccess: () => {
-      console.log(eventTypeId, 'eventTypeId');
+    onSuccess: (data) => {
       toast.success('Teilnehmer erfolgreich entfernt');
-      queryClient.invalidateQueries({ queryKey: ['calendar', 'availability'] });
-      queryClient.invalidateQueries({ queryKey: ['bookings', bookingUid] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.calendar.attendees() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.calendar.bookings(bookingUid) });
+      if (data.attendeeIsLastOne) {
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.calendar.availability(eventTypeId ?? 'MISSING_EVENT_TYPE_ID')
+        });
+      }
     },
     onError: (error) => {
       toast.error(error.message);
