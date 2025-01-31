@@ -1,12 +1,11 @@
-import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { fetchAvailableDatesQueryOptions } from 'lib/calendar/query-options';
-import { getQueryClient } from 'lib/context/query-client';
 import ProductDateButton from './product-date-btn';
 import ProductDateSeats from './product-date-seats';
 
 export default async function ProductCourseSelector({ eventType }: { eventType: string }) {
-  const queryClient = getQueryClient();
+  const queryClient = new QueryClient();
   const dates = await queryClient.fetchQuery(fetchAvailableDatesQueryOptions(eventType));
 
   return (
