@@ -1,10 +1,10 @@
+import { kv } from '@vercel/kv';
 import {
   addAttendeeToCalEventBooking,
   createCalEventBooking,
   fetchAvailableDates,
   getCalEventBookings
 } from 'lib/calendar';
-import { getTimeRange } from 'lib/calendar/query-options';
 import { shopifyAdminFetch } from 'lib/shopify';
 import { getCalEventIdOfProduct } from 'lib/shopify/queries/product';
 import { ShopifyGetCalEventTypeIdOfProductOperation } from 'lib/shopify/types';
@@ -35,13 +35,23 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const body = await req.json();
   const {
     customer,
-    line_items
+    line_items,
+    id: orderId
   }: {
     customer: { email: string; first_name: string; last_name: string } & Record<string, unknown>;
     line_items: LineItemProps[];
+    id: string;
   } = body;
+
+  // Check if this order has already been processed
+  const orderKey = `order-${orderId}-${customer.email}`;
+  const isProcessed = await kv.get(orderKey);
+  if (isProcessed) {
+    console.log('Order already processed', orderKey);
+    return NextResponse.json({ status: 200, message: 'Order already processed' });
+  }
+
   const { email, first_name, last_name } = customer;
-  const { start, end } = getTimeRange();
 
   // filter out the line items that don't have extra attributes
   const courseLineItems = line_items.filter(
@@ -125,5 +135,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     await Promise.all(promises);
   }
 
-  return NextResponse.json({ message: 'Hello, World!' });
+  // Mark order as processed
+  await kv.set(orderKey, true, { ex: 60 * 60 * 1 }); // Expire after 1 hour
+
+  return NextResponse.json({ message: 'Order processed successfully' });
 }
