@@ -55,14 +55,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: 202 });
     }
 
-    const set = await kv.set(`${sku}-stock`, true);
+    await kv.set(`${sku}-stock`, true, { ex: 120 });
     console.log('Data', data);
     // get product price and check if it changed
     const r2oProductID = data['resource[product_id]'];
     const r2oProductPrice = parseFloat(data['resource[product_price]'] || 'NaN');
 
-    const r2oStock = await fetchStock(sku);
-    const r2oStockLevel = r2oStock[0].product_stock;
+    let r2oStockLevel = 0;
+    try {
+      const r2oStock = await fetchStock(sku);
+      r2oStockLevel = r2oStock[0]?.product_stock || 0;
+    } catch (error) {
+      console.error('Error fetching stock from r2o.', error);
+    }
 
     // check stock levels in shopify and update if necessary
     const shopifyStock = await getStockLevels(sku);
