@@ -41,26 +41,23 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
         )}
 
         {images.length > 1 ? (
-          <div className="absolute bottom-[15%] flex w-full justify-center">
-            <div className="mx-auto flex h-11 items-center rounded-full border border-white bg-neutral-50/80 text-neutral-500 backdrop-blur dark:border-black dark:bg-neutral-900/80">
-              <Link
-                aria-label="Previous product image"
-                href={previousUrl}
-                className={buttonClassName}
-                scroll={false}
-              >
-                <ArrowLeftIcon className="h-5" />
-              </Link>
-              <div className="mx-1 h-6 w-px bg-neutral-500"></div>
-              <Link
-                aria-label="Next product image"
-                href={nextUrl}
-                className={buttonClassName}
-                scroll={false}
-              >
-                <ArrowRightIcon className="h-5" />
-              </Link>
-            </div>
+          <div className="absolute inset-0 flex items-center justify-between">
+            <Link
+              aria-label="Previous product image"
+              href={previousUrl}
+              className="ml-4 flex h-11 w-11 items-center justify-center rounded-full bg-secondary text-white shadow-sm transition-all ease-in-out hover:scale-110 hover:bg-secondary/90"
+              scroll={false}
+            >
+              <ArrowLeftIcon className="h-5 w-5" />
+            </Link>
+            <Link
+              aria-label="Next product image"
+              href={nextUrl}
+              className="mr-4 flex h-11 w-11 items-center justify-center rounded-full bg-secondary text-white shadow-sm transition-all ease-in-out hover:scale-110 hover:bg-secondary/90"
+              scroll={false}
+            >
+              <ArrowRightIcon className="h-5 w-5" />
+            </Link>
           </div>
         ) : null}
       </div>
