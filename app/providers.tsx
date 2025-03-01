@@ -1,3 +1,4 @@
+import { NavigationTracker } from 'components/layout/navigation-tracker';
 import { CookieProvider } from 'lib/context/cookies';
 import { PHProvider } from 'lib/context/posthog';
 import QueryProvider from 'lib/context/query-client';
@@ -11,6 +12,7 @@ function Providers({ children }: PropsWithChildren) {
       <CookieProvider>
         <QueryProvider>
           <PHProvider>
+            <NavigationTracker />
             {children}
             <ToastContainer />
           </PHProvider>
