@@ -87,7 +87,7 @@ async function AdminCoursesPage({ searchParams }: { searchParams: { eventType?: 
         }
       >
         <div className="mb-8">
-          <div className="join join-horizontal flex-wrap justify-center gap-y-2">
+          <div className="join join-horizontal flex-wrap justify-center gap-y-2 space-x-4">
             {eventTypes.map((eventType) => (
               <EventTypeButton key={eventType.id} eventType={eventType} />
             ))}
