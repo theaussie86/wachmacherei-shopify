@@ -1,6 +1,24 @@
+import CacheClearForm from 'components/admin/CacheClearForm';
 import LoginForm from 'components/login';
 import { auth } from 'lib/auth';
 import Link from 'next/link';
+
+async function clearCache(): Promise<{ message: string; status: 'success' | 'error' }> {
+  'use server';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const response = await fetch(
+    `${baseUrl}/api/revalidate?secret=${process.env.SHOPIFY_REVALIDATION_SECRET}`,
+    {
+      method: 'POST'
+    }
+  );
+
+  if (!response.ok) {
+    return { message: 'Fehler beim Löschen des Caches', status: 'error' as const };
+  }
+
+  return { message: 'Cache wurde erfolgreich geleert', status: 'success' as const };
+}
 
 export default async function AdminPage() {
   const session = await auth();
@@ -40,18 +58,14 @@ export default async function AdminPage() {
           </div>
         </Link>
 
-        {/* Statistiken Card */}
-        {/* <div className="card bg-base-100 shadow-sm">
+        {/* Cache Card */}
+        <div className="card bg-base-100 shadow-sm">
           <div className="card-body">
-            <h2 className="card-title">Statistiken</h2>
-            <p className="text-base-content/70">Übersicht über Buchungen und Teilnehmer</p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-ghost btn-sm" disabled>
-                Demnächst verfügbar
-              </button>
-            </div>
+            <h2 className="card-title">Cache</h2>
+            <p className="text-base-content/70">Hier können sie den Server Cache löschen</p>
+            <CacheClearForm clearCache={clearCache} />
           </div>
-        </div> */}
+        </div>
 
         {/* Einstellungen Card */}
         {/* <div className="card bg-base-100 shadow-sm">
