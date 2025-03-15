@@ -67,6 +67,22 @@ export default async function AdminPage() {
           </div>
         </div>
 
+        {/* Produkt übertragen Card */}
+        <Link
+          href="/admin/product-transfer"
+          className="card bg-base-100 shadow-sm transition-all hover:shadow-md"
+        >
+          <div className="card-body">
+            <h2 className="card-title">Produkt übertragen</h2>
+            <p className="text-base-content/70">
+              Hier können sie ein Produkt aus R2O in Shopify übertragen
+            </p>
+            <div className="card-actions justify-end">
+              <button className="btn btn-primary btn-sm">Übertragen</button>
+            </div>
+          </div>
+        </Link>
+
         {/* Einstellungen Card */}
         {/* <div className="card bg-base-100 shadow-sm">
           <div className="card-body">

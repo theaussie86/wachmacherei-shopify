@@ -1,6 +1,8 @@
 import AdminMenuBar from 'components/layout/menu/admin';
 import { auth } from 'lib/auth';
 import { redirect } from 'next/navigation';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -13,6 +15,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <>
       <AdminMenuBar user={session.user} />
       {children}
+      <ToastContainer />
     </>
   );
 }
