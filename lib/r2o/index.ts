@@ -1,5 +1,8 @@
+'use server';
+
 import { updateShopifyCustomerMetafield } from 'lib/shopify';
 import { ShopifyCustomer } from 'lib/shopify/types';
+import { prepareCustomerData } from './util';
 
 type R20Address = {
   salutation: string | null;
@@ -89,50 +92,6 @@ export async function createOrUpdateCustomerInR2O(data: ShopifyCustomer, custome
   return customer;
 }
 
-export function removeNullAndUndefined(obj: any): any {
-  Object.keys(obj).forEach((key) =>
-    obj[key] && typeof obj[key] === 'object'
-      ? removeNullAndUndefined(obj[key])
-      : obj[key] == null && delete obj[key]
-  );
-  return obj;
-}
-
-export function prepareCustomerData(data: Partial<ShopifyCustomer>) {
-  return removeNullAndUndefined({
-    address: {
-      delivery: {
-        company: data.defaultAddress?.company,
-        city: data.defaultAddress?.city,
-        country: data.defaultAddress?.countryCodeV2,
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        phone: data.phone,
-        street: `${data.defaultAddress?.address1 ?? ''} ${data.defaultAddress?.address2 ?? ''}`,
-        zip: data.defaultAddress?.zip
-      },
-      invoice: {
-        company: data.defaultAddress?.company,
-        city: data.defaultAddress?.city,
-        country: data.defaultAddress?.countryCodeV2,
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        phone: data.phone,
-        street: `${data.defaultAddress?.address1} ${data.defaultAddress?.address2 ?? ''}`,
-        zip: data.defaultAddress?.zip
-      }
-    },
-    email: data.email,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    phone: data.phone,
-    company: data.defaultAddress?.company,
-    customerCategory_id: 125301
-  });
-}
-
 export async function fetchStock(sku: string) {
   const response = await fetch(`${process.env.R2O_BASE_URL}/v1/products/itemNumber/${sku}/stock`, {
     method: 'GET',
@@ -158,4 +117,26 @@ export async function fetchProduct(productId: string) {
   );
   const product = await response.json();
   return product;
+}
+
+export async function findR2OProduct({ itemNumber, name }: { itemNumber?: string; name?: string }) {
+  const query = new URLSearchParams();
+  query.set('includeProductVariations', 'true');
+  query.set('includeProductGroup', 'true');
+
+  if (itemNumber) {
+    query.set('itemNumber', itemNumber);
+  }
+  if (name) {
+    query.set('name', name);
+  }
+  const response = await fetch(`${process.env.R2O_BASE_URL}/v1/products?${query.toString()}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${process.env.R2O_AUTH_TOKEN}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  const products = await response.json();
+  return products;
 }
