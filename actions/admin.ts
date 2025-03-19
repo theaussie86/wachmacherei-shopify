@@ -5,7 +5,7 @@ export async function triggerProductCreation(r2o_itemnumber: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-N8N-CWE': process.env.N8N_WEBHOOK_SECRET || ''
+      'X-N8N-WACHMACHEREI': process.env.N8N_WEBHOOK_SECRET || ''
     },
     body: JSON.stringify({ r2o_itemnumber })
   });
