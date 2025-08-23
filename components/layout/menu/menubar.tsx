@@ -8,15 +8,29 @@ import {
   Transition
 } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import FacebookIcon from 'components/icons/facebook';
-import InstagramIcon from 'components/icons/instagram';
+import { signOut } from 'actions';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 
 function MenuBarList() {
   const currentYear = new Date().getFullYear();
   const copyrightDate = 2022 + (currentYear > 2022 ? `-${currentYear}` : '');
   const copyrightName = 'Wachmacherei';
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  const handleSignOut = () => {
+    signOut().then(() => router.push('/'));
+  };
+
+  const adminMenuItems = session?.user
+    ? [
+        { name: 'Dashboard', to: '/admin' },
+        { name: 'Termine', to: '/admin/calendar' }
+      ]
+    : [];
 
   return (
     <PopoverGroup className="flex">
@@ -42,14 +56,26 @@ function MenuBarList() {
                 <span className="sr-only">Menü schließen</span>
                 <XMarkIcon className="h-9 w-9 text-secondary" aria-hidden="true" />
               </PopoverButton>
+
+              {/* User Info Section - Only on mobile */}
+              <div className="md:hidden">
+                {session?.user && (
+                  <div className="mb-6 rounded-lg bg-secondary/10 p-4">
+                    <div className="mb-2 text-sm text-secondary">
+                      Eingeloggt als <span className="font-medium">{session.user.email}</span>
+                    </div>
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full rounded bg-secondary px-3 py-2 text-sm font-medium text-primary hover:bg-secondary/80"
+                    >
+                      Abmelden
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <div className="grid max-w-7xl gap-y-4 xl:gap-y-8">
-                {[
-                  { name: 'Home', to: '/' },
-                  { name: 'Shop', to: '/shop' },
-                  { name: 'Kurse', to: '/kurse' },
-                  { name: 'Über Uns', to: '/ueber-uns' },
-                  { name: 'Kontakt', to: '/kontakt' }
-                ].map((item) => (
+                {adminMenuItems.map((item) => (
                   <PopoverButton as={Link} key={item.name} href={item.to} className="block">
                     <span className="group relative font-gin text-3xl leading-loose tracking-wide hover:underline">
                       {item.name}
@@ -63,14 +89,6 @@ function MenuBarList() {
                 <h3 className="text-xl tracking-wider text-secondary">
                   &copy; {copyrightDate} {copyrightName}
                 </h3>
-                <div className="flex gap-x-2">
-                  <a href="https://www.facebook.com/WACHMACHEREI">
-                    <FacebookIcon className="h-8 w-8 rounded bg-secondary p-1" />
-                  </a>
-                  <a href="https://www.instagram.com/wach.macherei/">
-                    <InstagramIcon className="h-8 w-8 rounded bg-secondary p-1" />
-                  </a>
-                </div>
               </div>
             </div>
           </PopoverPanel>

@@ -1,11 +1,9 @@
-import Cart from 'components/cart';
-import OpenCart from 'components/cart/open-cart';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import WMLogoSchriftWeiß from '../../images/Schriftzug_Wachmacherei_weiss640x250.png';
 import WMLogoIcon from '../../images/favicon.png';
 import MenuBarList from './menubar';
+import UserInfo from './user-info';
 
 const MenuBar = () => {
   return (
@@ -29,9 +27,7 @@ const MenuBar = () => {
           ></div>
         </Link>
         <div className="flex p-4 md:p-0">
-          <Suspense fallback={<OpenCart />}>
-            <Cart />
-          </Suspense>
+          <UserInfo />
         </div>
       </nav>
     </header>

@@ -1,4 +1,3 @@
-import AdminMenuBar from 'components/layout/menu/admin';
 import { auth } from 'lib/auth';
 import { redirect } from 'next/navigation';
 import { ToastContainer } from 'react-toastify';
@@ -20,7 +19,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <>
-      <AdminMenuBar user={session.user} />
       {children}
       <ToastContainer />
     </>

@@ -7,6 +7,7 @@ import { ReactNode, Suspense } from 'react';
 import { SITE_NAME, baseUrl, openGraphDefaults } from '../lib/utils';
 import './globals.css';
 import Providers from './providers';
+import { auth } from 'lib/auth';
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -26,11 +27,13 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
+  const session = await auth();
+
   return (
     <html lang="de">
       <body className="bg-white text-primary selection:bg-secondary dark:bg-primary dark:text-white dark:selection:bg-secondary dark:selection:text-white">
         <GoogleAnalytics />
-        <Providers>
+        <Providers session={session}>
           <Banner />
           <MenuBar />
           <Suspense>
