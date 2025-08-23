@@ -1,6 +1,7 @@
 import { queryOptions } from '@tanstack/react-query';
 import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns';
 import { fetchAllAttendees, fetchAvailableDates } from '.';
+import { getGoogleCalendarEvents } from './google';
 
 export const QUERY_KEYS = {
   calendar: {
@@ -34,3 +35,10 @@ export function getTimeRange() {
     end: format(endOfMonthInSixMonths, 'yyyy-MM-dd')
   };
 }
+
+export const fetchGoogleCalendarEventsQueryOptions = () => ({
+  queryKey: ['google-calendar', 'events'] as const,
+  queryFn: getGoogleCalendarEvents,
+  staleTime: 1000 * 60 * 2, // 2 Minuten
+  gcTime: 1000 * 60 * 5 // 5 Minuten
+});

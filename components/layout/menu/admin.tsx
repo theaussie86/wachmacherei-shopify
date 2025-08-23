@@ -15,7 +15,8 @@ const AdminMenuBar = ({ user }: { user: User }) => {
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', current: pathname === '/admin' },
-    { name: 'Kurse', href: '/admin/courses', current: pathname.startsWith('/admin/courses') }
+    { name: 'Kurse', href: '/admin/courses', current: pathname.startsWith('/admin/courses') },
+    { name: 'Termine', href: '/admin/calendar', current: pathname.startsWith('/admin/calendar') }
   ];
   const userNavigation = [
     { name: 'Abmelden', onClick: () => signOut().then(() => router.push('/')) }
