@@ -133,7 +133,7 @@ export async function getGoogleCalendarEvents(
 
     return {
       events,
-      nextPageToken: eventsResponse.data.nextPageToken
+      nextPageToken: eventsResponse.data.nextPageToken || undefined
     };
   } catch (error) {
     console.error('Fehler beim Abrufen der Google Kalender Events:', error);

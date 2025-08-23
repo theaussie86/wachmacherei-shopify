@@ -79,7 +79,7 @@ export default function AttendeeManagement({
       setNewEmail('');
 
       // Cache invalidieren, um die aktualisierten Daten zu laden
-      queryClient.invalidateQueries(['google-calendar', 'events']);
+      queryClient.invalidateQueries({ queryKey: ['google-calendar', 'events'] });
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unbekannter Fehler');
     } finally {
@@ -119,7 +119,7 @@ export default function AttendeeManagement({
       }
 
       // Cache invalidieren, um die aktualisierten Daten zu laden
-      queryClient.invalidateQueries(['google-calendar', 'events']);
+      queryClient.invalidateQueries({ queryKey: ['google-calendar', 'events'] });
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unbekannter Fehler');
     } finally {
