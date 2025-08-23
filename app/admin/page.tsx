@@ -3,6 +3,13 @@ import LoginForm from 'components/login';
 import { auth } from 'lib/auth';
 import Link from 'next/link';
 
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false
+  }
+};
+
 async function clearCache(): Promise<{ message: string; status: 'success' | 'error' }> {
   'use server';
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';

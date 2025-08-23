@@ -11,6 +11,10 @@ export const metadata = {
   openGraph: {
     ...openGraphDefaults,
     url: baseUrl + '/shop'
+  },
+  robots: {
+    index: false,
+    follow: false
   }
 };
 

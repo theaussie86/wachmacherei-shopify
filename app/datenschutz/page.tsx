@@ -2,6 +2,13 @@ import Prose from 'components/prose';
 import CookieTable from './cookie-table';
 import CookieStatus from './coookie-status';
 
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false
+  }
+};
+
 function DatenschutzPage() {
   return (
     <Prose className="mb-8">
@@ -19,7 +26,7 @@ function DatenschutzPage() {
       <h4>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</h4>
       <p>
         Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen
-        Kontaktdaten können Sie dem Abschnitt „Hinweis zur Verantwortlichen Stelle“ in dieser
+        Kontaktdaten können Sie dem Abschnitt „Hinweis zur Verantwortlichen Stelle" in dieser
         Datenschutzerklärung entnehmen.
       </p>
       <h4>Wie erfassen wir Ihre Daten?</h4>
@@ -185,7 +192,7 @@ function DatenschutzPage() {
         Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher
         Inhalte, wie zum Beispiel Bestellungen oder Anfragen, die Sie an uns als Seitenbetreiber
         senden, eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie
-        daran, dass die Adresszeile des Browsers von „http://“ auf „https://“ wechselt und an dem
+        daran, dass die Adresszeile des Browsers von „http://" auf „https://" wechselt und an dem
         Schloss-Symbol in Ihrer Browserzeile.
       </p>
       <p>
@@ -202,7 +209,7 @@ function DatenschutzPage() {
         Der Zahlungsverkehr über die gängigen Zahlungsmittel (Visa/MasterCard, Lastschriftverfahren)
         erfolgt ausschließlich über eine verschlüsselte SSL- bzw. TLS-Verbindung. Eine
         verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von
-        „http://“ auf „https://“ wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.
+        „http://" auf „https://" wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.
       </p>
       <p>
         Bei verschlüsselter Kommunikation können Ihre Zahlungsdaten, die Sie an uns übermitteln,
@@ -264,7 +271,7 @@ function DatenschutzPage() {
       <h2>4. Datenerfassung auf dieser Website</h2>
       <h3>Cookies</h3>
       <p>
-        Unsere Internetseiten verwenden so genannte „Cookies“. Cookies sind kleine Textdateien und
+        Unsere Internetseiten verwenden so genannte „Cookies". Cookies sind kleine Textdateien und
         richten auf Ihrem Endgerät keinen Schaden an. Sie werden entweder vorübergehend für die
         Dauer einer Sitzung (Session-Cookies) oder dauerhaft (permanente Cookies) auf Ihrem Endgerät
         gespeichert. Session-Cookies werden nach Ende Ihres Besuchs automatisch gelöscht. Permanente
@@ -386,8 +393,8 @@ function DatenschutzPage() {
         Drittländer übertragen.
       </p>
       <p>
-        Die Facebook Plugins erkennen Sie an dem Facebook-Logo oder dem „Like-Button“ („Gefällt
-        mir“) auf dieser Website. Eine Übersicht über die Facebook Plugins finden Sie hier:
+        Die Facebook Plugins erkennen Sie an dem Facebook-Logo oder dem „Like-Button" („Gefällt
+        mir") auf dieser Website. Eine Übersicht über die Facebook Plugins finden Sie hier:
         <span>&nbsp;</span>
         <a href="https://developers.facebook.com/docs/plugins/?locale=de_DE" target="_blank">
           https://developers.facebook.com/docs/plugins/?locale=de_DE
@@ -397,7 +404,7 @@ function DatenschutzPage() {
       <p>
         Wenn Sie diese Website besuchen, wird über das Plugin eine direkte Verbindung zwischen Ihrem
         Browser und dem Facebook-Server hergestellt. Facebook erhält dadurch die Information, dass
-        Sie mit Ihrer IP-Adresse diese Website besucht haben. Wenn Sie den Facebook „Like-Button“
+        Sie mit Ihrer IP-Adresse diese Website besucht haben. Wenn Sie den Facebook „Like-Button"
         anklicken, während Sie in Ihrem Facebook-Account eingeloggt sind, können Sie die Inhalte
         dieser Website auf Ihrem Facebook-Profil verlinken. Dadurch kann Facebook den Besuch dieser
         Website Ihrem Benutzerkonto zuordnen. Wir weisen darauf hin, dass wir als Anbieter der
@@ -530,7 +537,7 @@ function DatenschutzPage() {
       <p>
         Bei jedem Abruf einer Seite dieser Website, die Funktionen von LinkedIn enthält, wird eine
         Verbindung zu Servern von LinkedIn aufgebaut. LinkedIn wird darüber informiert, dass Sie
-        diese Website mit Ihrer IP-Adresse besucht haben. Wenn Sie den „Recommend-Button“ von
+        diese Website mit Ihrer IP-Adresse besucht haben. Wenn Sie den „Recommend-Button" von
         LinkedIn anklicken und in Ihrem Account bei LinkedIn eingeloggt sind, ist es LinkedIn
         möglich, Ihren Besuch auf dieser Website Ihnen und Ihrem Benutzerkonto zuzuordnen. Wir
         weisen darauf hin, dass wir als Anbieter der Seiten keine Kenntnis vom Inhalt der
@@ -585,7 +592,7 @@ function DatenschutzPage() {
       <h3>Google Analytics</h3>
       <p>
         Diese Website nutzt Funktionen des Webanalysedienstes Google Analytics. Anbieter ist die
-        Google Ireland Limited („Google“), Gordon House, Barrow Street, Dublin 4, Irland.
+        Google Ireland Limited („Google"), Gordon House, Barrow Street, Dublin 4, Irland.
       </p>
       <p>
         Google Analytics ermöglicht es dem Websitebetreiber, das Verhalten der Websitebesucher zu
@@ -655,18 +662,18 @@ function DatenschutzPage() {
       </p>
       <h4>Demografische Merkmale bei Google Analytics</h4>
       <p>
-        Diese Website nutzt die Funktion „demografische Merkmale“ von Google Analytics, um den
+        Diese Website nutzt die Funktion „demografische Merkmale" von Google Analytics, um den
         Websitebesuchern passende Werbeanzeigen innerhalb des Google-Werbenetzwerks anzeigen zu
         können. Dadurch können Berichte erstellt werden, die Aussagen zu Alter, Geschlecht und
         Interessen der Seitenbesucher enthalten. Diese Daten stammen aus interessenbezogener Werbung
         von Google sowie aus Besucherdaten von Drittanbietern. Diese Daten können keiner bestimmten
         Person zugeordnet werden. Sie können diese Funktion jederzeit über die Anzeigeneinstellungen
         in Ihrem Google-Konto deaktivieren oder die Erfassung Ihrer Daten durch Google Analytics wie
-        im Punkt „Widerspruch gegen Datenerfassung“ dargestellt generell untersagen.
+        im Punkt „Widerspruch gegen Datenerfassung" dargestellt generell untersagen.
       </p>
       <h4>Google Analytics E-Commerce-Tracking</h4>
       <p>
-        Diese Website nutzt die Funktion „E-Commerce-Tracking“ von Google Analytics. Mit Hilfe von
+        Diese Website nutzt die Funktion „E-Commerce-Tracking" von Google Analytics. Mit Hilfe von
         E-Commerce-Tracking kann der Websitebetreiber das Kaufverhalten der Websitebesucher zur
         Verbesserung seiner Online-Marketing-Kampagnen analysieren. Hierbei werden Informationen,
         wie zum Beispiel die getätigten Bestellungen, durchschnittliche Bestellwerte, Versandkosten
@@ -758,7 +765,7 @@ function DatenschutzPage() {
         .
       </p>
       <p>
-        Sie können außerdem die Remarketing-Funktion „Custom Audiences“ im Bereich Einstellungen für
+        Sie können außerdem die Remarketing-Funktion „Custom Audiences" im Bereich Einstellungen für
         Werbeanzeigen unter<span>&nbsp;</span>
         <a
           href="https://www.facebook.com/ads/preferences/?entry_product=ad_settings_screen"
@@ -791,7 +798,7 @@ function DatenschutzPage() {
         Die Verarbeitung der in das Newsletteranmeldeformular eingegebenen Daten erfolgt
         ausschließlich auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Die erteilte
         Einwilligung zur Speicherung der Daten, der E-Mail-Adresse sowie deren Nutzung zum Versand
-        des Newsletters können Sie jederzeit widerrufen, etwa über den „Austragen“-Link im
+        des Newsletters können Sie jederzeit widerrufen, etwa über den „Austragen"-Link im
         Newsletter. Die Rechtmäßigkeit der bereits erfolgten Datenverarbeitungsvorgänge bleibt vom
         Widerruf unberührt.
       </p>
@@ -820,7 +827,7 @@ function DatenschutzPage() {
       <h3>YouTube mit erweitertem Datenschutz</h3>
       <p>
         Diese Website bindet Videos der YouTube ein. Betreiber der Seiten ist die Google Ireland
-        Limited („Google“), Gordon House, Barrow Street, Dublin 4, Irland.
+        Limited („Google"), Gordon House, Barrow Street, Dublin 4, Irland.
       </p>
       <p>
         Wir nutzen YouTube im erweiterten Datenschutzmodus. Dieser Modus bewirkt laut YouTube, dass
@@ -937,7 +944,7 @@ function DatenschutzPage() {
       <h3>Google Maps</h3>
       <p>
         Diese Seite nutzt den Kartendienst Google Maps. Anbieter ist die Google Ireland Limited
-        („Google“), Gordon House, Barrow Street, Dublin 4, Irland.
+        („Google"), Gordon House, Barrow Street, Dublin 4, Irland.
       </p>
       <p>
         Zur Nutzung der Funktionen von Google Maps ist es notwendig, Ihre IP-Adresse zu speichern.
@@ -974,8 +981,8 @@ function DatenschutzPage() {
       </p>
       <h3>Google reCAPTCHA</h3>
       <p>
-        Wir nutzen „Google reCAPTCHA“ (im Folgenden „reCAPTCHA“) auf dieser Website. Anbieter ist
-        die Google Ireland Limited („Google“), Gordon House, Barrow Street, Dublin 4, Irland.
+        Wir nutzen „Google reCAPTCHA" (im Folgenden „reCAPTCHA") auf dieser Website. Anbieter ist
+        die Google Ireland Limited („Google"), Gordon House, Barrow Street, Dublin 4, Irland.
       </p>
       <p>
         Mit reCAPTCHA soll überprüft werden, ob die Dateneingabe auf dieser Website (z.&nbsp;B. in
@@ -1056,7 +1063,7 @@ function DatenschutzPage() {
       <h4>PayPal</h4>
       <p>
         Anbieter dieses Zahlungsdienstes ist PayPal (Europe) S.à.r.l. et Cie, S.C.A., 22-24
-        Boulevard Royal, L-2449 Luxembourg (im Folgenden „PayPal“).
+        Boulevard Royal, L-2449 Luxembourg (im Folgenden „PayPal").
       </p>
       <p>
         Die Datenübertragung in die USA wird auf die Standardvertragsklauseln der EU-Kommission
@@ -1076,7 +1083,7 @@ function DatenschutzPage() {
       <h4>Stripe</h4>
       <p>
         Anbieter für Kunden innerhalb der EU ist die Stripe Payments Europe, Ltd.,1 Grand Canal
-        Street Lower, Grand Canal Dock, Dublin, Irland (im Folgenden „Stripe“).
+        Street Lower, Grand Canal Dock, Dublin, Irland (im Folgenden „Stripe").
       </p>
       <p>
         Die Datenübertragung in die USA wird auf die Standardvertragsklauseln der EU-Kommission

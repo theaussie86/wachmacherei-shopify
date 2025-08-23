@@ -14,6 +14,10 @@ export const metadata = {
   openGraph: {
     ...openGraphDefaults,
     url: baseUrl + '/kontakt'
+  },
+  robots: {
+    index: false,
+    follow: false
   }
 };
 

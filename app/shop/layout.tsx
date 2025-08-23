@@ -5,6 +5,13 @@ import Collections from 'components/layout/search/collections';
 import BackgroundOverlay from 'components/overlay';
 import { Suspense } from 'react';
 
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false
+  }
+};
+
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
   return (
     <Suspense>

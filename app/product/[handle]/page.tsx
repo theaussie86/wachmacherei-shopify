@@ -28,11 +28,11 @@ export async function generateMetadata({
     title: product.seo.title || product.title,
     description: product.seo.description || product.description,
     robots: {
-      index: indexable,
-      follow: indexable,
+      index: false,
+      follow: false,
       googleBot: {
-        index: indexable,
-        follow: indexable
+        index: false,
+        follow: false
       }
     },
     openGraph: url

@@ -6,6 +6,13 @@ import { fetchAvailableDatesQueryOptions } from 'lib/calendar/query-options';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false
+  }
+};
+
 async function AdminCoursesPage({ searchParams }: { searchParams: { eventType?: string } }) {
   const eventTypes = await fetchEventTypes();
   const eventTypeId = searchParams.eventType;

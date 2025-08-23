@@ -12,7 +12,11 @@ import { openGraphDefaults } from '../lib/utils';
 
 export const metadata = {
   description: 'In der Wachmacherei in Ottobeuren wird Kaffee mit Respekt geröstet.',
-  openGraph: openGraphDefaults
+  openGraph: openGraphDefaults,
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default async function HomePage() {
@@ -85,7 +89,7 @@ export default async function HomePage() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <div className="place-self-center lg:order-2">
               <div className="shadow-2xl">
-                <Image className="inset-0 w-full object-cover " src={BohnenImage} alt="" />
+                <Image className="inset-0 w-full object-cover" src={BohnenImage} alt="" />
               </div>
             </div>
             <div className="lg:order-1">
@@ -132,7 +136,7 @@ export default async function HomePage() {
             <div className="lg:pr-4">
               <div className="relative overflow-hidden px-6 pb-9 pt-64 shadow-2xl sm:px-12 lg:max-w-lg lg:px-8 lg:pb-8 xl:px-10 xl:pb-10">
                 <Image
-                  className="absolute inset-0 h-full w-full object-cover "
+                  className="absolute inset-0 h-full w-full object-cover"
                   src={TasseImage}
                   alt=""
                 />

@@ -16,8 +16,12 @@ export const metadata = {
   },
   openGraph: openGraphDefaults,
   robots: {
-    follow: true,
-    index: true
+    follow: false,
+    index: false,
+    nocache: true,
+    noarchive: true,
+    nosnippet: true,
+    noimageindex: true
   }
 };
 
