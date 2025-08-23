@@ -1,7 +1,16 @@
 import { getGoogleCalendarEvents } from 'lib/calendar/google';
+import { validateFrontendRequest, createUnauthorizedResponse } from 'lib/security/validate-request';
 import { NextRequest, NextResponse } from 'next/server';
 
+// Diese Route ist dynamisch, da sie Query-Parameter verwendet
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
+  // Sicherheitsüberprüfung
+  if (!validateFrontendRequest(request)) {
+    return createUnauthorizedResponse();
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const startDateParam = searchParams.get('startDate');

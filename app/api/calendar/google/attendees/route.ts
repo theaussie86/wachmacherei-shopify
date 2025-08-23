@@ -1,7 +1,16 @@
 import { getGoogleCalendarEvent, updateGoogleCalendarEvent } from 'lib/calendar/google';
+import { validateFrontendRequest, createUnauthorizedResponse } from 'lib/security/validate-request';
 import { NextRequest, NextResponse } from 'next/server';
 
+// Diese Route ist dynamisch, da sie Google Calendar API aufruft
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
+  // Sicherheitsüberprüfung
+  if (!validateFrontendRequest(request)) {
+    return createUnauthorizedResponse();
+  }
+
   try {
     const { eventId, action, email, displayName } = await request.json();
     console.log('Attendee management request:', { eventId, action, email, displayName });
