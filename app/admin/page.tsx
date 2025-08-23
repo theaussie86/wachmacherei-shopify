@@ -65,6 +65,22 @@ export default async function AdminPage() {
           </div>
         </Link>
 
+        {/* Termine Card */}
+        <Link
+          href="/admin/calendar"
+          className="card bg-base-100 shadow-sm transition-all hover:shadow-md"
+        >
+          <div className="card-body">
+            <h2 className="card-title">Termine</h2>
+            <p className="text-base-content/70">
+              Verwalten Sie hier die Teilnehmer Ihrer Kurstermine
+            </p>
+            <div className="card-actions justify-end">
+              <button className="btn btn-primary btn-sm">Öffnen</button>
+            </div>
+          </div>
+        </Link>
+
         {/* Cache Card */}
         <div className="card bg-base-100 shadow-sm">
           <div className="card-body">
