@@ -1,5 +1,6 @@
 import GoogleCalendarList from 'components/admin/google-calendar-list';
-import { Suspense, redirect } from 'react';
+import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
 import { format } from 'date-fns';
 
 export const metadata = {
