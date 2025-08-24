@@ -1,11 +1,9 @@
 import { NavigationTracker } from 'components/layout/navigation-tracker';
-import { PHProvider } from 'lib/context/posthog';
 import QueryProvider from 'lib/context/query-client';
-import ReCaptchaProvider from 'lib/context/recaptcha';
+import { Session } from 'next-auth';
+import { SessionProvider } from 'next-auth/react';
 import { PropsWithChildren } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { SessionProvider } from 'next-auth/react';
-import { Session } from 'next-auth';
 
 interface ProvidersProps extends PropsWithChildren {
   session: Session | null;
@@ -14,15 +12,11 @@ interface ProvidersProps extends PropsWithChildren {
 function Providers({ children, session }: ProvidersProps) {
   return (
     <SessionProvider session={session}>
-      <ReCaptchaProvider lng="de">
-        <QueryProvider>
-          <PHProvider>
-            <NavigationTracker />
-            {children}
-            <ToastContainer />
-          </PHProvider>
-        </QueryProvider>
-      </ReCaptchaProvider>
+      <QueryProvider>
+        <NavigationTracker />
+        {children}
+        <ToastContainer />
+      </QueryProvider>
     </SessionProvider>
   );
 }

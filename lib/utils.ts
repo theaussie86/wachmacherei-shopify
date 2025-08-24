@@ -1,4 +1,3 @@
-import { verifyRecaptcha } from 'actions';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { Product } from './shopify/types';
 
@@ -68,26 +67,6 @@ export const isMinEqualMaxPrice = (priceRange: Product['priceRange']) => {
     priceRange.minVariantPrice.amount === priceRange.maxVariantPrice.amount &&
     priceRange.minVariantPrice.currencyCode === priceRange.maxVariantPrice.currencyCode
   );
-};
-
-export const startVerifyRecaptcha = async (
-  // eslint-disable-next-line no-unused-vars
-  executeRecaptcha: ((action?: string | undefined) => Promise<string>) | undefined,
-  action: string
-) => {
-  if (!executeRecaptcha) {
-    throw new Error('Recaptcha not available');
-  }
-  const token = await executeRecaptcha(action);
-  if (!token) {
-    throw new Error('Recaptcha token not available');
-  }
-  // console.log(token);
-  const verifyRes = await verifyRecaptcha(token);
-  // console.log(verifyRes);
-  if (!verifyRes.success || verifyRes.score < 0.5) {
-    throw new Error('Recaptcha verification failed');
-  }
 };
 
 export const { SITE_NAME } = process.env;

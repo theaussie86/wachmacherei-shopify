@@ -5,10 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
 import { EMAIL_ADDRESS } from 'lib/constants';
 import { sendContactEmail } from 'lib/microsoft';
-import { startVerifyRecaptcha } from 'lib/utils';
 import Link from 'next/link';
 import { useState } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 const contactSchema = z.object({
@@ -30,7 +28,6 @@ type ContactFormValues = z.infer<typeof contactSchema>;
 
 function ContactForm() {
   const [message, setMessage] = useState<string>();
-  const { executeRecaptcha } = useGoogleReCaptcha();
   const {
     register,
     control,
@@ -41,8 +38,6 @@ function ContactForm() {
 
   const onSubmit = async (data: ContactFormValues) => {
     try {
-      await startVerifyRecaptcha(executeRecaptcha, 'contact');
-      console.log('recaptcha verified');
       console.log('submitting data', data);
       await sendContactEmail(data).then(() => {
         setMessage('Nachricht erfolgreich gesendet');
@@ -137,13 +132,7 @@ function ContactForm() {
             type="checkbox"
             {...register('consent')}
           />
-          <label htmlFor="consent">
-            Die{' '}
-            <Link className="underline hover:opacity-80" href="/datenschutz">
-              Datenschutzbestimmungen
-            </Link>{' '}
-            habe ich zur Kenntnis genommen.
-          </label>
+          <label htmlFor="consent">Ich stimme der Verarbeitung meiner Daten zu.</label>
         </div>
         {errors.consent ? (
           <span className="mt-2 text-sm text-red-600" id="message-error">
