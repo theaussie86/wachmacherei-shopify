@@ -1,11 +1,10 @@
-import Banner from 'components/banner';
 import MenuBar from 'components/layout/menu';
+import { auth } from 'lib/auth';
 import { GoogleAnalytics } from 'lib/scripts/ga';
 import { ReactNode, Suspense } from 'react';
 import { SITE_NAME, baseUrl, openGraphDefaults } from '../lib/utils';
 import './globals.css';
 import Providers from './providers';
-import { auth } from 'lib/auth';
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -32,7 +31,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body className="bg-white text-primary selection:bg-secondary dark:bg-primary dark:text-white dark:selection:bg-secondary dark:selection:text-white">
         <GoogleAnalytics />
         <Providers session={session}>
-          <Banner />
           <MenuBar />
           <Suspense>
             <main>{children}</main>
