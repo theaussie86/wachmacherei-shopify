@@ -1,8 +1,5 @@
-import Footer from 'components/layout/footer';
 import BackgroundOverlay from 'components/overlay';
 import Image from 'next/image';
-import Link from 'next/link';
-import { Suspense } from 'react';
 import TasseImage from '../components/images/Tasse.png';
 import HeroBgImage from '../components/images/roesterei-hero.jpg';
 import RoesterImage from '../components/images/wm_homepage_quer.jpg';
@@ -28,14 +25,7 @@ export default async function HomePage() {
             <h1 className="text-4xl font-medium !leading-relaxed tracking-wider text-secondary sm:text-7xl">
               Die Kaffeerösterei in Ottobeuren
             </h1>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Link
-                href="/shop"
-                className="bg-secondary px-3.5 py-2.5 font-semibold text-white shadow-sm hover:bg-secondary/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
-              >
-                Zum Shop
-              </Link>
-            </div>
+            <div className="mt-10 flex items-center justify-center gap-x-6"></div>
           </div>
         </div>
       </BackgroundOverlay>
@@ -152,14 +142,7 @@ export default async function HomePage() {
                     Tu Dir oder Deinen Liebsten etwas Gutes und bestelle Dir jetzt gleich Dein
                     SCHWARZES GLÜCK nach Hause. Natürlich auch in Bio-Qualität!
                   </p>
-                  <div className="mt-10 flex items-center gap-x-6">
-                    <Link
-                      href="/shop"
-                      className="bg-white px-3.5 py-2.5 font-semibold text-secondary shadow-sm hover:bg-secondary hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
-                    >
-                      Zum Shop
-                    </Link>
-                  </div>
+                  <div className="mt-10 flex items-center gap-x-6"></div>
                 </div>
               </div>
             </div>
@@ -167,10 +150,6 @@ export default async function HomePage() {
         </div>
         <div className="absolute inset-0 -z-10 bg-secondary/25 sm:-top-80" aria-hidden="true" />
       </div>
-
-      <Suspense>
-        <Footer />
-      </Suspense>
     </>
   );
 }
