@@ -1,6 +1,4 @@
 import Banner from 'components/banner';
-import CookieConsent from 'components/cookies/consent';
-import CookieSettings from 'components/cookies/settings';
 import MenuBar from 'components/layout/menu';
 import { GoogleAnalytics } from 'lib/scripts/ga';
 import { ReactNode, Suspense } from 'react';
@@ -39,8 +37,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <Suspense>
             <main>{children}</main>
           </Suspense>
-          <CookieConsent />
-          <CookieSettings />
         </Providers>
       </body>
     </html>

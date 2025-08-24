@@ -1,6 +1,4 @@
 import Prose from 'components/prose';
-import CookieTable from './cookie-table';
-import CookieStatus from './coookie-status';
 
 export const metadata = {
   robots: {
@@ -269,54 +267,6 @@ function DatenschutzPage() {
         Spam-E-Mails, vor.
       </p>
       <h2>4. Datenerfassung auf dieser Website</h2>
-      <h3>Cookies</h3>
-      <p>
-        Unsere Internetseiten verwenden so genannte „Cookies". Cookies sind kleine Textdateien und
-        richten auf Ihrem Endgerät keinen Schaden an. Sie werden entweder vorübergehend für die
-        Dauer einer Sitzung (Session-Cookies) oder dauerhaft (permanente Cookies) auf Ihrem Endgerät
-        gespeichert. Session-Cookies werden nach Ende Ihres Besuchs automatisch gelöscht. Permanente
-        Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese selbst löschen&nbsp;oder eine
-        automatische Löschung durch Ihren Webbrowser erfolgt.
-      </p>
-      <p>
-        Teilweise können auch Cookies von Drittunternehmen auf Ihrem Endgerät gespeichert werden,
-        wenn Sie unsere Seite betreten (Third-Party-Cookies). Diese ermöglichen uns oder Ihnen die
-        Nutzung bestimmter Dienstleistungen des Drittunternehmens (z.B. Cookies zur Abwicklung von
-        Zahlungsdienstleistungen).
-      </p>
-      <p>
-        Cookies haben verschiedene Funktionen. Zahlreiche Cookies sind technisch notwendig, da
-        bestimmte Websitefunktionen ohne diese nicht funktionieren würden (z.B. die
-        Warenkorbfunktion oder die Anzeige von Videos). Andere Cookies dienen dazu, das
-        Nutzerverhalten auszuwerten&nbsp;oder Werbung anzuzeigen.
-      </p>
-      <p>
-        Cookies, die zur Durchführung des elektronischen Kommunikationsvorgangs (notwendige Cookies)
-        oder zur Bereitstellung bestimmter, von Ihnen erwünschter Funktionen (funktionale Cookies,
-        z. B. für die Warenkorbfunktion) oder zur Optimierung der Website (z.B. Cookies zur Messung
-        des Webpublikums) erforderlich sind, werden auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO
-        gespeichert, sofern keine andere Rechtsgrundlage angegeben wird. Der Websitebetreiber hat
-        ein berechtigtes Interesse an der Speicherung von Cookies zur technisch fehlerfreien und
-        optimierten Bereitstellung seiner Dienste. Sofern eine Einwilligung zur Speicherung von
-        Cookies abgefragt wurde, erfolgt die Speicherung der betreffenden Cookies ausschließlich auf
-        Grundlage dieser Einwilligung (Art. 6 Abs. 1 lit. a DSGVO); die Einwilligung ist jederzeit
-        widerrufbar.
-      </p>
-      <p>
-        Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies informiert
-        werden und Cookies nur im Einzelfall erlauben, die Annahme von Cookies für bestimmte Fälle
-        oder generell ausschließen sowie das automatische Löschen der Cookies beim Schließen des
-        Browsers aktivieren. Bei der Deaktivierung von Cookies kann die Funktionalität dieser
-        Website eingeschränkt sein.
-      </p>
-      <p>
-        Soweit Cookies von Drittunternehmen oder zu Analysezwecken eingesetzt werden, werden wir Sie
-        hierüber im Rahmen dieser Datenschutzerklärung gesondert informieren und ggf. eine
-        Einwilligung abfragen.
-      </p>
-
-      <CookieTable />
-      <CookieStatus />
 
       <h3>Kontaktformular</h3>
       <p>
@@ -577,10 +527,10 @@ function DatenschutzPage() {
       <p>
         Der Google Tag Manager ist ein Tool, mit dessen Hilfe wir Tracking- oder Statistik-Tools und
         andere Technologien auf unserer Website einbinden können. Der Google Tag Manager selbst
-        erstellt keine Nutzerprofile, speichert keine Cookies und nimmt keine eigenständigen
-        Analysen vor. Er dient lediglich der Verwaltung und Ausspielung der über ihn eingebundenen
-        Tools. Der Google Tag Manager erfasst jedoch Ihre IP-Adresse, die auch an das
-        Mutterunternehmen von Google in die Vereinigten Staaten übertragen werden kann.
+        erstellt keine Nutzerprofile und nimmt keine eigenständigen Analysen vor. Er dient lediglich
+        der Verwaltung und Ausspielung der über ihn eingebundenen Tools. Der Google Tag Manager
+        erfasst jedoch Ihre IP-Adresse, die auch an das Mutterunternehmen von Google in die
+        Vereinigten Staaten übertragen werden kann.
       </p>
       <p>
         Der Einsatz des Google Tag Managers erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
@@ -603,17 +553,14 @@ function DatenschutzPage() {
       </p>
       <p>
         Google Analytics verwendet Technologien, die die Wiedererkennung des Nutzers zum Zwecke der
-        Analyse des Nutzerverhaltens ermöglichen (z.B. Cookies oder Device-Fingerprinting). Die von
-        Google erfassten Informationen über die Benutzung dieser Website werden in der Regel an
-        einen Server von Google in den USA übertragen und dort gespeichert.
+        Analyse des Nutzerverhaltens ermöglichen (z.B. Device-Fingerprinting). Die von Google
+        erfassten Informationen über die Benutzung dieser Website werden in der Regel an einen
+        Server von Google in den USA übertragen und dort gespeichert.
       </p>
       <p>
         Die Nutzung dieses Analyse-Tools erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der
         Websitebetreiber hat ein berechtigtes Interesse an der Analyse des Nutzerverhaltens, um
-        sowohl sein Webangebot als auch seine Werbung zu optimieren. Sofern eine entsprechende
-        Einwilligung abgefragt wurde (z. B. eine Einwilligung zur Speicherung von Cookies), erfolgt
-        die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO; die
-        Einwilligung ist jederzeit widerrufbar.
+        sowohl sein Webangebot als auch seine Werbung zu optimieren.
       </p>
       <p>
         Die Datenübertragung in die USA wird auf die Standardvertragsklauseln der EU-Kommission
@@ -683,10 +630,10 @@ function DatenschutzPage() {
       </p>
       <h4>Speicherdauer</h4>
       <p>
-        Bei Google gespeicherte Daten auf Nutzer- und Ereignisebene, die mit Cookies,
-        Nutzerkennungen (z.&nbsp;B. User ID) oder Werbe-IDs (z.&nbsp;B. DoubleClick-Cookies,
-        Android-Werbe-ID) verknüpft sind, werden nach 14 Monaten anonymisiert bzw. gelöscht. Details
-        hierzu ersehen Sie unter folgendem Link:<span>&nbsp;</span>
+        Bei Google gespeicherte Daten auf Nutzer- und Ereignisebene, die mit Nutzerkennungen
+        (z.&nbsp;B. User ID) oder Werbe-IDs (z.&nbsp;B. Android-Werbe-ID) verknüpft sind, werden
+        nach 14 Monaten anonymisiert bzw. gelöscht. Details hierzu ersehen Sie unter folgendem Link:
+        <span>&nbsp;</span>
         <a href="https://support.google.com/analytics/answer/7667196?hl=de" target="_blank">
           https://support.google.com/analytics/answer/7667196?hl=de
         </a>
@@ -719,9 +666,7 @@ function DatenschutzPage() {
       <p>
         Die Nutzung von Facebook-Pixel erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der
         Websitebetreiber hat ein berechtigtes Interesse an effektiven Werbemaßnahmen unter
-        Einschluss der sozialen Medien. Sofern eine entsprechende Einwilligung abgefragt wurde (z.
-        B. eine Einwilligung zur Speicherung von Cookies), erfolgt die Verarbeitung ausschließlich
-        auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO; die Einwilligung ist jederzeit widerrufbar.
+        Einschluss der sozialen Medien.
       </p>
       <p>
         Die Datenübertragung in die USA wird auf die Standardvertragsklauseln der EU-Kommission
@@ -844,11 +789,11 @@ function DatenschutzPage() {
         indem Sie sich aus Ihrem YouTube-Account ausloggen.
       </p>
       <p>
-        Des Weiteren kann YouTube nach Starten eines Videos verschiedene Cookies auf Ihrem Endgerät
-        speichern oder vergleichbare Wiedererkennungstechnologien (z.B. Device-Fingerprinting)
-        einsetzen. Auf diese Weise kann YouTube Informationen über Besucher dieser Website erhalten.
-        Diese Informationen werden u. a. verwendet, um Videostatistiken zu erfassen, die
-        Anwenderfreundlichkeit zu verbessern und Betrugsversuchen vorzubeugen.
+        Des Weiteren kann YouTube nach Starten eines Videos verschiedene
+        Wiedererkennungstechnologien (z.B. Device-Fingerprinting) einsetzen. Auf diese Weise kann
+        YouTube Informationen über Besucher dieser Website erhalten. Diese Informationen werden u.
+        a. verwendet, um Videostatistiken zu erfassen, die Anwenderfreundlichkeit zu verbessern und
+        Betrugsversuchen vorzubeugen.
       </p>
       <p>
         Gegebenenfalls können nach dem Start eines YouTube-Videos weitere Datenverarbeitungsvorgänge
@@ -857,9 +802,7 @@ function DatenschutzPage() {
       <p>
         Die Nutzung von YouTube erfolgt im Interesse einer ansprechenden Darstellung unserer
         Online-Angebote. Dies stellt ein berechtigtes Interesse im Sinne von Art. 6 Abs. 1 lit. f
-        DSGVO dar. Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung
-        ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO; die Einwilligung ist jederzeit
-        widerrufbar.
+        DSGVO dar.
       </p>
       <p>
         Weitere Informationen über Datenschutz bei YouTube finden Sie in deren Datenschutzerklärung
@@ -880,10 +823,7 @@ function DatenschutzPage() {
         aufnehmen. Hierdurch erlangt Google Kenntnis darüber, dass über Ihre IP-Adresse diese
         Website aufgerufen wurde. Die Nutzung von Google WebFonts erfolgt auf Grundlage von Art. 6
         Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an der
-        einheitlichen Darstellung des Schriftbildes auf seiner Website. Sofern eine entsprechende
-        Einwilligung abgefragt wurde (z. B. eine Einwilligung zur Speicherung von Cookies), erfolgt
-        die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO; die
-        Einwilligung ist jederzeit widerrufbar.
+        einheitlichen Darstellung des Schriftbildes auf seiner Website.
       </p>
       <p>
         Wenn Ihr Browser Web Fonts nicht unterstützt, wird eine Standardschrift von Ihrem Computer
@@ -916,9 +856,7 @@ function DatenschutzPage() {
       <p>
         Die Speicherung und Analyse der Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
         Der Websitebetreiber hat ein berechtigtes Interesse an der einheitlichen Darstellung des
-        Schriftbildes auf seiner Website. Sofern eine entsprechende Einwilligung abgefragt wurde (z.
-        B. eine Einwilligung zur Speicherung von Cookies), erfolgt die Verarbeitung ausschließlich
-        auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO; die Einwilligung ist jederzeit widerrufbar.
+        Schriftbildes auf seiner Website.
       </p>
       <p>
         Die Datenübertragung in die USA wird auf die Standardvertragsklauseln der EU-Kommission
@@ -955,9 +893,6 @@ function DatenschutzPage() {
         Die Nutzung von Google Maps erfolgt im Interesse einer ansprechenden Darstellung unserer
         Online-Angebote und an einer leichten Auffindbarkeit der von uns auf der Website angegebenen
         Orte. Dies stellt ein berechtigtes Interesse im Sinne von Art. 6 Abs. 1 lit. f DSGVO dar.
-        Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung
-        ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO; die Einwilligung ist jederzeit
-        widerrufbar.
       </p>
       <p>
         Die Datenübertragung in die USA wird auf die Standardvertragsklauseln der EU-Kommission
@@ -1000,9 +935,7 @@ function DatenschutzPage() {
       <p>
         Die Speicherung und Analyse der Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
         Der Websitebetreiber hat ein berechtigtes Interesse daran, seine Webangebote vor
-        missbräuchlicher automatisierter Ausspähung und vor SPAM zu schützen. Sofern eine
-        entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf
-        Grundlage von Art. 6 Abs. 1 lit. a DSGVO; die Einwilligung ist jederzeit widerrufbar.
+        missbräuchlicher automatisierter Ausspähung und vor SPAM zu schützen.
       </p>
       <p>
         Weitere Informationen zu Google reCAPTCHA entnehmen Sie den Google-Datenschutzbestimmungen

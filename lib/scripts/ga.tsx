@@ -1,16 +1,9 @@
 'use client';
 
-import Cookies from 'js-cookie';
 import Script from 'next/script';
 import { FC } from 'react';
 
 export const GoogleAnalytics: FC = () => {
-  const hasGivenConsent = Cookies.get('wm-analytics') === 'true';
-
-  if (!hasGivenConsent) {
-    return null;
-  }
-
   return (
     <>
       <Script

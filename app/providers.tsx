@@ -1,5 +1,4 @@
 import { NavigationTracker } from 'components/layout/navigation-tracker';
-import { CookieProvider } from 'lib/context/cookies';
 import { PHProvider } from 'lib/context/posthog';
 import QueryProvider from 'lib/context/query-client';
 import ReCaptchaProvider from 'lib/context/recaptcha';
@@ -16,15 +15,13 @@ function Providers({ children, session }: ProvidersProps) {
   return (
     <SessionProvider session={session}>
       <ReCaptchaProvider lng="de">
-        <CookieProvider>
-          <QueryProvider>
-            <PHProvider>
-              <NavigationTracker />
-              {children}
-              <ToastContainer />
-            </PHProvider>
-          </QueryProvider>
-        </CookieProvider>
+        <QueryProvider>
+          <PHProvider>
+            <NavigationTracker />
+            {children}
+            <ToastContainer />
+          </PHProvider>
+        </QueryProvider>
       </ReCaptchaProvider>
     </SessionProvider>
   );
