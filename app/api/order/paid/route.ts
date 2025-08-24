@@ -25,7 +25,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ status: 200 });
   }
 
-  const topic = headers().get('x-shopify-topic') || 'unknown';
+  const resolvedHeaders = await headers();
+  const topic = resolvedHeaders.get('x-shopify-topic') || 'unknown';
   if (topic !== 'orders/paid') {
     console.log('Invalid topic');
     return NextResponse.json({ status: 200 });

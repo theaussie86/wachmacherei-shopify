@@ -54,16 +54,22 @@ export default function DateRangePicker({
     }
   }, [startDate, endDate]);
 
-  // Rufe onDateRangeChange auf, wenn sich die lokalen Werte ändern und gültig sind
-  useEffect(() => {
+  // Entferne den problematischen useEffect, der onDateRangeChange bei jeder Änderung aufruft
+
+  const handleApply = () => {
     if (startDate && endDate && isValid) {
       const start = new Date(startDate);
       const end = new Date(endDate);
       onDateRangeChange(start, end);
     }
-  }, [startDate, endDate, isValid, onDateRangeChange]);
+  };
 
-  // Entferne handleApply und handleReset, da sie nicht mehr benötigt werden
+  const handleReset = () => {
+    if (defaultStartDate && defaultEndDate) {
+      setStartDate(format(defaultStartDate, 'yyyy-MM-dd'));
+      setEndDate(format(defaultEndDate, 'yyyy-MM-dd'));
+    }
+  };
 
   return (
     <div className={`flex flex-col gap-3 rounded-lg bg-base-200 p-4 ${className}`}>
@@ -114,6 +120,23 @@ export default function DateRangePicker({
           {format(new Date(endDate), 'dd.MM.yyyy', { locale: de })}
         </div>
       )}
+
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={handleReset}
+          className="btn btn-ghost btn-xs"
+          disabled={!defaultStartDate || !defaultEndDate}
+        >
+          Zurücksetzen
+        </button>
+        <button
+          onClick={handleApply}
+          className="btn btn-primary btn-xs"
+          disabled={!startDate || !endDate || !isValid}
+        >
+          Anwenden
+        </button>
+      </div>
     </div>
   );
 }

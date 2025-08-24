@@ -13,9 +13,14 @@ export const metadata = {
   }
 };
 
-async function AdminCoursesPage({ searchParams }: { searchParams: { eventType?: string } }) {
+async function AdminCoursesPage({
+  searchParams
+}: {
+  searchParams: Promise<{ eventType?: string }>;
+}) {
+  const resolvedSearchParams = await searchParams;
   const eventTypes = await fetchEventTypes();
-  const eventTypeId = searchParams.eventType;
+  const eventTypeId = resolvedSearchParams.eventType;
   const eventType = eventTypes.find((eventType) => eventType.id.toString() === eventTypeId);
 
   const queryClient = new QueryClient();

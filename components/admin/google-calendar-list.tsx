@@ -7,52 +7,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import AttendeeManagement from './attendee-management';
 import DateRangePicker from './date-range-picker';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function GoogleCalendarList() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  // Berechne Standard-Datumswerte direkt beim Rendern
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth();
-
-  // Anfang dieses Monats (1. Tag)
-  const defaultStartDate = new Date(currentYear, currentMonth, 1);
-
-  // Ende nächsten Monats (letzter Tag)
-  const defaultEndDate = new Date(currentYear, currentMonth + 2, 0);
-
-  // Lade Datumswerte aus URL-Parametern oder leite zu Standardwerten weiter
-  useEffect(() => {
-    const startDateParam = searchParams.get('startDate');
-    const endDateParam = searchParams.get('endDate');
-
-    if (!startDateParam || !endDateParam) {
-      // Keine URL-Parameter vorhanden - leite zu Standardwerten weiter
-      const params = new URLSearchParams();
-      params.set('startDate', format(defaultStartDate, 'yyyy-MM-dd'));
-      params.set('endDate', format(defaultEndDate, 'yyyy-MM-dd'));
-
-      router.replace(`?${params.toString()}`, { scroll: false });
-      return;
-    }
-
-    // Validiere vorhandene URL-Parameter
-    const startDate = new Date(startDateParam);
-    const endDate = new Date(endDateParam);
-
-    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime()) || startDate >= endDate) {
-      // Ungültige URL-Parameter - leite zu Standardwerten weiter
-      const params = new URLSearchParams();
-      params.set('startDate', format(defaultStartDate, 'yyyy-MM-dd'));
-      params.set('endDate', format(defaultEndDate, 'yyyy-MM-dd'));
-
-      router.replace(`?${params.toString()}`, { scroll: false });
-      return;
-    }
-  }, [searchParams, defaultStartDate, defaultEndDate, router]);
 
   // Hole aktuelle Datumswerte aus URL-Parametern
   const startDate = searchParams.get('startDate') ? new Date(searchParams.get('startDate')!) : null;
