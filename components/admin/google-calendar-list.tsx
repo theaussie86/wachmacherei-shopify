@@ -3,11 +3,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
+import {
+  addAttendeeToEvent,
+  getGoogleCalendarEvents,
+  removeAttendeeFromEvent
+} from 'lib/actions/calendar';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DateRangePicker from './date-range-picker';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addAttendeeToEvent, removeAttendeeFromEvent } from 'lib/calendar/attendee-actions';
 import { useState } from 'react';
 
 export default function GoogleCalendarList() {
@@ -22,25 +26,19 @@ export default function GoogleCalendarList() {
   const { data, isFetching, error, refetch } = useQuery({
     queryKey: ['google-calendar', 'events', startDate, endDate],
     queryFn: async () => {
-      const params = new URLSearchParams();
-      if (startDate) {
-        // Setze Startdatum auf Anfang des Tages (00:00:00)
-        const startOfDay = new Date(startDate);
-        startOfDay.setHours(0, 0, 0, 0);
-        params.append('startDate', startOfDay.toISOString());
-      }
-      if (endDate) {
-        // Setze Enddatum auf Ende des Tages (23:59:59)
-        const endOfDay = new Date(endDate);
-        endOfDay.setHours(23, 59, 59, 999);
-        params.append('endDate', endOfDay.toISOString());
+      if (!startDate || !endDate) {
+        throw new Error('Start- und Enddatum sind erforderlich');
       }
 
-      const response = await fetch(`/api/calendar/google?${params.toString()}`);
-      if (!response.ok) {
-        throw new Error('Fehler beim Laden der Kalender Events');
-      }
-      return response.json();
+      // Setze Startdatum auf Anfang des Tages (00:00:00)
+      const startOfDay = new Date(startDate);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      // Setze Enddatum auf Ende des Tages (23:59:59)
+      const endOfDay = new Date(endDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      return await getGoogleCalendarEvents(startOfDay, endOfDay);
     },
     enabled: !!startDate && !!endDate
   });
@@ -168,7 +166,7 @@ export default function GoogleCalendarList() {
     );
   }
 
-  if (!data?.events || data.events.length === 0) {
+  if (!data?.items || data.items.length === 0) {
     return (
       <div className="space-y-6">
         <div className="flex justify-end">
@@ -189,7 +187,7 @@ export default function GoogleCalendarList() {
   }
 
   // Sortiere Events nach Datum (neueste zuerst)
-  const sortedEvents = [...data.events].sort(
+  const sortedEvents = [...data.items].sort(
     (a, b) => new Date(b.start.dateTime).getTime() - new Date(a.start.dateTime).getTime()
   );
 

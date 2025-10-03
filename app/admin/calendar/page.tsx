@@ -1,9 +1,10 @@
 import GoogleCalendarList from 'components/admin/google-calendar-list';
 import { format } from 'date-fns';
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
-export const metadata = {
+export const metadata: Metadata = {
   robots: {
     index: false,
     follow: false
@@ -56,15 +57,22 @@ async function AdminCalendarPage({
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Suspense
-        fallback={
-          <div className="flex justify-center p-8">
-            <span className="loading loading-spinner loading-lg"></span>
-          </div>
-        }
-      >
-        <GoogleCalendarList />
-      </Suspense>
+      <div className="space-y-6">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Google Kalender</h1>
+          <p className="text-gray-600">Verwalte deine Google Kalender-Termine</p>
+        </div>
+
+        <Suspense
+          fallback={
+            <div className="flex justify-center p-8">
+              <span className="loading loading-spinner loading-lg"></span>
+            </div>
+          }
+        >
+          <GoogleCalendarList />
+        </Suspense>
+      </div>
     </div>
   );
 }
