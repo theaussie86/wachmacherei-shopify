@@ -2,20 +2,46 @@
 
 import { google } from 'googleapis';
 
-// OAuth2 Client für alle Google Calendar Operationen
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URI
-);
+// Service Account Authentifizierung für Google Calendar API
+let auth: any;
 
-// Setze den Refresh Token
-oauth2Client.setCredentials({
-  refresh_token: process.env.GOOGLE_REFRESH_TOKEN
-});
+// Initialisiere Service Account Auth
+function initializeServiceAccount() {
+  if (!auth) {
+    // Service Account Credentials aus Environment Variables
+    const serviceAccountCredentials = {
+      type: 'service_account',
+      project_id: process.env.GOOGLE_SERVICE_ACCOUNT_PROJECT_ID,
+      private_key_id: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY_ID,
+      private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
+      client_id: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_ID,
+      auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+      token_uri: 'https://oauth2.googleapis.com/token',
+      auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
+      client_x509_cert_url: `https://www.googleapis.com/robot/v1/metadata/x509/${encodeURIComponent(process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL || '')}`
+    };
 
-// Google Calendar API mit OAuth2
-const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
+    // Validiere, dass alle erforderlichen Credentials vorhanden sind
+    if (!serviceAccountCredentials.private_key || !serviceAccountCredentials.client_email) {
+      throw new Error(
+        'Service Account Credentials sind nicht vollständig konfiguriert. Bitte überprüfe deine Environment Variables.'
+      );
+    }
+
+    auth = new google.auth.GoogleAuth({
+      credentials: serviceAccountCredentials,
+      scopes: ['https://www.googleapis.com/auth/calendar']
+    });
+  }
+  return auth;
+}
+
+// Google Calendar API mit Service Account
+function getCalendar() {
+  const auth = initializeServiceAccount();
+  return google.calendar({ version: 'v3', auth });
+}
 
 export type GoogleCalendarEvent = {
   id: string;
@@ -53,6 +79,7 @@ export async function getGoogleCalendarEvents(
   endDate?: Date
 ): Promise<GoogleCalendarEventsResponse> {
   try {
+    const calendar = getCalendar();
     const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
 
     // Verwende übergebene Datumswerte oder Standard (Anfang dieses Monats bis Ende nächsten Monats)
@@ -148,6 +175,7 @@ export async function getGoogleCalendarEvents(
  */
 export async function getGoogleCalendarEvent(eventId: string): Promise<GoogleCalendarEvent | null> {
   try {
+    const calendar = getCalendar();
     const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
 
     const eventResponse = await calendar.events.get({
@@ -219,6 +247,7 @@ export async function createGoogleCalendarEvent(eventData: {
   attendees?: Array<{ email: string; displayName?: string }>;
 }) {
   try {
+    const calendar = getCalendar();
     const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
 
     const event = {
@@ -274,6 +303,7 @@ export async function updateGoogleCalendarEvent(
   }
 ) {
   try {
+    const calendar = getCalendar();
     const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
 
     // Hole zuerst das aktuelle Event, um bestehende Daten zu bekommen
@@ -337,6 +367,7 @@ export async function updateGoogleCalendarEvent(
  */
 export async function deleteGoogleCalendarEvent(eventId: string) {
   try {
+    const calendar = getCalendar();
     const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
 
     await calendar.events.delete({

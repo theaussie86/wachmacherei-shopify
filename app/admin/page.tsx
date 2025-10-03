@@ -51,20 +51,6 @@ export default async function AdminPage() {
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {/* Kursverwaltung Card */}
-        <Link
-          href="/admin/courses"
-          className="card bg-base-100 shadow-sm transition-all hover:shadow-md"
-        >
-          <div className="card-body">
-            <h2 className="card-title">Kursverwaltung</h2>
-            <p className="text-base-content/70">Verwalten Sie hier Ihre Kurse und Termine</p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary btn-sm">Öffnen</button>
-            </div>
-          </div>
-        </Link>
-
         {/* Termine Card */}
         <Link
           href="/admin/calendar"

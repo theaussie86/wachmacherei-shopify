@@ -4,14 +4,16 @@ import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { useRouter, useSearchParams } from 'next/navigation';
-import AttendeeManagement from './attendee-management';
 import DateRangePicker from './date-range-picker';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { addAttendeeToEvent, removeAttendeeFromEvent } from 'lib/calendar/attendee-actions';
 import { useState } from 'react';
 
 export default function GoogleCalendarList() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
   // Hole aktuelle Datumswerte aus URL-Parametern
   const startDate = searchParams.get('startDate') ? new Date(searchParams.get('startDate')!) : null;
@@ -44,9 +46,57 @@ export default function GoogleCalendarList() {
   });
 
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [newAttendeeEmail, setNewAttendeeEmail] = useState('');
+  const [newAttendeeName, setNewAttendeeName] = useState('');
+  const [isAddingAttendee, setIsAddingAttendee] = useState<string | null>(null);
 
   const toggleEvent = (eventId: string) => {
     setSelectedEventId(selectedEventId === eventId ? null : eventId);
+  };
+
+  // Mutation für das Hinzufügen von Teilnehmern
+  const addAttendeeMutation = useMutation({
+    mutationFn: async ({
+      eventId,
+      attendeeEmail,
+      attendeeName
+    }: {
+      eventId: string;
+      attendeeEmail: string;
+      attendeeName: string;
+    }) => {
+      return await addAttendeeToEvent(eventId, attendeeEmail, attendeeName);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['google-calendar'] });
+      setNewAttendeeEmail('');
+      setNewAttendeeName('');
+      setIsAddingAttendee(null);
+    }
+  });
+
+  // Mutation für das Entfernen von Teilnehmern
+  const removeAttendeeMutation = useMutation({
+    mutationFn: async ({ eventId, attendeeEmail }: { eventId: string; attendeeEmail: string }) => {
+      return await removeAttendeeFromEvent(eventId, attendeeEmail);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['google-calendar'] });
+    }
+  });
+
+  const handleAddAttendee = (eventId: string) => {
+    if (!newAttendeeEmail.trim()) return;
+
+    addAttendeeMutation.mutate({
+      eventId,
+      attendeeEmail: newAttendeeEmail.trim(),
+      attendeeName: newAttendeeName.trim() || newAttendeeEmail.trim()
+    });
+  };
+
+  const handleRemoveAttendee = (eventId: string, attendeeEmail: string) => {
+    removeAttendeeMutation.mutate({ eventId, attendeeEmail });
   };
 
   const handleDateRangeChange = (newStartDate: Date | null, newEndDate: Date | null) => {
@@ -213,13 +263,145 @@ export default function GoogleCalendarList() {
               )}
             </div>
             <div className="collapse-content border-t bg-base-200/50">
-              <div className="py-4">
-                <AttendeeManagement
-                  eventId={event.id}
-                  attendees={event.attendees || []}
-                  maxAttendees={6}
-                  eventStartDate={event.start.dateTime}
-                />
+              <div className="space-y-4 py-4">
+                {/* Teilnehmerliste */}
+                <div>
+                  <h4 className="mb-2 text-sm font-semibold text-base-content">
+                    Teilnehmer ({event.attendees?.length || 0}/6)
+                  </h4>
+
+                  {event.attendees && event.attendees.length > 0 ? (
+                    <div className="space-y-2">
+                      {event.attendees.map(
+                        (
+                          attendee: {
+                            displayName?: string;
+                            email: string;
+                            responseStatus?: string;
+                          },
+                          index: number
+                        ) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between rounded-lg bg-base-100 p-3"
+                          >
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">
+                                {attendee.displayName || attendee.email}
+                              </p>
+                              <p className="text-xs text-base-content/60">{attendee.email}</p>
+                              {attendee.responseStatus && (
+                                <span
+                                  className={`rounded px-2 py-1 text-xs ${
+                                    attendee.responseStatus === 'accepted'
+                                      ? 'bg-success/20 text-success'
+                                      : attendee.responseStatus === 'declined'
+                                        ? 'bg-error/20 text-error'
+                                        : 'bg-warning/20 text-warning'
+                                  }`}
+                                >
+                                  {attendee.responseStatus === 'accepted'
+                                    ? 'Angenommen'
+                                    : attendee.responseStatus === 'declined'
+                                      ? 'Abgelehnt'
+                                      : 'Ausstehend'}
+                                </span>
+                              )}
+                            </div>
+                            <button
+                              onClick={() => handleRemoveAttendee(event.id, attendee.email)}
+                              disabled={removeAttendeeMutation.isPending}
+                              className="btn btn-outline btn-error btn-sm"
+                            >
+                              {removeAttendeeMutation.isPending ? (
+                                <span className="loading loading-spinner loading-xs"></span>
+                              ) : (
+                                'Entfernen'
+                              )}
+                            </button>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-base-content/60">Keine Teilnehmer</p>
+                  )}
+                </div>
+
+                {/* Teilnehmer hinzufügen */}
+                {event.attendees && event.attendees.length < 6 && (
+                  <div className="border-t pt-4">
+                    <h4 className="mb-2 text-sm font-semibold text-base-content">
+                      Teilnehmer hinzufügen
+                    </h4>
+
+                    {isAddingAttendee === event.id ? (
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-1 gap-3">
+                          <input
+                            type="email"
+                            placeholder="E-Mail-Adresse"
+                            value={newAttendeeEmail}
+                            onChange={(e) => setNewAttendeeEmail(e.target.value)}
+                            className="input input-sm input-bordered"
+                            disabled={addAttendeeMutation.isPending}
+                          />
+                          <input
+                            type="text"
+                            placeholder="Name (optional)"
+                            value={newAttendeeName}
+                            onChange={(e) => setNewAttendeeName(e.target.value)}
+                            className="input input-sm input-bordered"
+                            disabled={addAttendeeMutation.isPending}
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleAddAttendee(event.id)}
+                            disabled={addAttendeeMutation.isPending || !newAttendeeEmail.trim()}
+                            className="btn btn-primary btn-sm"
+                          >
+                            {addAttendeeMutation.isPending ? (
+                              <span className="loading loading-spinner loading-xs"></span>
+                            ) : (
+                              'Hinzufügen'
+                            )}
+                          </button>
+                          <button
+                            onClick={() => {
+                              setIsAddingAttendee(null);
+                              setNewAttendeeEmail('');
+                              setNewAttendeeName('');
+                            }}
+                            className="btn btn-ghost btn-sm"
+                            disabled={addAttendeeMutation.isPending}
+                          >
+                            Abbrechen
+                          </button>
+                        </div>
+                        {addAttendeeMutation.error && (
+                          <div className="alert alert-error">
+                            <span className="text-xs">{addAttendeeMutation.error.message}</span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setIsAddingAttendee(event.id)}
+                        className="btn btn-outline btn-sm"
+                      >
+                        + Teilnehmer hinzufügen
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* Maximale Teilnehmeranzahl erreicht */}
+                {event.attendees && event.attendees.length >= 6 && (
+                  <div className="alert alert-info">
+                    <span className="text-sm">Maximale Teilnehmeranzahl erreicht (6)</span>
+                  </div>
+                )}
               </div>
             </div>
           </li>
