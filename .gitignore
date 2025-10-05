@@ -29,6 +29,7 @@ yarn-error.log*
 # local env files
 .env*
 !.env.example
+wachmacherei-a873ce276fb8.json
 
 # vercel
 .vercel
