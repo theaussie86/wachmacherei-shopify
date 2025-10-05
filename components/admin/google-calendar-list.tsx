@@ -348,7 +348,7 @@ export default function GoogleCalendarList() {
                 </div>
 
                 {/* Teilnehmer hinzufügen */}
-                {event.attendees && event.attendees.length < 6 && (
+                {(event.attendees?.length || 0) < 6 && (
                   <div className="border-t pt-4">
                     <h4 className="mb-2 text-sm font-semibold text-base-content">
                       Teilnehmer hinzufügen
