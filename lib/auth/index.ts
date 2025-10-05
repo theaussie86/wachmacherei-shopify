@@ -16,8 +16,7 @@ export const {
           prompt: 'consent',
           access_type: 'offline',
           response_type: 'code',
-          scope:
-            'openid email profile https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events'
+          scope: 'openid email profile'
         }
       }
     })
@@ -33,21 +32,11 @@ export const {
       return allowedEmails.includes(email);
     },
     async jwt({ token, account, user }) {
-      // Speichere sowohl Login- als auch Calendar-Token
-      if (account?.provider === 'google') {
-        token.calendarAccessToken = account.access_token;
-        token.calendarRefreshToken = account.refresh_token;
-        token.calendarExpiresAt = account.expires_at;
-      }
+      // Nur Login-Token speichern (keine Calendar-Token mehr)
       return token;
     },
     async session({ session, token }) {
-      // Füge Calendar-Token zur Session hinzu
-      if (token.calendarAccessToken) {
-        session.calendarAccessToken = token.calendarAccessToken as string;
-        session.calendarRefreshToken = token.calendarRefreshToken as string;
-        session.calendarExpiresAt = token.calendarExpiresAt as number;
-      }
+      // Nur Standard-Session-Daten (keine Calendar-Token mehr)
       return session;
     }
   }

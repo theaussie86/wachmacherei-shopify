@@ -156,11 +156,32 @@ export default function GoogleCalendarList() {
         </div>
         <div className="rounded-lg bg-error/10 p-6 text-center">
           <h3 className="mb-4 text-xl font-bold text-error">Fehler beim Laden der Termine</h3>
-          <p className="text-error">
+          <p className="mb-4 text-error">
             {error instanceof Error
               ? error.message
               : 'Unbekannter Fehler beim Laden der Kalenderdaten'}
           </p>
+          {error instanceof Error && error.message.includes('Service Account') && (
+            <div className="rounded-lg bg-warning/10 p-4 text-left">
+              <h4 className="mb-2 font-semibold text-warning">Konfiguration erforderlich</h4>
+              <p className="text-sm text-warning">
+                Um die Kalender-Funktionen zu nutzen, müssen die folgenden Umgebungsvariablen
+                gesetzt werden:
+              </p>
+              <ul className="mt-2 list-inside list-disc text-sm text-warning">
+                <li>
+                  <code>GOOGLE_SERVICE_ACCOUNT_EMAIL</code>
+                </li>
+                <li>
+                  <code>GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY</code>
+                </li>
+              </ul>
+              <p className="mt-2 text-sm text-warning">
+                Bitte wende dich an den Administrator, um die Google Service Account Konfiguration
+                abzuschließen.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     );
