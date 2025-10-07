@@ -1,5 +1,5 @@
 {
   "crons": [],
-  "buildCommand": "corepack enable && pnpm install && pnpm build",
-  "installCommand": "corepack enable && pnpm install"
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install"
 }
