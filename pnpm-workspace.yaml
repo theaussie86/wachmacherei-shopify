@@ -1,4 +1,0 @@
-ignoredBuiltDependencies:
-  - '@vercel/git-hooks'
-  - sharp
-  - unrs-resolver
