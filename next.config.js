@@ -4,6 +4,8 @@ module.exports = {
     // Disabling on production builds because we're running checks on PRs via GitHub Actions.
     ignoreDuringBuilds: true
   },
+  // Explicitly set the workspace root to avoid lockfile detection issues
+  outputFileTracingRoot: __dirname,
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
