@@ -348,72 +348,70 @@ export default function GoogleCalendarList() {
                 </div>
 
                 {/* Teilnehmer hinzufügen */}
-                {(event.attendees?.length || 0) < 6 && (
-                  <div className="border-t pt-4">
-                    <h4 className="mb-2 text-sm font-semibold text-base-content">
-                      Teilnehmer hinzufügen
-                    </h4>
+                <div className="border-t pt-4">
+                  <h4 className="mb-2 text-sm font-semibold text-base-content">
+                    Teilnehmer hinzufügen
+                  </h4>
 
-                    {isAddingAttendee === event.id ? (
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-1 gap-3">
-                          <input
-                            type="email"
-                            placeholder="E-Mail-Adresse"
-                            value={newAttendeeEmail}
-                            onChange={(e) => setNewAttendeeEmail(e.target.value)}
-                            className="input input-sm input-bordered"
-                            disabled={addAttendeeMutation.isPending}
-                          />
-                          <input
-                            type="text"
-                            placeholder="Name (optional)"
-                            value={newAttendeeName}
-                            onChange={(e) => setNewAttendeeName(e.target.value)}
-                            className="input input-sm input-bordered"
-                            disabled={addAttendeeMutation.isPending}
-                          />
-                        </div>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleAddAttendee(event.id)}
-                            disabled={addAttendeeMutation.isPending || !newAttendeeEmail.trim()}
-                            className="btn btn-primary btn-sm"
-                          >
-                            {addAttendeeMutation.isPending ? (
-                              <span className="loading loading-spinner loading-xs"></span>
-                            ) : (
-                              'Hinzufügen'
-                            )}
-                          </button>
-                          <button
-                            onClick={() => {
-                              setIsAddingAttendee(null);
-                              setNewAttendeeEmail('');
-                              setNewAttendeeName('');
-                            }}
-                            className="btn btn-ghost btn-sm"
-                            disabled={addAttendeeMutation.isPending}
-                          >
-                            Abbrechen
-                          </button>
-                        </div>
-                        {addAttendeeMutation.error && (
-                          <div className="alert alert-error">
-                            <span className="text-xs">{addAttendeeMutation.error.message}</span>
-                          </div>
-                        )}
+                  {isAddingAttendee === event.id ? (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-1 gap-3">
+                        <input
+                          type="email"
+                          placeholder="E-Mail-Adresse"
+                          value={newAttendeeEmail}
+                          onChange={(e) => setNewAttendeeEmail(e.target.value)}
+                          className="input input-sm input-bordered"
+                          disabled={addAttendeeMutation.isPending}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Name (optional)"
+                          value={newAttendeeName}
+                          onChange={(e) => setNewAttendeeName(e.target.value)}
+                          className="input input-sm input-bordered"
+                          disabled={addAttendeeMutation.isPending}
+                        />
                       </div>
-                    ) : (
-                      <button
-                        onClick={() => setIsAddingAttendee(event.id)}
-                        className="btn btn-outline btn-sm"
-                      >
-                        + Teilnehmer hinzufügen
-                      </button>
-                    )}
-                  </div>
-                )}
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleAddAttendee(event.id)}
+                          disabled={addAttendeeMutation.isPending || !newAttendeeEmail.trim()}
+                          className="btn btn-primary btn-sm"
+                        >
+                          {addAttendeeMutation.isPending ? (
+                            <span className="loading loading-spinner loading-xs"></span>
+                          ) : (
+                            'Hinzufügen'
+                          )}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsAddingAttendee(null);
+                            setNewAttendeeEmail('');
+                            setNewAttendeeName('');
+                          }}
+                          className="btn btn-ghost btn-sm"
+                          disabled={addAttendeeMutation.isPending}
+                        >
+                          Abbrechen
+                        </button>
+                      </div>
+                      {addAttendeeMutation.error && (
+                        <div className="alert alert-error">
+                          <span className="text-xs">{addAttendeeMutation.error.message}</span>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setIsAddingAttendee(event.id)}
+                      className="btn btn-outline btn-sm"
+                    >
+                      + Teilnehmer hinzufügen
+                    </button>
+                  )}
+                </div>
 
                 {/* Maximale Teilnehmeranzahl erreicht */}
                 {event.attendees && event.attendees.length >= 6 && (
