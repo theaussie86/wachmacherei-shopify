@@ -1,6 +1,6 @@
 'use client';
 
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import { toast } from 'react-toastify';
 
 type CacheClearFormProps = {
@@ -8,7 +8,7 @@ type CacheClearFormProps = {
 };
 
 export default function CacheClearForm({ clearCache }: CacheClearFormProps) {
-  const [state, formAction] = useFormState(async () => {
+  const [state, formAction] = useActionState(async () => {
     const result = await clearCache();
     if (result.status === 'success') {
       toast.success(result.message);
