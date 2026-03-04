@@ -4,3 +4,46 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    groups:
+      tanstack:
+        patterns:
+          - '@tanstack/*'
+      testing:
+        patterns:
+          - '@testing-library/*'
+          - 'jest*'
+          - 'ts-jest'
+      types:
+        patterns:
+          - '@types/*'
+      tailwind:
+        patterns:
+          - 'tailwindcss'
+          - '@tailwindcss/*'
+          - 'daisyui'
+      eslint:
+        patterns:
+          - 'eslint'
+          - 'eslint-*'
+      google:
+        patterns:
+          - 'google*'
+          - '@google*'
+      nextjs:
+        patterns:
+          - 'next'
+          - 'eslint-config-next'
+    ignore:
+      # Defer major version updates requiring migration
+      - dependency-name: 'daisyui'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'tailwindcss'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'eslint'
+        update-types: ['version-update:semver-major']
