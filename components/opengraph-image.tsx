@@ -14,14 +14,12 @@ export default async function OpengraphImage(props?: Props): Promise<ImageRespon
   };
 
   return new ImageResponse(
-    (
-      <div tw="flex h-full w-full flex-col items-center justify-center bg-black">
-        <div tw="flex flex-none items-center justify-center h-[360px] w-[160px]">
-          <LogoIcon />
-        </div>
-        <p tw="text-7xl text-white text-center">{title}</p>
+    <div tw="flex h-full w-full flex-col items-center justify-center bg-black">
+      <div tw="flex flex-none items-center justify-center h-[360px] w-[160px]">
+        <LogoIcon />
       </div>
-    ),
+      <p tw="text-7xl text-white text-center">{title}</p>
+    </div>,
     {
       width: 1200,
       height: 630,
