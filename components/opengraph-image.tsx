@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { readFile } from 'node:fs/promises';
 import LogoIcon from './icons/logo';
 
 export type Props = {
@@ -26,9 +27,9 @@ export default async function OpengraphImage(props?: Props): Promise<ImageRespon
       fonts: [
         {
           name: 'IBM Plex Sans',
-          data: await fetch(
+          data: await readFile(
             new URL('../public/fonts/IBMPlexSans/IBMPlexSans-SemiBold.ttf', import.meta.url)
-          ).then((res) => res.arrayBuffer()),
+          ).then((buf) => buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength)),
           style: 'normal'
         }
       ]
