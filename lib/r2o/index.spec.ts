@@ -1,5 +1,6 @@
+/// <reference types="jest" />
 import { ShopifyCustomer } from 'lib/shopify/types';
-import { prepareCustomerData, removeNullAndUndefined } from '.';
+import { prepareCustomerData, removeNullAndUndefined } from './util';
 
 describe('remove empty keys', () => {
   test('should remove empty keys', () => {
